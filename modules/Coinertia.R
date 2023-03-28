@@ -52,7 +52,7 @@ coinertiaserver <- function(input, output, session, projet){
     if (is.null(projet$dudi[[input$NameCoinertia]]))
       return()
     
-    x <- lapply(coin1, is.data.frame)
+    x <- lapply(projet$dudi[[input$NameCoinertia]], is.data.frame)
     y <- x[which(x == T)]
     
     selectInput("dataframeCoinertia", "Select a variable", choices = names(y))
@@ -110,7 +110,12 @@ coinertiaserver <- function(input, output, session, projet){
     if (is.null(projet$dudi[[input$NameCoinertia]]))
       return(data.frame(list()))
     
-    datatable(projet$dudi[[input$NameCoinertia]][[input$dataframeCoinertia]], 
+    dt <- projet$dudi[[input$NameCoinertia]]
+    
+    if (is.null(dt[[input$dataframeCoinertia]]))
+      return(data.frame(list()))
+    
+    datatable(dt[[input$dataframeCoinertia]], 
               extensions = c("Buttons"),
               options = list(scrollX = TRUE, buttons = c("csv"), dom = 'Bfrtip'))
   }, server = F)

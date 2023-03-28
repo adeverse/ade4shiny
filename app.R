@@ -1,4 +1,4 @@
-setwd("C:/Users/marti/Documents/Cours/M2/Projet/shiny_demo/")
+setwd("C:/Users/marti/Documents/Cours/M2/Projet/shiny_ade4/")
 
 library(shiny)
 library(shinydashboard)
