@@ -8,15 +8,15 @@ coa <- tabItem(tabName = "coa",
                  ),
                  mainPanel = mainPanel(
                    tabsetPanel(
-                     tabPanel("Screeplot",
-                              plotOutput("screeplotCOA")
+                     tabPanel("Summary",
+                              verbatimTextOutput("summaryCOA")
                      ),
                      
-                     tabPanel("Summary",
-                              selectInput("selectsummaryCOA", "", 
+                     tabPanel("Output",
+                              selectInput("selectoutputCOA", "", 
                                           choices = c("Eigenvalues", "Variables", "Individuals")),
-                              uiOutput("selectsummaryCOA2"),
-                              dataTableOutput("summaryCOA")),
+                              uiOutput("selectoutputCOA2"),
+                              dataTableOutput("outputCOA")),
                      
                      tabPanel("Biplot",
                               plotOutput("biplotCOA"))
@@ -34,12 +34,12 @@ coaServer <- function(input, output, session, projet){
     selectInput("DataframeCOA", "Select a dataframe", choices = names(projet$data), selected = input$DataframeCOA)
   )
   
-  output$selectsummaryCOA2 <- renderUI({
-    if(input$selectsummaryCOA == "Eigenvalues")
+  output$selectoutputCOA2 <- renderUI({
+    if(input$selectoutputCOA == "Eigenvalues")
       return()
     
     else
-      selectInput("summaryCOA2", "Select a value to show", 
+      selectInput("outputCOA2", "Select a value to show", 
                   c("coord", "cos2", "contrib"), 
                   selected = "coord")
     
@@ -65,39 +65,29 @@ coaServer <- function(input, output, session, projet){
     
   })
   
-  
-  output$screeplotCOA <- renderPlot({
+  output$summaryCOA <- renderPrint({
     if (is.null(projet$dudi[[input$NameCOA]]))
-      return(0)
+      return("No dudi object with this name in the project")
     
-    color_bar <- c(rep("black", projet$dudi[[input$NameCOA]]$nf), 
-                   rep("grey", length(projet$dudi[[input$NameCOA]]$eig) - projet$dudi[[input$NameCOA]]$nf))
-    
-    
-    barplot(projet$dudi[[input$NameCOA]]$eig, 
-            main = "Screeplot - Eigenvalues", 
-            names.arg = 1:length(projet$dudi[[input$NameCOA]]$eig), 
-            col = color_bar)
+    ade4:::summary.dudi(projet$dudi[[input$NameCOA]])
     
   })
   
-  
-  
-  output$summaryCOA <- renderDataTable({
+  output$outputCOA <- renderDataTable({
     if (is.null(projet$dudi[[input$NameCOA]]))
-      return(0)
+      return(data.frame(list()))
     
-    if (input$selectsummaryCOA == "Eigenvalues"){
+    if (input$selectoutputCOA == "Eigenvalues"){
       return(datatable(data.frame(list(values = projet$dudi[[input$NameCOA]]$eig))))
     }
     
-    else if (input$selectsummaryCOA == "Variables")
+    else if (input$selectoutputCOA == "Variables")
       dt <- get_ca_col(projet$dudi[[input$NameCOA]])
     
     else
       dt <- get_ca_row(projet$dudi[[input$NameCOA]])
     
-    datatable(dt[[input$summaryCOA2]], extensions = c("Buttons"),
+    datatable(dt[[input$outputCOA2]], extensions = c("Buttons"),
             options = list(scrollX = TRUE, buttons = c("csv"), dom = 'Bfrtip'))
     
   }, server = F)
@@ -109,6 +99,22 @@ coaServer <- function(input, output, session, projet){
     
     ade4:::biplot.dudi(projet$dudi[[input$NameCOA]])
   })
+  
+  
+  # output$screeplotCOA <- renderPlot({
+  #   if (is.null(projet$dudi[[input$NameCOA]]))
+  #     return(0)
+  #   
+  #   color_bar <- c(rep("black", projet$dudi[[input$NameCOA]]$nf), 
+  #                  rep("grey", length(projet$dudi[[input$NameCOA]]$eig) - projet$dudi[[input$NameCOA]]$nf))
+  #   
+  #   
+  #   barplot(projet$dudi[[input$NameCOA]]$eig, 
+  #           main = "Screeplot - Eigenvalues", 
+  #           names.arg = 1:length(projet$dudi[[input$NameCOA]]$eig), 
+  #           col = color_bar)
+  #   
+  # })
   
   
 }

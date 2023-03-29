@@ -10,6 +10,10 @@ coinertie <- tabItem(tabName = "coinertia",
                        mainPanel = mainPanel(
                          tabsetPanel(
                           tabPanel("Summary",
+                                   verbatimTextOutput("summaryCoinertia")
+                                   ), 
+                           
+                          tabPanel("Output",
                                    uiOutput("selectdatatableCoinertia"),
                                    dataTableOutput("datatableCoinertia")
                                    ),
@@ -86,6 +90,14 @@ coinertiaserver <- function(input, output, session, projet){
   })
   
   
+  output$summaryCoinertia <- renderPrint({
+    if (is.null(projet$dudi[[input$NameCoinertia]]))
+      return("No dudi object with this name in the project")
+    
+    ade4:::summary.dudi(projet$dudi[[input$NameCoinertia]])
+  })
+  
+  
   output$plotCoinertia <- renderPlot({
     if (length(projet$dudi) == 0)
       return(0)
@@ -95,12 +107,7 @@ coinertiaserver <- function(input, output, session, projet){
     
     coin <- projet$dudi[[input$NameCoinertia]]
     
-    g1 <- s.arrow(coin$l1, plab.cex = 0.7, plot = FALSE)
-    g2 <- s.arrow(coin$c1, plab.cex = 0.7, plot = FALSE)
-    g3 <- s.corcircle(coin$aX, plot = FALSE)
-    g4 <- s.corcircle(coin$aY, plot = FALSE)
-    ADEgS(list(g1, g2, g3, g4), layout = c(2, 2))
-    
+    ade4:::plot.coinertia(coin)
   })
   
   output$datatableCoinertia <- renderDataTable({

@@ -12,12 +12,21 @@ bga <- tabItem(tabName = "bga",
                    actionButton("DoBGA", "Compute BGA")
                  ),
                  mainPanel = mainPanel(
-                   plotOutput("plotBGA")
-                   
+                   tabsetPanel(
+                     tabPanel("Summary",
+                              verbatimTextOutput("summaryBGA")
+                              ),
+                     tabPanel("Output",
+                              uiOutput("selectoutputBGA"),
+                              dataTableOutput("datatableBGA")
+                              ),
+                     tabPanel("Plot",
+                              plotOutput("plotBGA")
+                              )  
+                   )
                  )
                )
 )
-
 
 
 bgaServer <- function(input, output, session, projet){
@@ -56,6 +65,17 @@ bgaServer <- function(input, output, session, projet){
   })
   
   
+  output$selectoutputBGA <- renderUI({
+    if (is.null(projet$dudi[[input$NameBGA]]))
+      return(0)
+    
+    x <- lapply(projet$dudi[[input$NameBGA]], is.data.frame)
+    y <- x[which(x == T)]
+    
+    selectInput("outputBGA", "Select a variable", choices = names(y))
+  })
+  
+  
   observeEvent(input$DoBGA, {
     if (input$NameBGA == ""){
       alert("Please enter a name")
@@ -84,9 +104,32 @@ bgaServer <- function(input, output, session, projet){
     
   })
   
+  
+  output$summaryBGA <- renderPrint({
+    if (is.null(projet$dudi[[input$NameBGA]]))
+      return("No dudi object with this name in the project")
+    
+    ade4:::summary.dudi(projet$dudi[[input$NameBGA]])
+  })
+  
+  
+  output$datatableBGA <- renderDataTable({
+    if (is.null(projet$dudi[[input$NameBGA]]))
+      return(data.frame(list()))
+    
+    dt <- projet$dudi[[input$NameBGA]]
+    
+    datatable(dt[[input$outputBGA]], extensions = c("Buttons"),
+              options = list(scrollX = TRUE, buttons = c("csv"), dom = 'Bfrtip'))
+  }, server = F)
+  
+  
+  
   output$plotBGA <- renderPlot({
     if (is.null(projet$dudi[[input$NameBGA]]))
       return(0)
+    
+    dud <- projet$dudi[[input$DudiBGA]]
     
     if ("dudi" %in% class(projet$dudi[[input$ObjectGroupBGA]]))
       fact <- as.factor(projet$dudi[[input$ObjectGroupBGA]]$tab[,input$GroupBGA])
@@ -94,15 +137,10 @@ bgaServer <- function(input, output, session, projet){
     else
       fact <- as.factor(projet$data[[input$ObjectGroupBGA]][,input$GroupBGA])
     
-    g1 <- s.class(projet$dudi[[input$DudiBGA]]$li, 
-                  fact, psub.text = paste0(class(projet$dudi[[input$DudiBGA]])[1], " analysis"),
-                  plot = F)
-    g2 <- s.class(projet$dudi[[input$NameBGA]]$ls, fact, psub.text = "Between sites", plot = F)
-    G <- ADEgS(list(g1, g2), layout = c(1, 2))
+    ade4:::plot.between(projet$dudi[[input$NameBGA]])
     
   })
   
   
   
 }
-

@@ -37,7 +37,6 @@ body <- dashboardBody(
     bga,
     coinertie,
     visu
-    
 ))
 
 dashboardPage(
