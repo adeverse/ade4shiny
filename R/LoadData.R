@@ -1,21 +1,9 @@
 LoadData <- tabItem(tabName = "managedata",
                     sidebarLayout(
                       sidebarPanel = sidebarPanel(
-                        p(markdown("#### ADE4 Examples")),
-                        selectInput("examples", "Choose an example", choices = 
-                                      c("doubs", "butterfly", "carni70", "lizards", "meaudret")),
-                        actionButton("DoLoadExample", "Load example"),
-                        tags$hr(style="border-color: gray;"),
-                        p(markdown("#### Saved project")),
-                        fileInput("LoadProjectFile", "Choose a rds file"),
-                        tags$hr(style="border-color: gray;"),
-                        p(markdown("#### New data")),
-                        textInput("LoadDataName", "Choose a name to refer the data frame later"),
-                        fileInput("LoadDataFile", "Choose a rds or csv file"),
-                        textInput("LoadDataSep", "separator", ","),
-                        checkboxInput("LoadDataCheckHeader", "Header"),
-                        checkboxInput("LoadDataCheckRownames", "Rownames in first column"),
-                        actionButton("DoLoadData", "Load data", class = "btn-primary", style = "color : white")
+                        selectInput("LoaddataType", "Loading method", 
+                                    choices = c("ADE4 example", "Saved project", "New dataframe")),
+                        uiOutput("LoadData_listoptions")
                       ),
                       mainPanel = mainPanel(
                         tabsetPanel(
@@ -34,6 +22,34 @@ LoadData <- tabItem(tabName = "managedata",
 
 
 LoadDataServer <- function(input, output, session, projet){
+  
+  
+  output$LoadData_listoptions <- renderUI({
+    
+    switch(input$LoaddataType,
+           
+           "ADE4 example" = tagList(
+             selectInput("examples", "Choose an example", choices = 
+                           c("doubs", "butterfly", "carni70", "lizards", "meaudret")),
+             actionButton("DoLoadExample", "Load example")
+           ),
+           "Saved project" = tagList(
+             fileInput("LoadProjectFile", "Choose a rds file")
+           ),
+           "New dataframe" = tagList(
+             textInput("LoadDataName", "Choose a name to refer the data frame later"),
+             fileInput("LoadDataFile", "Choose a rds or csv file"),
+             textInput("LoadDataSep", "separator", ","),
+             checkboxInput("LoadDataCheckHeader", "Header"),
+             checkboxInput("LoadDataCheckRownames", "Rownames in first column"),
+             actionButton("DoLoadData", "Load data", class = "btn-primary", style = "color : white")
+           )
+          )
+    
+    
+  })
+  
+  
   
   observeEvent(input$LoadProjectFile,{
     
