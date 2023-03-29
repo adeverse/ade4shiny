@@ -30,7 +30,14 @@ LoadDataServer <- function(input, output, session, projet){
            
            "ADE4 example" = tagList(
              selectInput("examples", "Choose an example", choices = 
-                           c("doubs", "butterfly", "carni70", "lizards", "meaudret")),
+                           list(PCA = c("aravo", "baran95"), 
+                                COA = c("aminoacyl", "microsatt"),
+                                BCA = c("meaudret", "avimedi"),
+                                Coinertia = c("doubs", "aviurba")),
+                         selected = input$examples),
+             if (length(input$examples) != 0) 
+               p(description[[input$examples]])
+               ,
              actionButton("DoLoadExample", "Load example")
            ),
            "Saved project" = tagList(
@@ -48,7 +55,7 @@ LoadDataServer <- function(input, output, session, projet){
     
     
   })
-  
+
   
   
   observeEvent(input$LoadProjectFile,{
