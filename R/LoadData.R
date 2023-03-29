@@ -38,7 +38,7 @@ LoadDataServer <- function(input, output, session, projet){
              if (length(input$examples) != 0) 
                p(description[[input$examples]])
                ,
-             actionButton("DoLoadExample", "Load example")
+             actionButton("DoLoadExample", "Load example", style = "color : white; background-color : #58d68d")
            ),
            "Saved project" = tagList(
              fileInput("LoadProjectFile", "Choose a rds file")
@@ -49,7 +49,7 @@ LoadDataServer <- function(input, output, session, projet){
              textInput("LoadDataSep", "separator", ","),
              checkboxInput("LoadDataCheckHeader", "Header"),
              checkboxInput("LoadDataCheckRownames", "Rownames in first column"),
-             actionButton("DoLoadData", "Load data", class = "btn-primary", style = "color : white")
+             actionButton("DoLoadData", "Load data", style = "color : white; background-color : #58d68d")
            )
           )
     

@@ -1,10 +1,10 @@
-# Sourcing modules
-source("modules/LoadData.R")
-source("modules/ACP.R")
-source("modules/Visualisation.R")
-source("modules/COA.R")
-source("modules/BGA.R")
-source("modules/Coinertia.R")
+############# Sourcing modules
+# source("modules/LoadData.R")
+# source("modules/ACP.R")
+# source("modules/Visualisation.R")
+# source("modules/COA.R")
+# source("modules/BGA.R")
+# source("modules/Coinertia.R")
 
 header <- dashboardHeader(title = "Dashboard ade4 example")
 
@@ -39,7 +39,7 @@ body <- dashboardBody(
     visu
 ))
 
-dashboardPage(
+dashboardPage(skin = "green",
   header,
   sidebar,
   body

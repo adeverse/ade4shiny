@@ -5,7 +5,7 @@ coinertie <- tabItem(tabName = "coinertia",
                          uiOutput("selectDudiCoinertia1"),
                          uiOutput("selectDudiCoinertia2"),
                          numericInput("nfCoinertia", "Nomber of dimension to keep", 5, 2, 200),
-                         actionButton("DoCoinertia", "Compute coinertia")
+                         actionButton("DoCoinertia", "Compute coinertia", style = "color : white; background-color : #58d68d")
                        ),
                        mainPanel = mainPanel(
                          tabsetPanel(

@@ -6,7 +6,7 @@ acp <- tabItem(tabName = "pca",
       numericInput("nfPCA", "Nomber of dimension to keep", 5, 2, 200),
       checkboxInput("docenterACP", "Center", value = T),
       checkboxInput("doscaleACP", "Scale", value = T),
-      actionButton("DoACP", "Compute ACP")
+      actionButton("DoACP", "Compute ACP", style = "color : white; background-color : #58d68d")
     ),
     mainPanel = mainPanel(
       tabsetPanel(

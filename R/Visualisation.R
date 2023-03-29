@@ -6,12 +6,13 @@ visu <- tabItem("visualisation",
       hr(),
       uiOutput("visualisation_listoption"),
       checkboxInput("AddPlot", "Add to plot"),
-      actionButton("DoRenderPlot", "Compute plot", class = "btn-primary", style = "color : white"),
+      actionButton("DoRenderPlot", "Compute plot", 
+                   style = "color : white; background-color : #58d68d"),
       hr(),
       selectInput("plotformat", "Picture extension", c("PDF" = "pdf", "PNG" = "png", "JPEG" = "jpeg")),
       numericInput("width", "Plot width (px)", value = 2048),
       numericInput("height", "Plot height (px)", value = 1024),
-      downloadButton("exportplot", "Export plot")
+      downloadButton("exportplot", "Export plot", style = "color : white; background-color : #58d68d")
     ),
     mainPanel = mainPanel(
       plotOutput("PlotVisualisation")

@@ -4,7 +4,7 @@ coa <- tabItem(tabName = "coa",
                    textInput("NameCOA", "Name to refer the COA later"),
                    uiOutput("SelectDataframeCOA"),
                    numericInput("nfCOA", "Nomber of dimension to keep", 5, 2, 200),
-                   actionButton("DoCOA", "Compute COA")
+                   actionButton("DoCOA", "Compute COA", style = "color : white; background-color : #58d68d")
                  ),
                  mainPanel = mainPanel(
                    tabsetPanel(
