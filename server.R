@@ -12,6 +12,8 @@ server <- function(input, output, session) {
   # COA
   coaServer(input, output, session, projet)
   
+  # MCA
+  mcaServer(input, output, session, projet)
   
   # BGA
   bgaServer(input, output, session, projet)
@@ -19,8 +21,8 @@ server <- function(input, output, session) {
   # Coinertia
   coinertiaserver(input, output, session, projet)
   
-  
   # Visualisation
   visuServer(input, output, session, projet)
+  
   
 }

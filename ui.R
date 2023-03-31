@@ -13,7 +13,7 @@ sidebar <- dashboardSidebar(sidebarMenu(
   menuItem("One table analyses",
            menuSubItem("PCA", tabName = "pca"),
            menuSubItem("COA", tabName = "coa"),
-           menuSubItem("MCA"),
+           menuSubItem("MCA", tabName = "mca"),
            menuSubItem("PCO")),
   
   menuItem("One table with groups",
@@ -34,6 +34,7 @@ body <- dashboardBody(
     LoadData,
     acp,
     coa,
+    mca,
     bga,
     coinertie,
     visu

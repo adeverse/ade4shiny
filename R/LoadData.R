@@ -23,7 +23,6 @@ LoadData <- tabItem(tabName = "managedata",
 
 LoadDataServer <- function(input, output, session, projet){
   
-  
   output$LoadData_listoptions <- renderUI({
     
     switch(input$LoaddataType,
@@ -32,12 +31,12 @@ LoadDataServer <- function(input, output, session, projet){
              selectInput("examples", "Choose an example", choices = 
                            list(PCA = c("aravo", "baran95"), 
                                 COA = c("aminoacyl", "microsatt"),
+                                MCA = c("ours", "banque"),
                                 BCA = c("meaudret", "avimedi"),
                                 Coinertia = c("doubs", "aviurba")),
                          selected = input$examples),
              if (length(input$examples) != 0) 
-               p(description[[input$examples]])
-               ,
+               p(description[[input$examples]]),
              actionButton("DoLoadExample", "Load example", style = "color : white; background-color : #58d68d")
            ),
            "Saved project" = tagList(
@@ -132,15 +131,18 @@ LoadDataServer <- function(input, output, session, projet){
     
     temp <- get(data(list = c(input$examples)))
     
-    for(i in names(temp)){
-      
-      if("dudi" %in% class(temp[[i]]))
-        projet$dudi[[i]] <- temp[[i]]
-      
-      else if (class(temp[[i]]) == "data.frame")
-        projet$data[[i]] <- temp[[i]]
-      
-    }
+    if (class(temp) == "data.frame" & "dudi" %in% class(temp) == FALSE)
+      projet$data[[input$examples]] <- temp
+    
+    if (class(temp) == "list")
+      for(i in names(temp)){
+        
+        if("dudi" %in% class(temp[[i]]))
+          projet$dudi[[i]] <- temp[[i]]
+        
+        else if (class(temp[[i]]) == "data.frame")
+          projet$data[[i]] <- temp[[i]]
+      }
   })
   
   output$textdudiLoadData <- renderPrint({
