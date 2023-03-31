@@ -44,9 +44,52 @@ visuServer <- function(input, output, session, projet){
              numericInput("xLabel", "x axis column", value = 1),
              numericInput("yLabel", "y axis column", value = 2)
              
-           )
+           ),
            
-           )
+           "Class" = tagList(
+             selectInput("objectClass", "Object", 
+                         choices = c(names(projet$data), names(projet$dudi)),
+                         selected = input$objectClass),
+             {
+               if (length(input$objectClass) != 0){
+                 if (input$objectClass %in% names(projet$data))
+                 {}
+                 
+                 else if (input$objectClass %in% names(projet$dudi))
+                   selectInput("xyClass", "XY coordinates", 
+                               choices = names(projet$dudi[[input$objectClass]]),
+                               selected = input$xyClass)
+               }
+             },
+             numericInput("xClass", "x axis column", value = 1),
+             numericInput("yClass", "y axis column", value = 2),
+             
+             tags$hr(style="border-color: gray;"),
+             p(markdown("#### Grouping factor")),
+             selectInput("dataClassFactor", "Dataframe containing the groups", 
+                         names(projet$data), selected = input$dataClassFactor),
+             {if (length(input$dataClassFactor) != 0)
+               selectInput("ClassGroupingFactor", "Column containing the groups",
+                           names(projet$data[[input$dataClassFactor]]),
+                           selected = input$ClassGroupingFactor)
+               
+               },
+             
+             tags$hr(style="border-color: gray;"),
+             p(markdown("#### Row weight")),
+             selectInput("dataClassWeight", "Dataframe containing the weights", 
+                         c("None" = "none", names(projet$data)),
+                         selected = input$dataClassWeight),
+             {if (length(input$dataClassWeight) != 0)
+               selectInput("RowWeightClass", "Column containing the groups",
+                           names(projet$data[[input$dataClassWeight]]),
+                           selected = input$RowWeightClass)
+             }
+             
+             
+           ))
+           
+           
     
   })
   
@@ -85,7 +128,42 @@ visuServer <- function(input, output, session, projet){
                           }
                           )
                         }
-                    })})
+                    })}),
+                    
+                    
+                    "Class" = output$PlotVisualisation <- renderPlot({
+                      isolate({
+                        
+                        if (input$objectClass %in% names(projet$data))
+                          df <- projet$data[[input$objectClass]]
+                        
+                        else
+                          df <- projet$dudi[[input$objectClass]][[input$xyClass]]
+                        
+                        fact <- projet$data[[input$dataClassFactor]][,input$ClassGroupingFactor]
+                        
+                        if (input$dataClassWeight == "none")
+                          rw <- rep(1, length(fact))
+                        
+                        else
+                          rw <- projet$data[[input$dataClassWeight]][,input$RowWeightClass]
+                          
+                        
+                        tryCatch({
+                          ade4:::s.class(dfxy = df, fac = fact, wt = rw,
+                                         xax = input$xClass,
+                                         yax = input$yClass) 
+                          
+                        }, error = function(e){
+                          alert("The dataframe is not suited for the plot")
+                          print(e)
+                          return(0)
+                        }
+                        )
+                        
+                        
+                      })
+                    })
                       
                     ))
   
