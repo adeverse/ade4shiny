@@ -6,7 +6,9 @@
 # source("modules/BGA.R")
 # source("modules/Coinertia.R")
 
-header <- dashboardHeader(title = "Dashboard ade4 example")
+header <- dashboardHeader(title = "Dashboard ade4 example", tags$li(class = "dropdown", 
+                                                                  downloadButton("savedata", "Save data",
+                                                                                 style = "color : white; background-color : #58d68d")))
 
 sidebar <- dashboardSidebar(sidebarMenu(
   menuItem("Manage data", tabName = "managedata"),
@@ -14,7 +16,7 @@ sidebar <- dashboardSidebar(sidebarMenu(
            menuSubItem("PCA", tabName = "pca"),
            menuSubItem("COA", tabName = "coa"),
            menuSubItem("MCA", tabName = "mca"),
-           menuSubItem("PCO")),
+           menuSubItem("PCO", tabName = "pco")),
   
   menuItem("One table with groups",
            menuSubItem("BGA", tabName = "bga"),
@@ -22,8 +24,8 @@ sidebar <- dashboardSidebar(sidebarMenu(
            menuSubItem("DA")),
   menuItem("Two tables analyses",
            menuSubItem("Coinertia", tabName = "coinertia"),
-           menuSubItem("CCA"),
-           menuSubItem("PCAIV")),
+           #menuSubItem("CCA", tabName = "cca"),
+           menuSubItem("PCAIV", tabName = "pcaiv")),
   menuItem("Visualisation", tabName = "visualisation")
 ))
 
@@ -35,8 +37,11 @@ body <- dashboardBody(
     acp,
     coa,
     mca,
+    pco,
     bga,
     coinertie,
+    cca,
+    pcaIV,
     visu
 ))
 

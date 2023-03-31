@@ -5,7 +5,7 @@ visu <- tabItem("visualisation",
                   choices = c("Label", "Class", "Value")),
       hr(),
       uiOutput("visualisation_listoption"),
-      checkboxInput("AddPlot", "Add to plot"),
+      #checkboxInput("AddPlot", "Add to plot"),
       actionButton("DoRenderPlot", "Compute plot", 
                    style = "color : white; background-color : #58d68d"),
       hr(),
@@ -60,8 +60,8 @@ visuServer <- function(input, output, session, projet){
                           tryCatch({
                             ade4:::s.label(projet$data[[input$objectLabel]], 
                                                   xax = input$xLabel,
-                                                  yax = input$yLabel,
-                                                  add.plot = input$AddPlot)
+                                                  yax = input$yLabel)
+                                                  #add.plot = input$AddPlot)
                             
                           }, error = function(e){
                             alert("The dataframe is not suited for the plot")
@@ -75,8 +75,8 @@ visuServer <- function(input, output, session, projet){
                           tryCatch({
                             ade4:::s.label(projet$dudi[[input$objectLabel]][[input$xyLabel]],
                                                   xax = input$xLabel,
-                                                  yax = input$yLabel, 
-                                                  add.plot = input$AddPlot)
+                                                  yax = input$yLabel) 
+                                                  #add.plot = input$AddPlot)
                             
                           }, error = function(e){
                             alert("The dataframe is not suited for the plot")
@@ -89,5 +89,24 @@ visuServer <- function(input, output, session, projet){
                       
                     ))
   
+  
+  output$exportplot <- downloadHandler(
+    filename = function(){
+      paste("plot_ade4", input$plotformat, sep = ".")}
+    ,
+    # content is a function with argument file. content writes the plot to the device
+    content = function(file) {
+      if(input$plotformat == "pdf")
+        pdf(file)
+      
+      else if (input$plotformat == "png")
+        png(file)
+      
+      else
+        jpeg(file)
+      
+      dev.off()
+    } 
+  )
   
 }

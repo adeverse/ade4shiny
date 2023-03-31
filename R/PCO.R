@@ -59,7 +59,7 @@ pcoServer <- function(input, output, session, projet){
     
     tryCatch({
       
-      temp <- dudi.acm(df, nf = input$nfPCO, scannf = F, 
+      temp <- dudi.pco(df, nf = input$nfPCO, scannf = F, 
                        center = input$docenterPCO, scale = input$doscalePCO)
       projet$dudi[[input$NamePCO]] <- temp
       

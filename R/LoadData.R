@@ -33,7 +33,8 @@ LoadDataServer <- function(input, output, session, projet){
                                 COA = c("aminoacyl", "microsatt"),
                                 MCA = c("ours", "banque"),
                                 BCA = c("meaudret", "avimedi"),
-                                Coinertia = c("doubs", "aviurba")),
+                                Coinertia = c("doubs", "aviurba"),
+                                PCAIV = c("rhone", "avimedi")),
                          selected = input$examples),
              if (length(input$examples) != 0) 
                p(description[[input$examples]]),
@@ -59,7 +60,9 @@ LoadDataServer <- function(input, output, session, projet){
   
   observeEvent(input$LoadProjectFile,{
     
-    projet <- readRDS(input$LoadProjectFile$datapath)
+    object <- readRDS(input$LoadProjectFile$datapath)
+    projet$data <- object$data
+    projet$dudi <- object$dudi
     
   })
   
