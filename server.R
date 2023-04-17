@@ -1,7 +1,8 @@
 server <- function(input, output, session) { 
   
   projet <- reactiveValues(data = list(),
-                           dudi = list())
+                           dudi = list(),
+                           plot = character(0))
   
   
   output$savedata <- downloadHandler(

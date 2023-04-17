@@ -10,8 +10,8 @@ visu <- tabItem("visualisation",
                    style = "color : white; background-color : #58d68d"),
       hr(),
       selectInput("plotformat", "Picture extension", c("PDF" = "pdf", "PNG" = "png", "JPEG" = "jpeg")),
-      numericInput("width", "Plot width (px)", value = 2048),
-      numericInput("height", "Plot height (px)", value = 1024),
+      numericInput("width", "Plot width (cm)", value = 14),
+      numericInput("height", "Plot height (cm)", value = 9),
       downloadButton("exportplot", "Export plot", style = "color : white; background-color : #58d68d")
     ),
     mainPanel = mainPanel(
@@ -101,7 +101,7 @@ visuServer <- function(input, output, session, projet){
                         isolate({
                         if (input$objectLabel %in% names(projet$data)){
                           tryCatch({
-                            ade4:::s.label(projet$data[[input$objectLabel]], 
+                            projet$plot <- ade4:::s.label(projet$data[[input$objectLabel]], 
                                                   xax = input$xLabel,
                                                   yax = input$yLabel)
                                                   #add.plot = input$AddPlot)
@@ -116,7 +116,7 @@ visuServer <- function(input, output, session, projet){
                         
                         else if (input$objectLabel %in% names(projet$dudi)){
                           tryCatch({
-                            ade4:::s.label(projet$dudi[[input$objectLabel]][[input$xyLabel]],
+                            projet$plot <- ade4:::s.label(projet$dudi[[input$objectLabel]][[input$xyLabel]],
                                                   xax = input$xLabel,
                                                   yax = input$yLabel) 
                                                   #add.plot = input$AddPlot)
@@ -150,7 +150,7 @@ visuServer <- function(input, output, session, projet){
                           
                         
                         tryCatch({
-                          ade4:::s.class(dfxy = df, fac = fact, wt = rw,
+                          projet$plot <- ade4:::s.class(dfxy = df, fac = fact, wt = rw,
                                          xax = input$xClass,
                                          yax = input$yClass) 
                           
@@ -175,14 +175,15 @@ visuServer <- function(input, output, session, projet){
     # content is a function with argument file. content writes the plot to the device
     content = function(file) {
       if(input$plotformat == "pdf")
-        pdf(file)
+        pdf(file, width = input$width/2.54, height = input$height/2.54)
       
       else if (input$plotformat == "png")
-        png(file)
+        png(file, width = input$width, height = input$height, units = 'cm', res = 72 * input$width / 10)
       
       else
-        jpeg(file)
+        jpeg(file, width = input$width, height = input$height, units = "cm", res = 72 * input$width / 10)
       
+      eval(projet$plot)
       dev.off()
     } 
   )
