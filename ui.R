@@ -6,9 +6,13 @@
 # source("modules/BGA.R")
 # source("modules/Coinertia.R")
 
-header <- dashboardHeader(title = "Dashboard ade4 example", tags$li(class = "dropdown", 
-                                                                  downloadButton("savedata", "Save data",
-                                                                                 style = "color : white; background-color : #58d68d")))
+header <- dashboardHeader(title = "Dashboard ade4 example", 
+                          tags$li(class = "dropdown", 
+                                  downloadButton("savedata", "Save data",
+                                                 style = "color : white; background-color : #58d68d")),
+                          tags$li(class = "dropdown",
+                                  downloadButton("savecode", "Save code", 
+                                                 style = "color : white; background-color : #58d68d")))
 
 sidebar <- dashboardSidebar(sidebarMenu(
   menuItem("Manage data", tabName = "managedata"),
@@ -32,6 +36,9 @@ sidebar <- dashboardSidebar(sidebarMenu(
 
 body <- dashboardBody(
   useShinyjs(),
+  tags$head(
+    tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")
+  ),
   tabItems(
     LoadData,
     acp,
@@ -45,7 +52,7 @@ body <- dashboardBody(
     visu
 ))
 
-dashboardPage(skin = "green",
+dashboardPage(
   header,
   sidebar,
   body
