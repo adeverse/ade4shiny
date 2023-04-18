@@ -99,9 +99,16 @@ LoadDataServer <- function(input, output, session, projet){
       return(0)
     }
     
-    if (file_ext(input$LoadDataFile$datapath) == "rds")
+    if (file_ext(input$LoadDataFile$datapath) == "rds"){
+      
       projet$data[[input$LoadDataName]] <- readRDS(input$LoadDataFile$datapath)
-    
+      
+      string <- paste(input$LoadDataName, " <- readRDS(", 
+                      input$LoadDataFile$datapath,")", sep = "")
+      
+      projet$code <- paste(projet$code, string, sep = "\n")
+      
+    }
     
     else if (file_ext(input$LoadDataFile$datapath) == "csv"){
       isrownames <- NULL
@@ -113,6 +120,15 @@ LoadDataServer <- function(input, output, session, projet){
                                                     header = input$LoadDataCheckHeader,
                                                     sep = input$LoadDataSep,
                                                     row.names = isrownames)
+      
+      string <- paste(input$LoadDataName, " <- read.csv(", 
+                      input$LoadDataFile$datapath, ", header = ", 
+                      input$LoadDataCheckHeader, ", sep = ", 
+                      input$LoadDataSep, ", row.names = ", 
+                      isrownames,")", sep = "")
+      
+      projet$code <- paste(projet$code, string, sep = "\n\n# Load data from a new dataframe\n")
+      
     }
     else {
       alert("Please enter a rds or csv file") 
@@ -146,6 +162,11 @@ LoadDataServer <- function(input, output, session, projet){
         else if (class(temp[[i]]) == "data.frame")
           projet$data[[i]] <- temp[[i]]
       }
+    
+    string <- paste("data(", input$examples,")\nattach(",
+                    input$examples, ")", sep = "")
+    
+    projet$code <- paste(projet$code, string, sep = "\n\n# Load data from ade4 examples\n")
   })
   
   output$textdudiLoadData <- renderPrint({

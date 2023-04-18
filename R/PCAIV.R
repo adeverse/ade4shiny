@@ -75,6 +75,14 @@ pcaIVserver <- function(input, output, session, projet){
       temp <- pcaiv(dudi, df ,nf = input$nfPCAIV, scannf = F)
       projet$dudi[[input$NamePCAIV]] <- temp
       
+      string <- paste(input$NamePCAIV, " <- pcaiv(", input$DudiPCAIV, 
+                      ", ", input$DfPCAIV, ", nf = ", input$nfPCAIV, 
+                      ", scannf = ", F,")", sep = "")
+      
+      projet$code <- paste(projet$code, string, sep = "\n\n# Computing PCAIV\n")
+      
+      projet$dudi[[input$NamePCAIV]]$call <- substring(string, nchar(input$NamePCAIV) + 5)
+      
     }, error = function(e){
       alert("There has been an error (printed in the R console)")
       print(e)

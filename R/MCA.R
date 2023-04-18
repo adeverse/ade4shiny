@@ -62,6 +62,13 @@ mcaServer <- function(input, output, session, projet){
       temp <- dudi.acm(df, nf = input$nfMCA, scannf = FALSE)
       projet$dudi[[input$NameMCA]] <- temp
       
+      string <- paste(input$NameMCA, " <- dudi.acm(", input$DataframeMCA, 
+                      ", nf = ", input$nfMCA, ", scannf = ", F,")", sep = "")
+      
+      projet$code <- paste(projet$code, string, sep = "\n\n#Computing MCA\n")
+      
+      projet$dudi[[input$NameMCA]]$call <- substring(string, nchar(input$NameMCA) + 5)
+      
     }, error = function(e){
       alert("The dataframe is not suited for a mca analysis")
       print(e)

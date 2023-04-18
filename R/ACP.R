@@ -65,6 +65,13 @@ acpServer <- function(input, output, session, projet){
                      center = input$docenterACP, scale = input$doscaleACP)
     projet$dudi[[input$NameACP]] <- temp
     
+    string <- paste(input$NameACP, " <- dudi.pca(", input$DataframeACP, ", nf = ", input$nfPCA, ", scannf = ", F,
+                    ", center = ",input$docenterACP, ", scale = ", input$doscaleACP, ")", sep = "")
+    
+    projet$code <- paste(projet$code, string, sep = "\n\n# Computing PCA\n")
+    
+    projet$dudi[[input$NameACP]]$call <- substring(string, nchar(input$NameACP) + 5)
+    
     }, error = function(e){
       alert("The dataframe is not suited for a pca analysis")
       print(e)
@@ -107,47 +114,4 @@ acpServer <- function(input, output, session, projet){
     
     ade4:::biplot.dudi(projet$dudi[[input$NameACP]])
   })
-  
-  
-  # output$screeplotPCA <- renderPlot({
-  #   if (is.null(projet$dudi[[input$NameACP]]))
-  #     return(0)
-  #   
-  #   color_bar <- c(rep("black", projet$dudi[[input$NameACP]]$nf), 
-  #                  rep("grey", length(projet$dudi[[input$NameACP]]$eig) - projet$dudi[[input$NameACP]]$nf))
-  #   
-  #   #adegraphics:::screeplot.dudi(projet$dudi[[input$NameACP]])
-  #   
-  #   barplot(projet$dudi[[input$NameACP]]$eig, 
-  #           main = "Screeplot - Eigenvalues", 
-  #           names.arg = 1:length(projet$dudi[[input$NameACP]]$eig), 
-  #            col = color_bar)
-  #   
-  # })
-  
-  
-  # output$corcirclePCA <- renderPlot({
-  #   if (is.null(projet$dudi[[input$NameACP]]))
-  #     return(0)
-  #   
-  #   if (identical(projet$dudi[[input$NameACP]]$norm[1:length(projet$dudi[[input$NameACP]]$norm)], 
-  #                 rep(1, length(projet$dudi[[input$NameACP]]$norm))))
-  #     return(s.arrow(projet$dudi[[input$NameACP]]$co))
-  #   
-  #   else
-  #     return(s.corcircle(projet$dudi[[input$NameACP]]$co))
-  #   
-  # })
-  
-  # output$goiPCA <- renderPlot({
-  #   if (is.null(projet$dudi[[input$NameACP]]))
-  #     return(0)
-  #   
-  #   s.label(projet$dudi[[input$NameACP]]$li, 
-  #           xax = 1,     # Dimension 1
-  #           yax = 2)     # Dimension 2
-  #   
-  # })
-  
-  
 }

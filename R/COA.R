@@ -58,6 +58,13 @@ coaServer <- function(input, output, session, projet){
       temp <- dudi.coa(df, nf = input$nfCOA, scannf = F)
       projet$dudi[[input$NameCOA]] <- temp
       
+      string <- paste(input$NameCOA, " <- dudi.coa(", input$DataframeCOA, 
+                      ", nf = ", input$nfCOA, ", scannf = ", F,")", sep = "")
+      
+      projet$code <- paste(projet$code, string, sep = "\n\n# Computing COA\n")
+      
+      projet$dudi[[input$NameCOA]]$call <- substring(string, nchar(input$NameCOA) + 5)
+      
     }, error = function(e){
       alert("The dataframe is not suited for a coa analysis")
       return(0)

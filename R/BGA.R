@@ -95,6 +95,22 @@ bgaServer <- function(input, output, session, projet){
       temp <- bca(dud, fac = fact,nf = input$nfBGA, scannf = F)
       projet$dudi[[input$NameBGA]] <- temp
       
+      if ("dudi" %in% class(projet$dudi[[input$ObjectGroupBGA]]))
+        string <- paste(input$NameBGA, " <- bca(", input$DudiBGA, ", fac = ", 
+                        "as.factor(", input$ObjectGroupBGA, "$tab[,", '"',input$GroupBGA,'"',"])",
+                        ", nf = ", input$nfBGA, ", scannf = F"
+                        ,")", sep = "")
+      
+      else
+        string <- paste(input$NameBGA, " <- bca(", input$DudiBGA, ", fac = ", 
+                        "as.factor(", input$ObjectGroupBGA, "[,", "'",input$GroupBGA,"'","])",
+                        ", nf = ", input$nfBGA, ", scannf = F"
+                        ,")", sep = "")
+      
+      projet$code <- paste(projet$code, string, sep = "\n\n# Computing BCA\n")
+      
+      projet$dudi[[input$NameBGA]]$call <- substring(string, nchar(input$NameBGA) + 5)
+      
     }, error = function(e){
       alert("The dataframe is not suited for a bga analysis")
       print(e)
@@ -137,7 +153,11 @@ bgaServer <- function(input, output, session, projet){
     else
       fact <- as.factor(projet$data[[input$ObjectGroupBGA]][,input$GroupBGA])
     
-    ade4:::plot.between(projet$dudi[[input$NameBGA]])
+    temp <- bca(dud, fac = fact, nf = input$nfBGA, scannf = F)
+    
+    
+    ade4:::plot.between(temp)
+    
     
   })
   

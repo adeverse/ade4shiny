@@ -2,7 +2,8 @@ server <- function(input, output, session) {
   
   projet <- reactiveValues(data = list(),
                            dudi = list(),
-                           plot = character(0))
+                           plot = character(0),
+                           code = "library(ade4)\n")
   
   
   output$savedata <- downloadHandler(
@@ -11,6 +12,14 @@ server <- function(input, output, session) {
       
       object <- list(data = projet$data, dudi = projet$dudi)
       saveRDS(object, file)
+    }
+  )
+  
+  output$savecode <- downloadHandler(
+    filename = "ade4_R_code.txt",
+    content = function(file) {
+      
+      writeLines(projet$code, file)
     }
   )
   

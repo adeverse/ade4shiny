@@ -81,6 +81,15 @@ coinertiaserver <- function(input, output, session, projet){
       temp <- coinertia(dud1, dud2 ,nf = input$nfCoinertia, scannf = F)
       projet$dudi[[input$NameCoinertia]] <- temp
       
+      
+      string <- paste(input$NameCoinertia, " <- coinertia(", input$DudiCoinertia1, 
+                      ", ", input$DudiCoinertia2, ", nf = ", input$nfCoinertia, 
+                      ", scannf = ", F,")", sep = "")
+      
+      projet$code <- paste(projet$code, string, sep = "\n\n# Computing Coinertia\n")
+      
+      projet$dudi[[input$NameCoinertia]]$call <- substring(string, nchar(input$NameCoinertia) + 5)
+      
     }, error = function(e){
       alert("There has been an error (printed in the R console)")
       print(e)

@@ -63,6 +63,13 @@ pcoServer <- function(input, output, session, projet){
                        center = input$docenterPCO, scale = input$doscalePCO)
       projet$dudi[[input$NamePCO]] <- temp
       
+      string <- paste(input$NamePCO, " <- dudi.pco(", input$DataframePCO, ", nf = ", input$nfPCO, ", scannf = ", F,
+                      ", center = ",input$docenterPCO, ", scale = ", input$doscalePCO, ")", sep = "")
+      
+      projet$code <- paste(projet$code, string, sep = "\n\n# Computing PCO\n")
+      
+      projet$dudi[[input$NamePCO]]$call <- substring(string, nchar(input$NamePCO) + 5)
+      
     }, error = function(e){
       alert("The dataframe is not suited for a pco analysis")
       print(e)
