@@ -1,7 +1,7 @@
 coinertie <- tabItem(tabName = "coinertia",
                      sidebarLayout(
                        sidebarPanel = sidebarPanel(
-                         textInput("NameCoinertia", "Name to refer the coinertia later"),
+                         uiOutput("selectizeCoineria"),
                          uiOutput("selectDudiCoinertia1"),
                          uiOutput("selectDudiCoinertia2"),
                          numericInput("nfCoinertia", "Nomber of dimension to keep", 5, 2, 200),
@@ -27,6 +27,23 @@ coinertie <- tabItem(tabName = "coinertia",
 
 
 coinertiaserver <- function(input, output, session, projet){
+  
+  output$selectizeCoinertia <- renderUI({
+    all_Coinertia <- sapply(names(projet$dudi), function(x){
+      if ("coinertia" %in% class(projet$dudi[[x]]))
+        return(x)
+    })
+    
+    if (length(all_Coinertia) == 0)
+      selectizeInput("NameCoinertia", "Name to refer the coinertia later", 
+                     choices = all_Coinertia, options = list(create = TRUE))
+    
+    else{
+      last <- all_Coinertia[length(all_Coinertia)]
+      selectizeInput("NameCoinertia", "Name to refer the coinertia later", choices = all_Coinertia, 
+                     options = list(create = TRUE), selected = last)
+    }
+  })
   
   output$selectDudiCoinertia1 <- renderUI({
     if (length(projet$dudi) == 0)
@@ -67,6 +84,11 @@ coinertiaserver <- function(input, output, session, projet){
   observeEvent(input$DoCoinertia, {
     if (input$NameCoinertia == ""){
       alert("Please enter a name")
+      return(0)
+    }
+    
+    if (input$NameCoinertia %in% names(projet$dudi)){
+      alert("Name already taken, please enter a new one")
       return(0)
     }
     

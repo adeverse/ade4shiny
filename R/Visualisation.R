@@ -58,7 +58,7 @@ visuServer <- function(input, output, session, projet){
                  else if (input$objectClass %in% names(projet$dudi))
                    selectInput("xyClass", "XY coordinates", 
                                choices = names(projet$dudi[[input$objectClass]]),
-                               selected = input$xyClass)
+                               selected = "li")
                }
              },
              numericInput("xClass", "x axis column", value = 1),
@@ -174,6 +174,7 @@ visuServer <- function(input, output, session, projet){
     ,
     # content is a function with argument file. content writes the plot to the device
     content = function(file) {
+      tryCatch({
       if(input$plotformat == "pdf")
         pdf(file, width = input$width/2.54, height = input$height/2.54)
       
@@ -185,6 +186,11 @@ visuServer <- function(input, output, session, projet){
       
       eval(projet$plot)
       dev.off()
+      }, error = function(e){
+        alert("There has been an error (printed in R console)")
+        print(e)
+        return(0)
+      })
     } 
   )
   

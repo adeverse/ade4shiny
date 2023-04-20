@@ -1,7 +1,7 @@
 coa <- tabItem(tabName = "coa",
                sidebarLayout(
                  sidebarPanel = sidebarPanel(
-                   textInput("NameCOA", "Name to refer the COA later"),
+                   uiOutput("selectizeCOA"),
                    uiOutput("SelectDataframeCOA"),
                    numericInput("nfCOA", "Nomber of dimension to keep", 5, 2, 200),
                    actionButton("DoCOA", "Compute COA", style = "color : white; background-color : #58d68d")
@@ -30,6 +30,24 @@ coa <- tabItem(tabName = "coa",
 
 coaServer <- function(input, output, session, projet){
   
+  output$selectizeCOA <- renderUI({
+    all_COA <- sapply(names(projet$dudi), function(x){
+      if ("coa" %in% class(projet$dudi[[x]]))
+        return(x)
+    })
+    
+    if (length(all_COA) == 0)
+      selectizeInput("NameCOA", "Name to refer the COA later", 
+                     choices = all_COA, options = list(create = TRUE))
+    
+    else{
+      last <- all_COA[length(all_COA)]
+      selectizeInput("NameCOA", "Name to refer the COA later", choices = all_COA, 
+                     options = list(create = TRUE), selected = last)
+    }
+    
+  })
+  
   output$SelectDataframeCOA <- renderUI(
     selectInput("DataframeCOA", "Select a dataframe", choices = names(projet$data), selected = input$DataframeCOA)
   )
@@ -51,11 +69,17 @@ coaServer <- function(input, output, session, projet){
       return(0)
     }
     
+    if (input$NameCOA %in% names(projet$dudi)){
+      alert("Name already taken, please enter a new one")
+      return(0)
+    }
+    
     df <- projet$data[[input$DataframeCOA]]
     
     tryCatch({
       
       temp <- dudi.coa(df, nf = input$nfCOA, scannf = F)
+      
       projet$dudi[[input$NameCOA]] <- temp
       
       string <- paste(input$NameCOA, " <- dudi.coa(", input$DataframeCOA, 

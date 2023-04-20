@@ -1,7 +1,7 @@
 pcaIV <- tabItem(tabName = "pcaiv",
                sidebarLayout(
                  sidebarPanel = sidebarPanel(
-                   textInput("NamePCAIV", "Name to refer the PCAIV later"),
+                   uiOutput("selectizePCAIV"),
                    uiOutput("selectDudiPCAIV"),
                    uiOutput("selectDfPCAIV"),
                    numericInput("nfPCAIV", "Nomber of dimension to keep", 5, 2, 200),
@@ -27,6 +27,23 @@ pcaIV <- tabItem(tabName = "pcaiv",
 
 
 pcaIVserver <- function(input, output, session, projet){
+  
+  output$selectizePCAIV <- renderUI({
+    all_PCAIV <- sapply(names(projet$dudi), function(x){
+      if ("pcaiv" %in% class(projet$dudi[[x]]))
+        return(x)
+    })
+    
+    if (length(all_PCAIV) == 0)
+      selectizeInput("NamePCAIV", "Name to refer the PCAIV later", 
+                     choices = all_PCAIV, options = list(create = TRUE))
+    
+    else{
+      last <- all_PCAIV[length(all_PCAIV)]
+      selectizeInput("NamePCAIV", "Name to refer the PCAIV later", choices = all_PCAIV, 
+                     options = list(create = TRUE), selected = last)
+    }
+  })
   
   output$selectDudiPCAIV <- renderUI({
     if (length(projet$dudi) == 0)
@@ -64,6 +81,11 @@ pcaIVserver <- function(input, output, session, projet){
   observeEvent(input$DoPCAIV, {
     if (input$NamePCAIV == ""){
       alert("Please enter a name")
+      return(0)
+    }
+    
+    if (input$NamePCAIV %in% names(projet$dudi)){
+      alert("Name already taken, please enter a new one")
       return(0)
     }
     

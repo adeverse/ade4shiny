@@ -1,11 +1,15 @@
 acp <- tabItem(tabName = "pca",
   sidebarLayout(
     sidebarPanel = sidebarPanel(
-      textInput("NameACP", "Name to refer the PCA later"),
+      uiOutput("selectizeACP"),
       uiOutput("SelectDataframeACP"),
       numericInput("nfPCA", "Nomber of dimension to keep", 5, 2, 200),
       checkboxInput("docenterACP", "Center", value = T),
       checkboxInput("doscaleACP", "Scale", value = T),
+      checkboxInput("uniformrw", "Uniform row weight", value = T),
+      checkboxInput("uniformcw", "Uniform col weight", value = T),
+      uiOutput("FileUniRW"),
+      uiOutput("FileUniCW"),
       actionButton("DoACP", "Compute ACP", style = "color : white; background-color : #58d68d")
     ),
     mainPanel = mainPanel(
@@ -33,6 +37,42 @@ acp <- tabItem(tabName = "pca",
 
 acpServer <- function(input, output, session, projet){
   
+  output$selectizeACP <- renderUI({
+    all_PCA <- sapply(names(projet$dudi), function(x){
+      if ("pca" %in% class(projet$dudi[[x]]))
+        return(x)
+    })
+    
+    if (length(all_PCA) == 0)
+      selectizeInput("NameACP", "Name to refer the PCA later", choices = all_PCA, 
+                     options = list(create = TRUE))
+    
+    else{
+      last <- all_PCA[length(all_PCA)]
+      selectizeInput("NameACP", "Name to refer the PCA later", choices = all_PCA, 
+                   options = list(create = TRUE), selected = last)
+    }
+    
+  })
+  
+  
+  output$FileUniRW <- renderUI({
+    if (input$uniformrw)
+      return("")
+    
+    fileInput("rw", label = "Row weight file")
+    
+  })
+  
+  output$FileUniCW <- renderUI({
+    if (input$uniformcw == F)
+      return("")
+    
+    fileInput("cw", label = "Col weight file")
+    
+  })
+  
+  
   output$SelectDataframeACP <- renderUI(
     selectInput("DataframeACP", "Select a dataframe", choices = names(projet$data), selected = input$DataframeACP)
   )
@@ -57,12 +97,18 @@ acpServer <- function(input, output, session, projet){
       return(0)
     }
     
+    if (input$NameACP %in% names(projet$dudi)){
+      alert("Name already taken, please enter a new one")
+      return(0)
+    }
+    
     df <- projet$data[[input$DataframeACP]]
     
     tryCatch({
     
     temp <- dudi.pca(df, nf = input$nfPCA, scannf = F, 
                      center = input$docenterACP, scale = input$doscaleACP)
+    
     projet$dudi[[input$NameACP]] <- temp
     
     string <- paste(input$NameACP, " <- dudi.pca(", input$DataframeACP, ", nf = ", input$nfPCA, ", scannf = ", F,

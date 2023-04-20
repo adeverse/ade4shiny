@@ -1,7 +1,7 @@
 bga <- tabItem(tabName = "bga",
                sidebarLayout(
                  sidebarPanel = sidebarPanel(
-                   textInput("NameBGA", "Name to refer the BGA later"),
+                   uiOutput("selectizeBGA"),
                    uiOutput("selectDudiBGA"),
                    tags$hr(style="border-color: gray;"),
                    p(markdown("#### Grouping factor")),
@@ -30,6 +30,23 @@ bga <- tabItem(tabName = "bga",
 
 
 bgaServer <- function(input, output, session, projet){
+  
+  output$selectizeBGA <- renderUI({
+    all_BGA <- sapply(names(projet$dudi), function(x){
+      if ("between" %in% class(projet$dudi[[x]]))
+        return(x)
+    })
+    
+    if (length(all_BGA) == 0)
+      selectizeInput("NameBGA", "Name to refer the BGA later", 
+                     choices = all_BGA, options = list(create = TRUE))
+    
+    else{
+      last <- all_BGA[length(all_BGA)]
+      selectizeInput("NameBGA", "Name to refer the BGA later", choices = all_BGA, 
+                     options = list(create = TRUE), selected = last)
+    }
+  })
   
   output$selectDudiBGA <- renderUI({
     if (length(projet$dudi) == 0)
@@ -79,6 +96,11 @@ bgaServer <- function(input, output, session, projet){
   observeEvent(input$DoBGA, {
     if (input$NameBGA == ""){
       alert("Please enter a name")
+      return(0)
+    }
+    
+    if (input$NameBGA %in% names(projet$dudi)){
+      alert("Name already taken, please enter a new one")
       return(0)
     }
     

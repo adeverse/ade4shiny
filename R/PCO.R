@@ -1,7 +1,7 @@
 pco <- tabItem(tabName = "pco",
                sidebarLayout(
                  sidebarPanel = sidebarPanel(
-                   textInput("NamePCO", "Name to refer the PCO later"),
+                   uiOutput("selectizePCO"),
                    uiOutput("SelectDataframePCO"),
                    numericInput("nfPCO", "Number of dimension to keep", 5, 2, 200),
                    actionButton("DoPCO", "Compute PCO", style = "color : white; background-color : #58d68d")
@@ -31,6 +31,24 @@ pco <- tabItem(tabName = "pco",
 
 pcoServer <- function(input, output, session, projet){
   
+  output$selectizePCO <- renderUI({
+    all_PCO <- sapply(names(projet$dudi), function(x){
+      if ("pco" %in% class(projet$dudi[[x]]))
+        return(x)
+    })
+    
+    if (length(all_PCO) == 0)
+      selectizeInput("NamePCO", "Name to refer the PCO later", 
+                     choices = all_PCO, options = list(create = TRUE))
+    
+    else{
+      last <- all_PCO[length(all_PCO)]
+      selectizeInput("NamePCO", "Name to refer the PCO later", choices = all_PCO, 
+                     options = list(create = TRUE), selected = last)
+    }
+
+  })
+  
   output$SelectDataframePCO <- renderUI(
     selectInput("DataframePCO", "Select a dataframe", choices = names(projet$data), selected = input$DataframePCO)
   )
@@ -52,6 +70,11 @@ pcoServer <- function(input, output, session, projet){
   observeEvent(input$DoPCO, {
     if (input$NamePCO == ""){
       alert("Please enter a name")
+      return(0)
+    }
+    
+    if (input$NamePCO %in% names(projet$dudi)){
+      alert("Name already taken, please enter a new one")
       return(0)
     }
     

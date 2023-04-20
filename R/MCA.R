@@ -1,7 +1,7 @@
 mca <- tabItem(tabName = "mca",
                sidebarLayout(
                  sidebarPanel = sidebarPanel(
-                   textInput("NameMCA", "Name to refer the MCA later"),
+                   uiOutput("selectizeMCA"),
                    uiOutput("SelectDataframeMCA"),
                    numericInput("nfMCA", "Number of dimension to keep", 5, 2, 200),
                    actionButton("DoMCA", "Compute MCA", style = "color : white; background-color : #58d68d")
@@ -31,6 +31,23 @@ mca <- tabItem(tabName = "mca",
 
 mcaServer <- function(input, output, session, projet){
   
+  output$selectizeMCA <- renderUI({
+    all_MCA <- sapply(names(projet$dudi), function(x){
+      if ("acm" %in% class(projet$dudi[[x]]))
+        return(x)
+    })
+    
+    if (length(all_MCA) == 0)
+      selectizeInput("NameMCA", "Name to refer the MCA later", 
+                     choices = all_MCA, options = list(create = TRUE))
+    
+    else{
+      last <- all_MCA[length(all_MCA)]
+      selectizeInput("NameMCA", "Name to refer the MCA later", choices = all_MCA, 
+                     options = list(create = TRUE), selected = last)
+    }
+  })
+  
   output$SelectDataframeMCA <- renderUI(
     selectInput("DataframeMCA", "Select a dataframe", choices = names(projet$data), selected = input$DataframeMCA)
   )
@@ -52,6 +69,11 @@ mcaServer <- function(input, output, session, projet){
   observeEvent(input$DoMCA, {
     if (input$NameMCA == ""){
       alert("Please enter a name")
+      return(0)
+    }
+    
+    if (input$NameMCA %in% names(projet$dudi)){
+      alert("Name already taken, please enter a new one")
       return(0)
     }
     
