@@ -65,7 +65,7 @@ acpServer <- function(input, output, session, projet){
   })
   
   output$FileUniCW <- renderUI({
-    if (input$uniformcw == F)
+    if (input$uniformcw)
       return("")
     
     fileInput("cw", label = "Col weight file")
@@ -102,17 +102,68 @@ acpServer <- function(input, output, session, projet){
       return(0)
     }
     
+    if (!(input$uniformrw) & is.null(input$rw)){
+      alert("Please enter a row weight file")
+      return(0)
+    }
+    
+    
+    if (!(input$uniformcw) & is.null(input$cw)){
+      alert("Please enter a col weight file")
+      return(0)
+    }
+    
     df <- projet$data[[input$DataframeACP]]
     
     tryCatch({
     
+    if (input$uniformrw){
+      row.weight <- rep(1, nrow(df))/nrow(df)
+      
+      string_rw <- paste("rep(1, nrow(", input$DataframeACP, "))/nrow("
+                         , input$DataframeACP, ")",sep = "")
+      }
+    
+    else{
+      row.w1 <- read.table(input$rw$datapath, header = TRUE, row.names = 1)
+      
+      # Adding import table to automatic code
+      little_string <- "row.w1 <- read.table(<path_to_row_weight_file>, header = T, row.names = 1)"
+      projet$code <- paste(projet$code, little_string, sep = "\n\n# Importing row weight\n")
+      
+      row.weight <- row.w1[,1]
+      
+      string_rw <- "row.w1[,1]"
+      
+    }
+    
+    if (input$uniformcw){
+      col.weight <- rep(1, ncol(df))
+      string_cw <- paste("rep(1, ncol(", input$DataframeACP, "))", sep = "")
+    }
+    
+    else{
+      col.w1 <- read.table(input$cw$datapath, header = TRUE, row.names = 1)
+      
+      # Adding import table to automatic code
+      little_string <- "col.w1 <- read.table(<path_to_col_weight_file>, header = T, row.names = 1)"
+      projet$code <- paste(projet$code, little_string, sep = "\n\n# Importing col weight\n")
+      
+      col.weight <- col.w1[,1]
+      
+      string_cw <- "col.w1[,1]"
+    }
+    
+    
     temp <- dudi.pca(df, nf = input$nfPCA, scannf = F, 
-                     center = input$docenterACP, scale = input$doscaleACP)
+                     center = input$docenterACP, scale = input$doscaleACP, 
+                     row.w = row.weight, col.w = col.weight)
     
     projet$dudi[[input$NameACP]] <- temp
     
     string <- paste(input$NameACP, " <- dudi.pca(", input$DataframeACP, ", nf = ", input$nfPCA, ", scannf = ", F,
-                    ", center = ",input$docenterACP, ", scale = ", input$doscaleACP, ")", sep = "")
+                    ", center = ",input$docenterACP, ", scale = ", input$doscaleACP, 
+                    ", row.w = ", string_rw, ", col.w = ", string_cw,")", sep = "")
     
     projet$code <- paste(projet$code, string, sep = "\n\n# Computing PCA\n")
     
