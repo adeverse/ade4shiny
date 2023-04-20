@@ -18,8 +18,8 @@ coa <- tabItem(tabName = "coa",
                               uiOutput("selectoutputCOA2"),
                               dataTableOutput("outputCOA")),
                      
-                     tabPanel("Biplot",
-                              plotOutput("biplotCOA"))
+                     tabPanel("Screeplot",
+                              plotOutput("screeplotCOA"))
                      
                    )
                    
@@ -100,11 +100,11 @@ coaServer <- function(input, output, session, projet){
   }, server = F)
   
   
-  output$biplotCOA <- renderPlot({
+  output$screeplotCOA <- renderPlot({
     if (is.null(projet$dudi[[input$NameCOA]]))
       return(0)
     
-    ade4:::biplot.dudi(projet$dudi[[input$NameCOA]])
+    ade4:::screeplot.dudi(projet$dudi[[input$NameCOA]], main = input$NameCOA)
   })
   
   

@@ -18,8 +18,8 @@ pco <- tabItem(tabName = "pco",
                               uiOutput("selectoutputPCO2"),
                               dataTableOutput("outputPCO")),
                      
-                     tabPanel("Biplot",
-                              plotOutput("biplotPCO"))
+                     tabPanel("Screeplot",
+                              plotOutput("screeplotPCO"))
                      
                    )
                    
@@ -106,11 +106,11 @@ pcoServer <- function(input, output, session, projet){
   }, server = F)
   
   
-  output$biplotPCO <- renderPlot({
+  output$screeplotPCO <- renderPlot({
     if (is.null(projet$dudi[[input$NamePCO]]))
       return(0)
     
-    ade4:::biplot.dudi(projet$dudi[[input$NamePCO]])
+    ade4:::screeplot.dudi(projet$dudi[[input$NamePCO]], main = input$NamePCO)
   })
   
 }

@@ -109,7 +109,7 @@ mcaServer <- function(input, output, session, projet){
     if (is.null(projet$dudi[[input$NameMCA]]))
       return(0)
     
-    ade4:::scatter.dudi(projet$dudi[[input$NameMCA]])
+    ade4:::screeplot.dudi(projet$dudi[[input$NameMCA]], main = input$NameMCA)
   })
    
 }

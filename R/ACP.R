@@ -21,7 +21,7 @@ acp <- tabItem(tabName = "pca",
                  dataTableOutput("outputPCA")),
         
         tabPanel("Plot",
-                 plotOutput("biplotPCA"))
+                 plotOutput("screeplotPCA"))
         
       )
     
@@ -108,10 +108,11 @@ acpServer <- function(input, output, session, projet){
   }, server = F)
   
   
-  output$biplotPCA <- renderPlot({
+  output$screeplotPCA <- renderPlot({
     if (is.null(projet$dudi[[input$NameACP]]))
       return(0)
     
-    ade4:::biplot.dudi(projet$dudi[[input$NameACP]])
+    ade4:::screeplot.dudi(projet$dudi[[input$NameACP]], main = input$NameACP)
   })
 }
+
