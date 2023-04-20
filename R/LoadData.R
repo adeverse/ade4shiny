@@ -130,14 +130,12 @@ LoadDataServer <- function(input, output, session, projet){
       })
       
       if (is.null(isrownames))
-        string <- paste(input$LoadDataName, " <- read.csv(", 
-                        input$LoadDataFile$datapath, ", header = ", 
+        string <- paste(input$LoadDataName, " <- read.csv(<path_to_your_dataframe>, header = ", 
                         input$LoadDataCheckHeader, ", sep = ","'", 
                        input$LoadDataSep,"'", ", row.names = ", 
                        "NULL",")", sep = "")
       else
-        string <- paste(input$LoadDataName, " <- read.csv(", 
-                        input$LoadDataFile$datapath, ", header = ", 
+        string <- paste(input$LoadDataName, " <- read.csv(<path_to_your_dataframe>, header = ", 
                         input$LoadDataCheckHeader, ", sep = ","'", 
                         input$LoadDataSep,"'", ", row.names = ", 
                         isrownames,")", sep = "")
