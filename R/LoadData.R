@@ -45,7 +45,7 @@ LoadDataServer <- function(input, output, session, projet){
            ),
            "New dataframe" = tagList(
              textInput("LoadDataName", "Choose a name to refer the data frame later"),
-             fileInput("LoadDataFile", "Choose a rds or csv file"),
+             fileInput("LoadDataFile", "Choose a rds, csv or txt file"),
              textInput("LoadDataSep", "separator", ","),
              checkboxInput("LoadDataCheckHeader", "Header"),
              checkboxInput("LoadDataCheckRownames", "Rownames in first column"),
@@ -110,22 +110,37 @@ LoadDataServer <- function(input, output, session, projet){
       
     }
     
-    else if (file_ext(input$LoadDataFile$datapath) == "csv"){
+    else if (file_ext(input$LoadDataFile$datapath) == "csv" | 
+             file_ext(input$LoadDataFile$datapath) == "txt"){
       isrownames <- NULL
       if (input$LoadDataCheckRownames)
         isrownames <- 1
       
       
+      tryCatch(
       projet$data[[input$LoadDataName]] <- read.csv(input$LoadDataFile$datapath, 
                                                     header = input$LoadDataCheckHeader,
                                                     sep = input$LoadDataSep,
                                                     row.names = isrownames)
+      , error = function(e){
+        alert("There has been an error (printed in R console)")
+        print(e)
+        return(0)
+        
+      })
       
-      string <- paste(input$LoadDataName, " <- read.csv(", 
-                      input$LoadDataFile$datapath, ", header = ", 
-                      input$LoadDataCheckHeader, ", sep = ", 
-                      input$LoadDataSep, ", row.names = ", 
-                      isrownames,")", sep = "")
+      if (is.null(isrownames))
+        string <- paste(input$LoadDataName, " <- read.csv(", 
+                        input$LoadDataFile$datapath, ", header = ", 
+                        input$LoadDataCheckHeader, ", sep = ","'", 
+                       input$LoadDataSep,"'", ", row.names = ", 
+                       "NULL",")", sep = "")
+      else
+        string <- paste(input$LoadDataName, " <- read.csv(", 
+                        input$LoadDataFile$datapath, ", header = ", 
+                        input$LoadDataCheckHeader, ", sep = ","'", 
+                        input$LoadDataSep,"'", ", row.names = ", 
+                        isrownames,")", sep = "")
       
       projet$code <- paste(projet$code, string, sep = "\n\n# Load data from a new dataframe\n")
       
