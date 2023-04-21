@@ -14,7 +14,7 @@ mca <- tabItem(tabName = "mca",
                      
                      tabPanel("Output",
                               selectInput("selectoutputMCA", "", 
-                                          choices = c("Eigenvalues", "Variables", "Individuals")),
+                                          choices = c("Eigenvalues", "Variables", "Individuals", "Dudi Object")),
                               uiOutput("selectoutputMCA2"),
                               dataTableOutput("outputMCA")),
                      
@@ -60,9 +60,28 @@ mcaServer <- function(input, output, session, projet){
       selectInput("outputMCA2", "Select a value to show", 
                   c("coord", "cos2", "contrib"))
     
-    else
+    else if (input$selectoutputMCA == "Individuals")
       selectInput("outputMCA2", "Select a value to show", 
                   c("coord", "cos2", "contrib"))
+    
+    else {
+      if (is.null(input$selectoutputMCA))
+        return("")
+      
+      if (is.null(input$NameMCA))
+        return("")
+      
+      if (!(input$NameMCA %in% names(projet$dudi)))
+        return("")
+      
+      remove <- c("eig", "rank", "nf", "call")
+      name <- names(projet$dudi[[input$NameMCA]])
+      keep <- name[! name %in% remove]
+      
+      selectInput("outputMCA2", "select a value to show",
+                  keep)
+    }
+      
     
   })
   
@@ -82,6 +101,10 @@ mcaServer <- function(input, output, session, projet){
     tryCatch({
       
       temp <- dudi.acm(df, nf = input$nfMCA, scannf = FALSE)
+      
+      temp$cw <- list(col.weight = temp$cw)
+      temp$lw <- list(row.weight = temp$lw)
+      
       projet$dudi[[input$NameMCA]] <- temp
       
       string <- paste(input$NameMCA, " <- dudi.acm(", input$DataframeMCA, 
@@ -122,16 +145,27 @@ mcaServer <- function(input, output, session, projet){
       return(datatable(data.frame(list(values = projet$dudi[[input$NameMCA]]$eig))))
     }
     
-    else if (input$selectoutputMCA == "Variables")
-      dt <- get_mca_var(projet$dudi[[input$NameMCA]])
+    else if (input$selectoutputMCA == "Variables") {
+      temp.dudi <- projet$dudi[[input$NameMCA]]
+      temp.dudi$cw <- unlist(temp.dudi$cw)
+      temp.dudi$lw <- unlist(temp.dudi$lw)
+      dt <- get_mca_var(temp.dudi)
+    }
+    
+    else if (input$selectoutputMCA == "Individuals") {
+      temp.dudi <- projet$dudi[[input$NameMCA]]
+      temp.dudi$cw <- unlist(temp.dudi$cw)
+      temp.dudi$lw <- unlist(temp.dudi$lw)
+      dt <- get_mca_ind(temp.dudi)
+    }
     
     else
-      dt <- get_mca_ind(projet$dudi[[input$NameMCA]])
+      dt <- projet$dudi[[input$NameMCA]]
     
     if (is.null(input$outputMCA2))
       return(data.frame(list()))
     
-    datatable(dt[[input$outputMCA2]], extensions = c("Buttons"),
+    datatable(as.data.frame(dt[[input$outputMCA2]]), extensions = c("Buttons"),
               options = list(scrollX = TRUE, buttons = c("csv"), dom = 'Bfrtip'))
   }, server = F)
   

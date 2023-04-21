@@ -180,6 +180,11 @@ LoadDataServer <- function(input, output, session, projet){
         
         else if (class(temp[[i]]) == "data.frame")
           projet$data[[paste(input$examples, "$", i, sep = "")]] <- temp[[i]]
+        
+        else if (class(temp[[i]]) == "character" | class(temp[[i]]) == "factor") {
+          temp[[i]] <- list(X = temp[[i]])
+          projet$data[[paste(input$examples, "$", i, sep = "")]] <- as.data.frame(temp[[i]])
+        }
       }
     
     string <- paste("data(", input$examples,")", sep = "")

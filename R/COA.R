@@ -14,7 +14,7 @@ coa <- tabItem(tabName = "coa",
                      
                      tabPanel("Output",
                               selectInput("selectoutputCOA", "", 
-                                          choices = c("Eigenvalues", "Variables", "Individuals")),
+                                          choices = c("Eigenvalues", "Variables", "Individuals", "Dudi object")),
                               uiOutput("selectoutputCOA2"),
                               dataTableOutput("outputCOA")),
                      
@@ -53,13 +53,31 @@ coaServer <- function(input, output, session, projet){
   )
   
   output$selectoutputCOA2 <- renderUI({
+    if (is.null(input$selectoutputCOA))
+      return("")
+    
     if(input$selectoutputCOA == "Eigenvalues")
       return()
     
+    else if (input$selectoutputCOA == "Dudi object"){
+      if (is.null(input$NameCOA))
+        return("")
+      
+      if (!(input$NameCOA %in% names(projet$dudi)))
+        return("")
+      
+      remove <- c("eig", "nf", "call", "N", "rank")
+      name <- names(projet$dudi[[input$NameCOA]])
+      keep <- name[! name %in% remove]
+      
+      selectInput("outputCOA2", "select a value to show",
+                  choices = keep)
+      
+    }
+    
     else
       selectInput("outputCOA2", "Select a value to show", 
-                  c("coord", "cos2", "contrib"), 
-                  selected = "coord")
+                  c("coord", "cos2", "contrib", "inertia"))
     
   })
   
@@ -79,6 +97,9 @@ coaServer <- function(input, output, session, projet){
     tryCatch({
       
       temp <- dudi.coa(df, nf = input$nfCOA, scannf = F)
+      
+      temp$cw <- list(col.weight = temp$cw)
+      temp$lw <- list(row.weight = temp$lw)
       
       projet$dudi[[input$NameCOA]] <- temp
       
@@ -111,23 +132,36 @@ coaServer <- function(input, output, session, projet){
   })
   
   output$outputCOA <- renderDataTable({
-    if (is.null(projet$dudi[[input$NameCOA]]))
+    if (length(projet$dudi) == 0)
       return(data.frame(list()))
     
-    if (input$selectoutputCOA == "Eigenvalues"){
+    if (!(input$NameCOA %in% names(projet$dudi)))
+      return(data.frame(list()))
+    
+    if (input$selectoutputCOA == "Eigenvalues")
       return(datatable(data.frame(list(values = projet$dudi[[input$NameCOA]]$eig))))
+    
+    else if (input$selectoutputCOA == "Variables") {
+      temp.dudi <- projet$dudi[[input$NameCOA]]
+      temp.dudi$cw <- unlist(temp.dudi$cw)
+      temp.dudi$lw <- unlist(temp.dudi$lw)
+      dt <- get_ca_col(temp.dudi)
     }
     
-    else if (input$selectoutputCOA == "Variables")
-      dt <- get_ca_col(projet$dudi[[input$NameCOA]])
+    else if (input$selectoutputCOA == "Individuals"){
+      temp.dudi <- projet$dudi[[input$NameCOA]]
+      temp.dudi$cw <- unlist(temp.dudi$cw)
+      temp.dudi$lw <- unlist(temp.dudi$lw)
+      dt <- get_ca_row(temp.dudi)
+    }
     
     else
-      dt <- get_ca_row(projet$dudi[[input$NameCOA]])
+      dt <- projet$dudi[[input$NameCOA]]
     
     if (is.null(input$outputCOA2))
       return(data.frame(list()))
     
-    datatable(dt[[input$outputCOA2]], extensions = c("Buttons"),
+    datatable(as.data.frame(dt[[input$outputCOA2]]), extensions = c("Buttons"),
             options = list(scrollX = TRUE, buttons = c("csv"), dom = 'Bfrtip'))
     
   }, server = F)

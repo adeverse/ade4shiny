@@ -70,6 +70,10 @@ bgaServer <- function(input, output, session, projet){
     if (length(projet$dudi) == 0)
       return("No dudi object in the project")
     
+    if (is.null(input$ObjectGroupBGA))
+      return("")
+    
+    
     if ("dudi" %in% class(projet$dudi[[input$ObjectGroupBGA]]))
       selectInput("GroupBGA", "Select a grouping column",
                   choices = names(projet$dudi[[input$ObjectGroupBGA]]$tab),

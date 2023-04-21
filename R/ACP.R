@@ -20,7 +20,7 @@ acp <- tabItem(tabName = "pca",
         
         tabPanel("Output",
                  selectInput("selectoutputPCA", "", 
-                             choices = c("Eigenvalues", "Variables", "Individuals")),
+                             choices = c("Eigenvalues", "Variables", "Individuals", "Dudi object")),
                  uiOutput("selectoutputPCA2"),
                  dataTableOutput("outputPCA")),
         
@@ -85,10 +85,27 @@ acpServer <- function(input, output, session, projet){
       selectInput("outputPCA2", "Select a value to show", 
                   c("coord", "cor", "cos2", "contrib"))
     
-    else
+    else if (input$selectoutputPCA == "Individuals")
       selectInput("outputPCA2", "Select a value to show", 
                   c("coord", "cos2", "contrib"))
     
+    else {
+      if (is.null(input$selectoutputPCA))
+        return("")
+      
+      if (is.null(input$NameACP))
+        return("")
+      
+      if (!(input$NameACP %in% names(projet$dudi)))
+        return("")
+      
+      remove <- c("eig", "rank", "nf", "cent", "norm", "call")
+      name <- names(projet$dudi[[input$NameACP]])
+      keep <- name[! name %in% remove]
+      
+      selectInput("outputPCA2", "select a value to show",
+                  keep)
+    }
   })
   
   observeEvent(input$DoACP, {
@@ -159,6 +176,9 @@ acpServer <- function(input, output, session, projet){
                      center = input$docenterACP, scale = input$doscaleACP, 
                      row.w = row.weight, col.w = col.weight)
     
+    temp$cw <- list(col.weight = temp$cw)
+    temp$lw <- list(row.weight = temp$lw)
+    
     projet$dudi[[input$NameACP]] <- temp
     
     string <- paste(input$NameACP, " <- dudi.pca(", input$DataframeACP, ", nf = ", input$nfPCA, ", scannf = ", F,
@@ -196,8 +216,9 @@ acpServer <- function(input, output, session, projet){
     if (length(projet$dudi) == 0)
       return(data.frame(list()))
     
-    if (is.null(projet$dudi[[input$NameACP]]))
+    if (!(input$NameACP %in% names(projet$dudi)))
       return(data.frame(list()))
+    
     
     if (input$selectoutputPCA == "Eigenvalues"){
       return(datatable(data.frame(list(values = projet$dudi[[input$NameACP]]$eig))))
@@ -206,13 +227,16 @@ acpServer <- function(input, output, session, projet){
     else if (input$selectoutputPCA == "Variables")
       dt <- get_pca_var(projet$dudi[[input$NameACP]])
     
-    else
+    else if (input$selectoutputPCA == "Individuals")
       dt <- get_pca_ind(projet$dudi[[input$NameACP]])
+    
+    else
+      dt <- projet$dudi[[input$NameACP]]
     
     if (is.null(input$outputPCA2))
       return(data.frame(list()))
     
-    datatable(dt[[input$outputPCA2]], extensions = c("Buttons"),
+    datatable(as.data.frame(dt[[input$outputPCA2]]), extensions = c("Buttons"),
               options = list(scrollX = TRUE, buttons = c("csv"), dom = 'Bfrtip'))
   }, server = F)
   
