@@ -153,6 +153,12 @@ LoadDataServer <- function(input, output, session, projet){
     if (length(projet$data) == 0)
       return(data.frame(list()))
     
+    if (is.null(input$DataframenameLoadData))
+      return(data.frame(list()))
+    
+    if (!(input$DataframenameLoadData %in% names(projet$data)))
+      return(data.frame(list()))
+    
     datatable(projet$data[[input$DataframenameLoadData]],options = list(scrollX = T))
     })
   
@@ -183,6 +189,12 @@ LoadDataServer <- function(input, output, session, projet){
   
   output$textdudiLoadData <- renderPrint({
     if (length(projet$dudi) == 0)
+      return("No dudi object in the current project")
+    
+    if (is.null(input$DudinameLoadData))
+      return("No dudi object in the current project")
+    
+    if (!(input$DudinameLoadData %in% names(projet$dudi)))
       return("No dudi object in the current project")
     
     return(projet$dudi[[input$DudinameLoadData]])

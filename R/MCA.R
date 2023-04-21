@@ -92,7 +92,7 @@ mcaServer <- function(input, output, session, projet){
       projet$dudi[[input$NameMCA]]$call <- substring(string, nchar(input$NameMCA) + 5)
       
     }, error = function(e){
-      alert("The dataframe is not suited for a mca analysis")
+      alert("There has been an error (printed in R console)")
       print(e)
       return(0)
     })
@@ -100,7 +100,13 @@ mcaServer <- function(input, output, session, projet){
   })
   
   output$SummaryMCA <- renderPrint({
-    if (is.null(projet$dudi[[input$NameMCA]]))
+    if (length(projet$dudi) == 0)
+      return("No dudi object in the project")
+    
+    if (is.null(input$NameMCA))
+      return("No dudi object with this name in the project")
+    
+    if (!(input$NameMCA %in% names(projet$dudi)))
       return("No dudi object with this name in the project")
     
     ade4:::summary.dudi(projet$dudi[[input$NameMCA]])
@@ -121,6 +127,9 @@ mcaServer <- function(input, output, session, projet){
     
     else
       dt <- get_mca_ind(projet$dudi[[input$NameMCA]])
+    
+    if (is.null(input$outputMCA2))
+      return(data.frame(list()))
     
     datatable(dt[[input$outputMCA2]], extensions = c("Buttons"),
               options = list(scrollX = TRUE, buttons = c("csv"), dom = 'Bfrtip'))

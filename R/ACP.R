@@ -170,7 +170,7 @@ acpServer <- function(input, output, session, projet){
     projet$dudi[[input$NameACP]]$call <- substring(string, nchar(input$NameACP) + 5)
     
     }, error = function(e){
-      alert("The dataframe is not suited for a pca analysis")
+      alert("There has been an error (printed in R console)")
       print(e)
       return(0)
     })
@@ -178,7 +178,13 @@ acpServer <- function(input, output, session, projet){
   })
   
   output$SummaryPCA <- renderPrint({
-    if (is.null(projet$dudi[[input$NameACP]]))
+    if (length(projet$dudi) == 0)
+      return("No dudi object in the project")
+    
+    if (is.null(input$NameACP))
+      return("No dudi object with this name in the project")
+    
+    if (!(input$NameACP %in% names(projet$dudi)))
       return("No dudi object with this name in the project")
     
     ade4:::summary.dudi(projet$dudi[[input$NameACP]])
@@ -187,6 +193,9 @@ acpServer <- function(input, output, session, projet){
   
   
   output$outputPCA <- renderDataTable({
+    if (length(projet$dudi) == 0)
+      return(data.frame(list()))
+    
     if (is.null(projet$dudi[[input$NameACP]]))
       return(data.frame(list()))
     
@@ -199,6 +208,9 @@ acpServer <- function(input, output, session, projet){
     
     else
       dt <- get_pca_ind(projet$dudi[[input$NameACP]])
+    
+    if (is.null(input$outputPCA2))
+      return(data.frame(list()))
     
     datatable(dt[[input$outputPCA2]], extensions = c("Buttons"),
               options = list(scrollX = TRUE, buttons = c("csv"), dom = 'Bfrtip'))

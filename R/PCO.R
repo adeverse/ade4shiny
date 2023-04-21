@@ -94,7 +94,7 @@ pcoServer <- function(input, output, session, projet){
       projet$dudi[[input$NamePCO]]$call <- substring(string, nchar(input$NamePCO) + 5)
       
     }, error = function(e){
-      alert("The dataframe is not suited for a pco analysis")
+      alert("There has been an error (printed in R console)")
       print(e)
       return(0)
     })
@@ -102,7 +102,13 @@ pcoServer <- function(input, output, session, projet){
   })
   
   output$SummaryPCO <- renderPrint({
-    if (is.null(projet$dudi[[input$NamePCO]]))
+    if (length(projet$dudi) == 0)
+      return("No dudi object in the project")
+    
+    if (is.null(input$NamePCO))
+      return("No dudi object with this name in the project")
+    
+    if (!(input$NamePCO %in% names(projet$dudi)))
       return("No dudi object with this name in the project")
     
     ade4:::summary.dudi(projet$dudi[[input$NamePCO]])
@@ -123,6 +129,9 @@ pcoServer <- function(input, output, session, projet){
     
     else
       dt <- get_pco_ind(projet$dudi[[input$NamePCO]])
+    
+    if (is.null(input$outputPC02))
+      return(data.frame(list()))
     
     datatable(dt[[input$outputPCO2]], extensions = c("Buttons"),
               options = list(scrollX = TRUE, buttons = c("csv"), dom = 'Bfrtip'))

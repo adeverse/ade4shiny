@@ -88,6 +88,9 @@ ccaserver <- function(input, output, session, projet){
   
   
   output$summaryCCA <- renderPrint({
+    if (length(projet$dudi) == 0)
+      return("No dudi object in the project")
+    
     if (is.null(projet$dudi[[input$NameCCA]]))
       return("No dudi object with this name in the project")
     

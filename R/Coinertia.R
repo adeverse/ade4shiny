@@ -1,7 +1,7 @@
 coinertie <- tabItem(tabName = "coinertia",
                      sidebarLayout(
                        sidebarPanel = sidebarPanel(
-                         uiOutput("selectizeCoineria"),
+                         uiOutput("selectizeCoinertia"),
                          uiOutput("selectDudiCoinertia1"),
                          uiOutput("selectDudiCoinertia2"),
                          numericInput("nfCoinertia", "Nomber of dimension to keep", 5, 2, 200),
@@ -82,7 +82,7 @@ coinertiaserver <- function(input, output, session, projet){
   })
   
   observeEvent(input$DoCoinertia, {
-    if (input$NameCoinertia == ""){
+    if (is.null(input$NameCoinertia)){
       alert("Please enter a name")
       return(0)
     }
@@ -122,7 +122,13 @@ coinertiaserver <- function(input, output, session, projet){
   
   
   output$summaryCoinertia <- renderPrint({
-    if (is.null(projet$dudi[[input$NameCoinertia]]))
+    if (length(projet$dudi) == 0)
+      return("No dudi object in the project")
+    
+    if (is.null(input$NameCoinertia))
+      return("No dudi object with this name in the project")
+    
+    if (!(input$NameCoinertia %in% names(projet$dudi)))
       return("No dudi object with this name in the project")
     
     ade4:::summary.dudi(projet$dudi[[input$NameCoinertia]])
@@ -150,7 +156,7 @@ coinertiaserver <- function(input, output, session, projet){
     
     dt <- projet$dudi[[input$NameCoinertia]]
     
-    if (is.null(dt[[input$dataframeCoinertia]]))
+    if (is.null(input$dataframeCoinertia))
       return(data.frame(list()))
     
     datatable(dt[[input$dataframeCoinertia]], 

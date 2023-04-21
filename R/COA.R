@@ -90,14 +90,20 @@ coaServer <- function(input, output, session, projet){
       projet$dudi[[input$NameCOA]]$call <- substring(string, nchar(input$NameCOA) + 5)
       
     }, error = function(e){
-      alert("The dataframe is not suited for a coa analysis")
+      alert("There has been an error (printed in R console)")
       return(0)
     })
     
   })
   
   output$summaryCOA <- renderPrint({
-    if (is.null(projet$dudi[[input$NameCOA]]))
+    if (length(projet$dudi) == 0)
+      return("No dudi object in the project")
+    
+    if (is.null(input$NameCOA))
+      return("No dudi object with this name in the project")
+    
+    if (!(input$NameCOA %in% names(projet$dudi)))
       return("No dudi object with this name in the project")
     
     ade4:::summary.dudi(projet$dudi[[input$NameCOA]])
@@ -117,6 +123,9 @@ coaServer <- function(input, output, session, projet){
     
     else
       dt <- get_ca_row(projet$dudi[[input$NameCOA]])
+    
+    if (is.null(input$outputCOA2))
+      return(data.frame(list()))
     
     datatable(dt[[input$outputCOA2]], extensions = c("Buttons"),
             options = list(scrollX = TRUE, buttons = c("csv"), dom = 'Bfrtip'))

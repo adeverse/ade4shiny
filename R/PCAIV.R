@@ -115,7 +115,13 @@ pcaIVserver <- function(input, output, session, projet){
   
   
   output$summaryPCAIV <- renderPrint({
-    if (is.null(projet$dudi[[input$NamePCAIV]]))
+    if (length(projet$dudi) == 0)
+      return("No dudi object in the project")
+    
+    if (is.null(input$NamePCAIV))
+      return("No dudi object with this name in the project")
+    
+    if (!(input$NamePCAIV %in% names(projet$dudi)))
       return("No dudi object with this name in the project")
     
     pcai <- projet$dudi[[input$NamePCAIV]]
@@ -145,8 +151,10 @@ pcaIVserver <- function(input, output, session, projet){
     
     dt <- projet$dudi[[input$NamePCAIV]]
     
-    if (is.null(dt[[input$dataframePCAIV]]))
+    if (is.null(input$dataframePCAIV))
       return(data.frame(list()))
+    
+    
     
     datatable(dt[[input$dataframePCAIV]], 
               extensions = c("Buttons"),

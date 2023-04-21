@@ -83,7 +83,7 @@ bgaServer <- function(input, output, session, projet){
   
   
   output$selectoutputBGA <- renderUI({
-    if (is.null(projet$dudi[[input$NameBGA]]))
+    if (is.null(input$NameBGA) | !(input$NameBGA %in% names(projet$dudi)))
       return(0)
     
     x <- lapply(projet$dudi[[input$NameBGA]], is.data.frame)
@@ -134,7 +134,7 @@ bgaServer <- function(input, output, session, projet){
       projet$dudi[[input$NameBGA]]$call <- substring(string, nchar(input$NameBGA) + 5)
       
     }, error = function(e){
-      alert("The dataframe is not suited for a bga analysis")
+      alert("There has been an error (printed in R console)")
       print(e)
       return(0)
     })
@@ -144,7 +144,13 @@ bgaServer <- function(input, output, session, projet){
   
   
   output$summaryBGA <- renderPrint({
-    if (is.null(projet$dudi[[input$NameBGA]]))
+    if (length(projet$dudi) == 0)
+      return("No dudi object in the project")
+    
+    if (is.null(input$NameBGA))
+      return("No dudi object with this name in the project")
+    
+    if (!(input$NameBGA %in% names(projet$dudi)))
       return("No dudi object with this name in the project")
     
     ade4:::summary.dudi(projet$dudi[[input$NameBGA]])
@@ -156,6 +162,9 @@ bgaServer <- function(input, output, session, projet){
       return(data.frame(list()))
     
     dt <- projet$dudi[[input$NameBGA]]
+    
+    if (is.null(input$outputBGA))
+      return(data.frame(list()))
     
     datatable(dt[[input$outputBGA]], extensions = c("Buttons"),
               options = list(scrollX = TRUE, buttons = c("csv"), dom = 'Bfrtip'))
