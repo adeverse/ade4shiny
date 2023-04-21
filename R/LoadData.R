@@ -170,14 +170,13 @@ LoadDataServer <- function(input, output, session, projet){
       for(i in names(temp)){
         
         if("dudi" %in% class(temp[[i]]))
-          projet$dudi[[i]] <- temp[[i]]
+          projet$dudi[[paste(input$examples, "$", i, sep = "")]] <- temp[[i]]
         
         else if (class(temp[[i]]) == "data.frame")
-          projet$data[[i]] <- temp[[i]]
+          projet$data[[paste(input$examples, "$", i, sep = "")]] <- temp[[i]]
       }
     
-    string <- paste("data(", input$examples,")\nattach(",
-                    input$examples, ")", sep = "")
+    string <- paste("data(", input$examples,")", sep = "")
     
     projet$code <- paste(projet$code, string, sep = "\n\n# Load data from ade4 examples\n")
   })
