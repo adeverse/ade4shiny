@@ -9,6 +9,7 @@ library(adegraphics)
 library(DT)
 library(xfun)
 library(factoextra)
+library(shinyBS)
 
 runApp(".")
 

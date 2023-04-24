@@ -37,7 +37,11 @@ sidebar <- dashboardSidebar(sidebarMenu(
 body <- dashboardBody(
   useShinyjs(),
   tags$head(
-    tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")
+    tags$link(rel = "stylesheet", type = "text/css", href = "custom.css"),
+    tags$link(rel = "stylesheet", href = "https://use.fontawesome.com/releases/v5.8.1/css/all.css", 
+                        integrity = "sha384-50oBUHEmvpQ+86rDHNDJKPXuL8PAOGYrS6b7Lwv+2XN2S6JkleUpGSnLcJvkinD+", 
+                        crossorigin = "anonymous")
+    
   ),
   tabItems(
     LoadData,
