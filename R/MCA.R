@@ -102,9 +102,6 @@ mcaServer <- function(input, output, session, projet){
       
       temp <- dudi.acm(df, nf = input$nfMCA, scannf = FALSE)
       
-      temp$cw <- list(col.weight = temp$cw)
-      temp$lw <- list(row.weight = temp$lw)
-      
       projet$dudi[[input$NameMCA]] <- temp
       
       string <- paste(input$NameMCA, " <- dudi.acm(", input$DataframeMCA, 
@@ -145,22 +142,18 @@ mcaServer <- function(input, output, session, projet){
       return(datatable(data.frame(list(values = projet$dudi[[input$NameMCA]]$eig))))
     }
     
-    else if (input$selectoutputMCA == "Variables") {
-      temp.dudi <- projet$dudi[[input$NameMCA]]
-      temp.dudi$cw <- unlist(temp.dudi$cw)
-      temp.dudi$lw <- unlist(temp.dudi$lw)
-      dt <- get_mca_var(temp.dudi)
-    }
+    else if (input$selectoutputMCA == "Variables")
+      dt <- get_mca_var(projet$dudi[[input$NameMCA]])
     
-    else if (input$selectoutputMCA == "Individuals") {
-      temp.dudi <- projet$dudi[[input$NameMCA]]
-      temp.dudi$cw <- unlist(temp.dudi$cw)
-      temp.dudi$lw <- unlist(temp.dudi$lw)
-      dt <- get_mca_ind(temp.dudi)
-    }
+    else if (input$selectoutputMCA == "Individuals")
+      dt <- get_mca_ind(projet$dudi[[input$NameMCA]])
     
-    else
+    
+    else{
       dt <- projet$dudi[[input$NameMCA]]
+      dt$cw <- list(col.weight = dt$cw)
+      dt$lw <- list(row.weight = dt$lw)
+    }
     
     if (is.null(input$outputMCA2))
       return(data.frame(list()))

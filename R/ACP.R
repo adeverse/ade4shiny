@@ -176,9 +176,6 @@ acpServer <- function(input, output, session, projet){
                      center = input$docenterACP, scale = input$doscaleACP, 
                      row.w = row.weight, col.w = col.weight)
     
-    temp$cw <- list(col.weight = temp$cw)
-    temp$lw <- list(row.weight = temp$lw)
-    
     projet$dudi[[input$NameACP]] <- temp
     
     string <- paste(input$NameACP, " <- dudi.pca(", input$DataframeACP, ", nf = ", input$nfPCA, ", scannf = ", F,
@@ -230,9 +227,11 @@ acpServer <- function(input, output, session, projet){
     else if (input$selectoutputPCA == "Individuals")
       dt <- get_pca_ind(projet$dudi[[input$NameACP]])
     
-    else
+    else {
       dt <- projet$dudi[[input$NameACP]]
-    
+      dt$cw <- list(col.weight = dt$cw)
+      dt$lw <- list(row.weight = dt$lw)
+    }
     if (is.null(input$outputPCA2))
       return(data.frame(list()))
     

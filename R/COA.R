@@ -98,9 +98,6 @@ coaServer <- function(input, output, session, projet){
       
       temp <- dudi.coa(df, nf = input$nfCOA, scannf = F)
       
-      temp$cw <- list(col.weight = temp$cw)
-      temp$lw <- list(row.weight = temp$lw)
-      
       projet$dudi[[input$NameCOA]] <- temp
       
       string <- paste(input$NameCOA, " <- dudi.coa(", input$DataframeCOA, 
@@ -141,22 +138,17 @@ coaServer <- function(input, output, session, projet){
     if (input$selectoutputCOA == "Eigenvalues")
       return(datatable(data.frame(list(values = projet$dudi[[input$NameCOA]]$eig))))
     
-    else if (input$selectoutputCOA == "Variables") {
-      temp.dudi <- projet$dudi[[input$NameCOA]]
-      temp.dudi$cw <- unlist(temp.dudi$cw)
-      temp.dudi$lw <- unlist(temp.dudi$lw)
-      dt <- get_ca_col(temp.dudi)
-    }
+    else if (input$selectoutputCOA == "Variables")
+      dt <- get_ca_col(projet$dudi[[input$NameCOA]])
     
-    else if (input$selectoutputCOA == "Individuals"){
-      temp.dudi <- projet$dudi[[input$NameCOA]]
-      temp.dudi$cw <- unlist(temp.dudi$cw)
-      temp.dudi$lw <- unlist(temp.dudi$lw)
-      dt <- get_ca_row(temp.dudi)
-    }
+    else if (input$selectoutputCOA == "Individuals")
+      dt <- get_ca_row(projet$dudi[[input$NameCOA]])
     
-    else
+    else{
       dt <- projet$dudi[[input$NameCOA]]
+      dt$cw <- list(col.weight = dt$cw)
+      dt$lw <- list(row.weight = dt$lw)
+    }
     
     if (is.null(input$outputCOA2))
       return(data.frame(list()))

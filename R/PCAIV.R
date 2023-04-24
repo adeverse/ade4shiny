@@ -67,14 +67,18 @@ pcaIVserver <- function(input, output, session, projet){
     if (length(projet$dudi) < 2)
       return()
     
-    if (is.null(projet$dudi[[input$NamePCAIV]]))
+    if (is.null(input$NamePCAIV))
       return()
     
-    x <- lapply(projet$dudi[[input$NamePCAIV]], is.data.frame)
-    y <- x[which(x == T)]
+    if (!(input$NamePCAIV %in% names(projet$dudi)))
+      return()
     
-    selectInput("dataframePCAIV", "Select a variable", choices = names(y))
+    remove <- c("eig", "rank", "nf", "call")
+    name <- names(projet$dudi[[input$NamePCAIV]])
+    keep <- name[! name %in% remove]
     
+    selectInput("dataframePCAIV", "select a value to show",
+                keep)
     
   })
   
@@ -154,9 +158,11 @@ pcaIVserver <- function(input, output, session, projet){
     if (is.null(input$dataframePCAIV))
       return(data.frame(list()))
     
+    dt$cw <- list(col.weight = dt$cw)
+    dt$lw <- list(row.weight = dt$lw)
     
     
-    datatable(dt[[input$dataframePCAIV]], 
+    datatable(as.data.frame(dt[[input$dataframePCAIV]]), 
               extensions = c("Buttons"),
               options = list(scrollX = TRUE, buttons = c("csv"), dom = 'Bfrtip'))
   }, server = F)
