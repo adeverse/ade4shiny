@@ -9,10 +9,11 @@ library(adegraphics)
 library(DT)
 library(xfun)
 library(factoextra)
+library(shinyBS)
 
 runApp(".")
 
-########## ADE4::: quand ça marche pas (plot, output et summary pour chaque analyse)
+########## ADE4::: quand ?a marche pas (plot, output et summary pour chaque analyse)
 ########## Changer les sources
 ########## Changer load data
 ########## Description examples
@@ -22,6 +23,6 @@ runApp(".")
 ## Rajouter les autres analyses
 ## Rajouter les autres plots
 
-## Regarder écrire code automatiquement
+## Regarder ?crire code automatiquement
 ## Graph interactif Explor github
 ## Pedagogie
