@@ -109,6 +109,8 @@ bgaServer <- function(input, output, session, projet){
     }
     
     dud <- projet$dudi[[input$DudiBGA]]
+    dud$cw <- as.vector(unlist(dud$cw))
+    dud$lw <- as.vector(unlist(dud$lw))
     
     if ("dudi" %in% class(projet$dudi[[input$ObjectGroupBGA]]))
       fact <- as.factor(projet$dudi[[input$ObjectGroupBGA]]$tab[,input$GroupBGA])
@@ -181,6 +183,8 @@ bgaServer <- function(input, output, session, projet){
       return(0)
     
     dud <- projet$dudi[[input$DudiBGA]]
+    dud$cw <- as.vector(unlist(dud$cw))
+    dud$lw <- as.vector(unlist(dud$lw))
     
     if ("dudi" %in% class(projet$dudi[[input$ObjectGroupBGA]]))
       fact <- as.factor(projet$dudi[[input$ObjectGroupBGA]]$tab[,input$GroupBGA])
