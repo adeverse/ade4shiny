@@ -57,5 +57,3 @@ dashboardPage(
   sidebar,
   body
 )
-
-
