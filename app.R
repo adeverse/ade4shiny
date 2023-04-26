@@ -26,3 +26,9 @@ runApp(".")
 ## Regarder ?crire code automatiquement
 ## Graph interactif Explor github
 ## Pedagogie
+
+## corriger chargement des txt avec tab
+## charger les row weight depuis l'environnement (from dudi)
+## charger facteur bca :  
+## pouvoir subset les colonnes pour l'acp
+## changer le summary de l'acp pour pas choisir les val propres ?
