@@ -37,7 +37,7 @@ acp <- tabItem(tabName = "pca",
                                "if checked, centering by the mean, if uncheck, no centring. Default : centering by mean. See more: ",
                                a("dudi.pca()", href = "http://sdray.github.io/ade4/reference/dudi.pca.html", target="_blank")),
                              placement = "right",
-                             trigger = "hover",
+                             trigger = "click",
                              options = list(container = "body")),
                     ## checkbox and hovertext scale pca     
                    checkboxInput(
@@ -54,7 +54,7 @@ acp <- tabItem(tabName = "pca",
                           "Should column vectors be normed for the row.w weighting ? Yes if checked, no if unchecked. Default : yes. See more: ",
                           a("dudi.pca()", href = "http://sdray.github.io/ade4/reference/dudi.pca.html", target="_blank")),
                         placement = "right",
-                        trigger = "hover",
+                        trigger = "click",
                         options = list(container = "body")),
                    ## checkbox and hovertext row weights pca     
                    checkboxInput(
@@ -72,7 +72,7 @@ acp <- tabItem(tabName = "pca",
                              "By default (checked), row weights are uniform. If unchecked, you can input optional row weights as a column of a dataframe (csv, txt) . See more: ",
                              a("dudi.pca()", href = "http://sdray.github.io/ade4/reference/dudi.pca.html", target="_blank")),
                            placement = "right",
-                           trigger = "hover",
+                           trigger = "click",
                            options = list(container = "body")),
                  ## checkbox and hovertext column weights pca     
                    checkboxInput(
@@ -89,7 +89,7 @@ acp <- tabItem(tabName = "pca",
                              "By default (checked), column weights are uniform. If unchecked, you can input optional column weights as a column of a dataframe (csv, txt) . See more: ",
                              a("dudi.pca()", href = "http://sdray.github.io/ade4/reference/dudi.pca.html", target="_blank")),
                            placement = "right",
-                           trigger = "hover",
+                           trigger = "click",
                            options = list(container = "body")
                    ),
                  
@@ -165,7 +165,7 @@ acpServer <- function(input, output, session, projet){
   addPopover(session, id = "HdfPCA", title = "", content = paste0(
     "A dataframe with n rows (individuals) and p columns (numeric variables) previously loaded in the app. See more: ",
     a("dudi.pca()", href = "http://sdray.github.io/ade4/reference/dudi.pca.html", target="_blank")),
-    placement = "right", trigger = "hover",
+    placement = "right", trigger = "click",
     options = list(container = "body"))
   #)
   
@@ -176,7 +176,7 @@ acpServer <- function(input, output, session, projet){
                                          title = "",
                                          content = paste0("A dataframe with n rows (individuals) and p columns (numeric variables) previously loaded in the app. See more: ",
                                            a("dudi.pca()", href = "http://sdray.github.io/ade4/reference/dudi.pca.html", target="_blank")),
-                                         placement = "right", trigger = "hover",
+                                         placement = "right", trigger = "click",
                                          options = list(container = "body"))
                                   ),
                 choices = names(projet$data), selected = input$DataframeACP)
