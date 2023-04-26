@@ -88,12 +88,15 @@ bgaServer <- function(input, output, session, projet){
   
   output$selectoutputBGA <- renderUI({
     if (is.null(input$NameBGA) | !(input$NameBGA %in% names(projet$dudi)))
-      return(0)
+      return()
     
-    x <- lapply(projet$dudi[[input$NameBGA]], is.data.frame)
-    y <- x[which(x == T)]
     
-    selectInput("outputBGA", "Select a variable", choices = names(y))
+    remove <- c("eig", "rank", "nf", "call")
+    name <- names(projet$dudi[[input$NameBGA]])
+    keep <- name[! name %in% remove]
+    
+    selectInput("outputBGA", "select a value to show",
+                keep)
   })
   
   
@@ -109,8 +112,6 @@ bgaServer <- function(input, output, session, projet){
     }
     
     dud <- projet$dudi[[input$DudiBGA]]
-    dud$cw <- as.vector(unlist(dud$cw))
-    dud$lw <- as.vector(unlist(dud$lw))
     
     if ("dudi" %in% class(projet$dudi[[input$ObjectGroupBGA]]))
       fact <- as.factor(projet$dudi[[input$ObjectGroupBGA]]$tab[,input$GroupBGA])
@@ -172,7 +173,11 @@ bgaServer <- function(input, output, session, projet){
     if (is.null(input$outputBGA))
       return(data.frame(list()))
     
-    datatable(dt[[input$outputBGA]], extensions = c("Buttons"),
+    dt$cw <- list(col.weight = dt$cw)
+    dt$lw <- list(row.weight = dt$lw)
+    dt$ratio <- list(ratio = dt$ratio)
+    
+    datatable(as.data.frame(dt[[input$outputBGA]]), extensions = c("Buttons"),
               options = list(scrollX = TRUE, buttons = c("csv"), dom = 'Bfrtip'))
   }, server = F)
   
@@ -183,8 +188,6 @@ bgaServer <- function(input, output, session, projet){
       return(0)
     
     dud <- projet$dudi[[input$DudiBGA]]
-    dud$cw <- as.vector(unlist(dud$cw))
-    dud$lw <- as.vector(unlist(dud$lw))
     
     if ("dudi" %in% class(projet$dudi[[input$ObjectGroupBGA]]))
       fact <- as.factor(projet$dudi[[input$ObjectGroupBGA]]$tab[,input$GroupBGA])

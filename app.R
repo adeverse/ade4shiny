@@ -13,19 +13,10 @@ library(shinyBS)
 
 runApp(".")
 
-########## ADE4::: quand ?a marche pas (plot, output et summary pour chaque analyse)
-########## Changer les sources
-########## Changer load data
-########## Description examples
-########## Rajouter format pdf plot
-
-## Rajouter bouton export plot et projet
-## Rajouter les autres analyses
-## Rajouter les autres plots
-
-## Regarder ?crire code automatiquement
 ## Graph interactif Explor github
 ## Pedagogie
+
+## Modifier visualisation + explicite
 
 ## corriger chargement des txt avec tab
 ## charger les row weight depuis l'environnement (from dudi)

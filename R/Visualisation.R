@@ -38,7 +38,8 @@ visuServer <- function(input, output, session, projet){
                  
                  else if (input$objectLabel %in% names(projet$dudi))
                    selectInput("xyLabel", "XY coordinates", 
-                              choices = names(projet$dudi[[input$objectLabel]]))
+                              choices = c("Variables" = "co", "Individuals" = "li"),
+                              selected = input$xyLabel)
                }
              },
              numericInput("xLabel", "x axis column", value = 1),
@@ -57,7 +58,7 @@ visuServer <- function(input, output, session, projet){
                  
                  else if (input$objectClass %in% names(projet$dudi))
                    selectInput("xyClass", "XY coordinates", 
-                               choices = names(projet$dudi[[input$objectClass]]),
+                               choices = c("Variables" = "co", "Individuals" = "li"),
                                selected = input$xyClass)
                }
              },

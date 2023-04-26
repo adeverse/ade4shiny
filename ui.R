@@ -61,5 +61,3 @@ dashboardPage(
   sidebar,
   body
 )
-
-

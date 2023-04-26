@@ -275,25 +275,22 @@ acpServer <- function(input, output, session, projet){
         
         string_cw <- "col.w1[,1]"
       }
-      
-      
-      temp <- dudi.pca(df, nf = input$nfPCA, scannf = F, 
-                       center = input$docenterACP, scale = input$doscaleACP, 
-                       row.w = row.weight, col.w = col.weight)
-      
-      temp$cw <- list(col.weight = temp$cw)
-      temp$lw <- list(row.weight = temp$lw)
-      
-      projet$dudi[[input$NameACP]] <- temp
-      
-      string <- paste(input$NameACP, " <- dudi.pca(", input$DataframeACP, ", nf = ", input$nfPCA, ", scannf = ", F,
-                      ", center = ",input$docenterACP, ", scale = ", input$doscaleACP, 
-                      ", row.w = ", string_rw, ", col.w = ", string_cw,")", sep = "")
-      
-      projet$code <- paste(projet$code, string, sep = "\n\n# Computing PCA\n")
-      
-      projet$dudi[[input$NameACP]]$call <- substring(string, nchar(input$NameACP) + 5)
-      
+    
+    
+    temp <- dudi.pca(df, nf = input$nfPCA, scannf = F, 
+                     center = input$docenterACP, scale = input$doscaleACP, 
+                     row.w = row.weight, col.w = col.weight)
+    
+    projet$dudi[[input$NameACP]] <- temp
+    
+    string <- paste(input$NameACP, " <- dudi.pca(", input$DataframeACP, ", nf = ", input$nfPCA, ", scannf = ", F,
+                    ", center = ",input$docenterACP, ", scale = ", input$doscaleACP, 
+                    ", row.w = ", string_rw, ", col.w = ", string_cw,")", sep = "")
+    
+    projet$code <- paste(projet$code, string, sep = "\n\n# Computing PCA\n")
+    
+    projet$dudi[[input$NameACP]]$call <- substring(string, nchar(input$NameACP) + 5)
+    
     }, error = function(e){
       alert("There has been an error (printed in R console)")
       print(e)
@@ -335,9 +332,11 @@ acpServer <- function(input, output, session, projet){
     else if (input$selectoutputPCA == "Individuals")
       dt <- get_pca_ind(projet$dudi[[input$NameACP]])
     
-    else
+    else {
       dt <- projet$dudi[[input$NameACP]]
-    
+      dt$cw <- list(col.weight = dt$cw)
+      dt$lw <- list(row.weight = dt$lw)
+    }
     if (is.null(input$outputPCA2))
       return(data.frame(list()))
     
