@@ -26,6 +26,9 @@ server <- function(input, output, session) {
   # Load data
   LoadDataServer(input, output, session, projet)
   
+  # Subset data
+  SubsetDataServer(input, output, session, projet)
+  
   # ACP
   acpServer(input, output, session, projet)
   
@@ -55,3 +58,5 @@ server <- function(input, output, session) {
   
   
 }
+
+

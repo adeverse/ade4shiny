@@ -9,10 +9,12 @@
 header <- dashboardHeader(title = "Dashboard ade4 example", 
                           tags$li(class = "dropdown", 
                                   downloadButton("savedata", "Save data",
-                                                 style = "color : white; background-color : #58d68d")),
+                                                 style = "color : white; background-color : #117d89;
+                                                 border-color #094d4e")),
                           tags$li(class = "dropdown",
                                   downloadButton("savecode", "Save code", 
-                                                 style = "color : white; background-color : #58d68d")))
+                                                 style = "color : white; background-color : #117d89;
+                                                 border-color: #094d4e")))
 
 sidebar <- dashboardSidebar(sidebarMenu(
   menuItem("Manage data",
@@ -44,7 +46,12 @@ body <- dashboardBody(
     tags$link(rel = "stylesheet", type = "text/css", href = "custom.css"),
     tags$link(rel = "stylesheet", href = "https://use.fontawesome.com/releases/v5.8.1/css/all.css", 
                         integrity = "sha384-50oBUHEmvpQ+86rDHNDJKPXuL8PAOGYrS6b7Lwv+2XN2S6JkleUpGSnLcJvkinD+", 
-                        crossorigin = "anonymous")
+                        crossorigin = "anonymous"),
+    tags$style(".main-header{background-color: #094d4e}"),
+    tags$style(".skin-blue .main-header .navbar{background-color: #094d4e}"),
+    tags$style(".skin-blue .main-header .logo {background-color: #094d4e}"),
+    tags$style(".skin-blue .main-header .navbar .nav>li>a {color: #094d4e}"),
+    tags$style("#savedata {border-color: #094d4e}")
     
   ),
   tabItems(

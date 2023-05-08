@@ -9,7 +9,7 @@ bga <- tabItem(tabName = "bga",
                    uiOutput("selectGroupBGA"),
                    tags$hr(style="border-color: gray;"),
                    numericInput("nfBGA", "Nomber of dimension to keep", 5, 2, 200),
-                   actionButton("DoBGA", "Compute BGA", style = "color : white; background-color : #58d68d")
+                   actionButton("DoBGA", "Compute BGA", style = "color : white; background-color : #93bf29")
                  ),
                  mainPanel = mainPanel(
                    tabsetPanel(

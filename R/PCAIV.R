@@ -5,7 +5,7 @@ pcaIV <- tabItem(tabName = "pcaiv",
                    uiOutput("selectDudiPCAIV"),
                    uiOutput("selectDfPCAIV"),
                    numericInput("nfPCAIV", "Nomber of dimension to keep", 5, 2, 200),
-                   actionButton("DoPCAIV", "Compute PCAIV", style = "color : white; background-color : #58d68d")
+                   actionButton("DoPCAIV", "Compute PCAIV", style = "color : white; background-color : #93bf29")
                  ),
                  mainPanel = mainPanel(
                    tabsetPanel(

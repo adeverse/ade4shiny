@@ -7,12 +7,12 @@ visu <- tabItem("visualisation",
       uiOutput("visualisation_listoption"),
       #checkboxInput("AddPlot", "Add to plot"),
       actionButton("DoRenderPlot", "Compute plot", 
-                   style = "color : white; background-color : #58d68d"),
+                   style = "color : white; background-color : #93bf29"),
       hr(),
       selectInput("plotformat", "Picture extension", c("PDF" = "pdf", "PNG" = "png", "JPEG" = "jpeg")),
       numericInput("width", "Plot width (cm)", value = 14),
       numericInput("height", "Plot height (cm)", value = 9),
-      downloadButton("exportplot", "Export plot", style = "color : white; background-color : #58d68d")
+      downloadButton("exportplot", "Export plot", style = "color : white; background-color : #93bf29")
     ),
     mainPanel = mainPanel(
       plotOutput("PlotVisualisation")

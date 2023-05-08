@@ -4,7 +4,7 @@ coa <- tabItem(tabName = "coa",
                    uiOutput("selectizeCOA"),
                    uiOutput("SelectDataframeCOA"),
                    numericInput("nfCOA", "Nomber of dimension to keep", 5, 2, 200),
-                   actionButton("DoCOA", "Compute COA", style = "color : white; background-color : #58d68d")
+                   actionButton("DoCOA", "Compute COA", style = "color : white; background-color : #93bf29")
                  ),
                  mainPanel = mainPanel(
                    tabsetPanel(
@@ -184,3 +184,5 @@ coaServer <- function(input, output, session, projet){
   
   
 }
+
+

@@ -4,7 +4,7 @@ subsetdata <- tabItem(tabName = "subsetdata",
                           textInput("NameSubsetData", "Name of the created dataframe"),
                           uiOutput("selectDataframeSubsetData"),
                           uiOutput("SelectColumnSubsetData"),
-                          actionButton("DoSubsetData", "Subset data", style = "color : white; background-color : #58d68d")
+                          actionButton("DoSubsetData", "Subset data", style = "color : white; background-color : #93bf29")
                         ),
                         mainPanel = mainPanel(
                           dataTableOutput("DatatableSubsetData")

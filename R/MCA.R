@@ -4,7 +4,7 @@ mca <- tabItem(tabName = "mca",
                    uiOutput("selectizeMCA"),
                    uiOutput("SelectDataframeMCA"),
                    numericInput("nfMCA", "Number of dimension to keep", 5, 2, 200),
-                   actionButton("DoMCA", "Compute MCA", style = "color : white; background-color : #58d68d")
+                   actionButton("DoMCA", "Compute MCA", style = "color : white; background-color : #93bf29")
                  ),
                  mainPanel = mainPanel(
                    tabsetPanel(

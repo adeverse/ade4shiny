@@ -15,7 +15,6 @@ LoadData <- tabItem(tabName = "managedata",
                                    uiOutput("selectdudinameLoadData"),
                                    verbatimTextOutput("textdudiLoadData"))
                         )
-                        
                       )
                       )
                     )
@@ -38,7 +37,7 @@ LoadDataServer <- function(input, output, session, projet){
                          selected = input$examples),
              if (length(input$examples) != 0) 
                p(description[[input$examples]]),
-             actionButton("DoLoadExample", "Load example", style = "color : white; background-color : #58d68d")
+             actionButton("DoLoadExample", "Load example", style = "color : white; background-color : #93bf29")
            ),
            "Saved project" = tagList(
              fileInput("LoadProjectFile", "Choose a rds file")
@@ -49,7 +48,7 @@ LoadDataServer <- function(input, output, session, projet){
              selectInput("LoadDataSep", "separator", c(",", ";", "tab" = "\t", "space" = " ")),
              checkboxInput("LoadDataCheckHeader", "Header"),
              checkboxInput("LoadDataCheckRownames", "Rownames in first column"),
-             actionButton("DoLoadData", "Load data", style = "color : white; background-color : #58d68d")
+             actionButton("DoLoadData", "Load data", style = "color : white; background-color : #93bf29")
            )
           )
     
@@ -99,6 +98,7 @@ LoadDataServer <- function(input, output, session, projet){
       return(0)
     }
     
+    
     if (file_ext(input$LoadDataFile$datapath) == "rds"){
       
       projet$data[[input$LoadDataName]] <- readRDS(input$LoadDataFile$datapath)
@@ -131,8 +131,7 @@ LoadDataServer <- function(input, output, session, projet){
       if (is.null(isrownames))
         string <- paste(input$LoadDataName, " <- read.table(<path_to_your_dataframe>, header = ", 
                         input$LoadDataCheckHeader, ", sep = ","'", 
-                       input$LoadDataSep,"'", ", row.names = ", 
-                       "NULL",")", sep = "")
+                       input$LoadDataSep,"'", ", row.names = NULL)", sep = "")
       else
         string <- paste(input$LoadDataName, " <- read.table(<path_to_your_dataframe>, header = ", 
                         input$LoadDataCheckHeader, ", sep = ","'", 
