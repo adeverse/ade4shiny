@@ -56,45 +56,16 @@ acp <- tabItem(tabName = "pca",
                         placement = "right",
                         trigger = "click",
                         options = list(container = "body")),
+                   hr(),
+                   p(markdown("**Row weight**")),
                    ## checkbox and hovertext row weights pca     
-                   checkboxInput(
-                     inputId = "uniformrw",
-                     label = tags$span("Uniform row weight ", 
-                                       bsButton("HuniformrwPCA", label = "",
-                                                icon = icon("question-circle"),
-                                                size = "extra-small")),
-                     value = TRUE
-                   ),
+                   uiOutput("selectDfRw"),
+                   uiOutput("selectColumnRw"),
+                 hr(),
+                 p(markdown("**Col weight**")),
+                 uiOutput("selectDfCw"),
+                 uiOutput("selectColumnCw"),
 
-                 bsPopover(id = "HuniformrwPCA",
-                           title = "",
-                           content = paste0(
-                             "By default (checked), row weights are uniform. If unchecked, you can input optional row weights as a column of a dataframe (csv, txt) . See more: ",
-                             a("dudi.pca()", href = "http://sdray.github.io/ade4/reference/dudi.pca.html", target="_blank")),
-                           placement = "right",
-                           trigger = "click",
-                           options = list(container = "body")),
-                 ## checkbox and hovertext column weights pca     
-                   checkboxInput(
-                     inputId = "uniformcw",
-                     label = tags$span("Uniform column weight ", 
-                                       bsButton("HuniformcwPCA", label = "",
-                                                icon = icon("question-circle"),
-                                                size = "extra-small")),
-                     value = TRUE
-                   ),
-                 bsPopover(id = "HuniformcwPCA",
-                           title = "",
-                           content = paste0(
-                             "By default (checked), column weights are uniform. If unchecked, you can input optional column weights as a column of a dataframe (csv, txt) . See more: ",
-                             a("dudi.pca()", href = "http://sdray.github.io/ade4/reference/dudi.pca.html", target="_blank")),
-                           placement = "right",
-                           trigger = "click",
-                           options = list(container = "body")
-                   ),
-                 
-                   uiOutput("FileUniRW"),
-                   uiOutput("FileUniCW"),
                    actionButton("DoACP", "Compute ACP", style = "color : white; background-color : #58d68d")
                  ),
                  mainPanel = mainPanel(
@@ -144,21 +115,62 @@ acpServer <- function(input, output, session, projet){
   })
   
   
-  output$FileUniRW <- renderUI({
-    if (input$uniformrw)
+  output$selectDfRw <- renderUI({
+    if (length(projet$data) == 0 & length(projet$dudi) == 0)
       return("")
     
-    fileInput("rw", label = HTML(paste0("Upload row weights ", icon("question-circle"))))
+    selectInput("DfRw", label = "Select an object which contains the row weights",
+                choices = c("None", names(projet$data), names(projet$dudi)))
     
   })
   
-  output$FileUniCW <- renderUI({
-    if (input$uniformcw)
+  output$selectDfCw <- renderUI({
+    if (length(projet$data) == 0 & length(projet$dudi) == 0)
       return("")
     
-    fileInput("cw", label = HTML(paste0("Upload cloumn weights ", icon("question-circle"))))
+    selectInput("DfCw", label = "Select an object which contains the col weights",
+                choices = c("None", names(projet$data), names(projet$dudi)))
     
   })
+  
+  output$selectColumnRw <- renderUI({
+    if (is.null(input$DfRw))
+      return("")
+    
+    if (input$DfRw == "None")
+      return("")
+    
+    if (input$DfRw %in% names(projet$data)){
+      selectInput("ColumnRw", "Choose the row weigth column",
+                  colnames(projet$data[[input$DfRw]]))
+    }
+    
+    else{
+      selectInput("ColumnRw", "Choose the row weigth column",
+                  names(projet$dudi[[input$DfRw]]), selected = "lw")
+    }
+    
+  })
+  
+  output$selectColumnCw <- renderUI({
+    if (is.null(input$DfCw))
+      return("")
+    
+    if (input$DfCw == "None")
+      return("")
+    
+    if (input$DfCw %in% names(projet$data)){
+      selectInput("ColumnCw", "Choose the col weigth column",
+                  colnames(projet$data[[input$DfCw]]))
+    }
+    
+    else{
+      selectInput("ColumnCw", "Choose the col weigth column",
+                  names(projet$dudi[[input$DfCw]]), selected = "cw")
+    }
+    
+  })
+
   
   # trying to add popover with input generated by renderui does not work. help text for select dataframe
   #delay(400,
@@ -224,22 +236,11 @@ acpServer <- function(input, output, session, projet){
       return(0)
     }
     
-    if (!(input$uniformrw) & is.null(input$rw)){
-      alert("Please enter a row weight file")
-      return(0)
-    }
-    
-    
-    if (!(input$uniformcw) & is.null(input$cw)){
-      alert("Please enter a col weight file")
-      return(0)
-    }
-    
     df <- projet$data[[input$DataframeACP]]
     
     tryCatch({
       
-      if (input$uniformrw){
+      if (input$DfRw == "None"){
         row.weight <- rep(1, nrow(df))/nrow(df)
         
         string_rw <- paste("rep(1, nrow(", input$DataframeACP, "))/nrow("
@@ -247,33 +248,38 @@ acpServer <- function(input, output, session, projet){
       }
       
       else{
-        row.w1 <- read.table(input$rw$datapath, header = TRUE, row.names = 1)
         
-        # Adding import table to automatic code
-        little_string <- "row.w1 <- read.table(<path_to_row_weight_file>, header = T, row.names = 1)"
-        projet$code <- paste(projet$code, little_string, sep = "\n\n# Importing row weight\n")
+        if (input$DfRw %in% names(projet$data)){
+          row.weight <- projet$data[[input$DfRw]][,input$ColumnRw]
+          string_rw <- paste(input$DfRw, "[, '", input$ColumnRw, "']",sep = "")
+        }
         
-        row.weight <- row.w1[,1]
+        else{
+          row.weight <- projet$dudi[[input$DfRw]][[input$ColumnRw]]
+          string_rw <- paste(input$DfRw, "[['", input$ColumnRw, "']]",sep = "")
+          
+        }
         
-        string_rw <- "row.w1[,1]"
         
       }
       
-      if (input$uniformcw){
+      if (input$DfCw == "None"){
         col.weight <- rep(1, ncol(df))
         string_cw <- paste("rep(1, ncol(", input$DataframeACP, "))", sep = "")
       }
       
       else{
-        col.w1 <- read.table(input$cw$datapath, header = TRUE, row.names = 1)
+        if (input$DfCw %in% names(projet$data)){
+          col.weight <- projet$data[[input$DfCw]][,input$ColumnCw]
+          string_cw <- paste(input$DfCw, "[, '", input$ColumnCw, "']",sep = "")
+        }
         
-        # Adding import table to automatic code
-        little_string <- "col.w1 <- read.table(<path_to_col_weight_file>, header = T, row.names = 1)"
-        projet$code <- paste(projet$code, little_string, sep = "\n\n# Importing col weight\n")
+        else{
+          col.weight <- projet$dudi[[input$DfCw]][[input$ColumnCw]]
+          string_cw <- paste(input$DfCw, "[['", input$ColumnCw, "']]",sep = "")
+          
+        }
         
-        col.weight <- col.w1[,1]
-        
-        string_cw <- "col.w1[,1]"
       }
     
     
