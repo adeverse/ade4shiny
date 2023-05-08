@@ -19,13 +19,15 @@ sidebar <- dashboardSidebar(sidebarMenu(
   menuItem("One table analyses",
            menuSubItem("PCA", tabName = "pca"),
            menuSubItem("COA", tabName = "coa"),
-           menuSubItem("MCA", tabName = "mca"),
-           menuSubItem("PCO", tabName = "pco")),
+           menuSubItem("MCA", tabName = "mca")
+           # menuSubItem("PCO", tabName = "pco")),
+  ),
   
   menuItem("One table with groups",
-           menuSubItem("BGA", tabName = "bga"),
-           menuSubItem("WGA"),
-           menuSubItem("DA")),
+           menuSubItem("BGA", tabName = "bga")
+           # menuSubItem("WGA"),
+           # menuSubItem("DA")),
+  ),
   menuItem("Two tables analyses",
            menuSubItem("Coinertia", tabName = "coinertia"),
            #menuSubItem("CCA", tabName = "cca"),

@@ -197,9 +197,7 @@ bgaServer <- function(input, output, session, projet){
     
     temp <- bca(dud, fac = fact, nf = input$nfBGA, scannf = F)
     
-    
     ade4:::plot.between(temp)
-    
     
   })
   
