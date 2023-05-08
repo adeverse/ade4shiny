@@ -3,8 +3,21 @@ mca <- tabItem(tabName = "mca",
                  sidebarPanel = sidebarPanel(
                    uiOutput("selectizeMCA"),
                    uiOutput("SelectDataframeMCA"),
-                   numericInput("nfMCA", "Number of dimension to keep", 5, 2, 200),
-                   actionButton("DoMCA", "Compute MCA", style = "color : white; background-color : #93bf29")
+                   numericInput("nfMCA",
+                                label = tags$span("Number of dimension to keep", 
+                                                  bsButton("helpnfmca", label = "",
+                                                           icon = icon("question-circle" )
+                                                           , size = "extra-small")),
+                                5, 2, 200),
+                   bsPopover(id = "nfMCA",
+                             title = "",
+                             content = paste0(
+                               "Number of axes of variance (dimensions) to keep. See more: ",
+                               a("dudi.acm()", href = "http://sdray.github.io/ade4/reference/dudi.acm.html", target="_blank")),
+                             placement = "right",
+                             trigger = "click",
+                             options = list(container = "body")),
+                   actionButton("DoMCA", "Compute MCA", style = "color : white; background-color :  #93bf29")
                  ),
                  mainPanel = mainPanel(
                    tabsetPanel(
@@ -38,18 +51,42 @@ mcaServer <- function(input, output, session, projet){
     })
     
     if (length(all_MCA) == 0)
-      selectizeInput("NameMCA", "Name to refer the MCA later", 
+      selectizeInput("NameMCA",
+                     label = tags$span("MCA name ",
+                                       popify(el = bsButton("help_name_mca1", label = "", icon = icon("question-circle"), size = "extra-small"),
+                                              title = "",
+                                              content = "Type in a new name to compute a new MCA or select a previous one from the list to display its results",
+                                              placement = "right", trigger = "click",
+                                              options = list(container = "body"))
+                     ), 
                      choices = all_MCA, options = list(create = TRUE))
     
     else{
       last <- all_MCA[length(all_MCA)]
-      selectizeInput("NameMCA", "Name to refer the MCA later", choices = all_MCA, 
+      selectizeInput("NameMCA",
+                     label = tags$span("MCA name ",
+                                       popify(el = bsButton("help_name_mca", label = "", icon = icon("question-circle"), size = "extra-small"),
+                                              title = "",
+                                              content = "Type in a new name to compute a new MCA or select a previous one from the list to display its results",
+                                              placement = "right", trigger = "click",
+                                              options = list(container = "body"))
+                     ), 
+                     choices = all_MCA, 
                      options = list(create = TRUE), selected = last)
     }
   })
   
   output$SelectDataframeMCA <- renderUI(
-    selectInput("DataframeMCA", "Select a dataframe", choices = names(projet$data), selected = input$DataframeMCA)
+    selectInput("DataframeMCA",
+                label = tags$span("Select a dataframe ",
+                                  shinyBS::popify(el = bsButton("help_dfmca", label = "", icon = icon("question-circle"), size = "extra-small"),
+                                                  title = "",
+                                                  content = paste0("A dataframe (previously loaded in the app) containing only factors. See more: ",
+                                                                   a("dudi.acm()", href = "http://sdray.github.io/ade4/reference/dudi.acm.html", target="_blank")),
+                                                  placement = "right", trigger = "click",
+                                                  options = list(container = "body"))
+                ),
+                choices = names(projet$data), selected = input$DataframeMCA)
   )
   
   output$selectoutputMCA2 <- renderUI({

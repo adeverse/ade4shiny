@@ -4,8 +4,22 @@ coinertie <- tabItem(tabName = "coinertia",
                          uiOutput("selectizeCoinertia"),
                          uiOutput("selectDudiCoinertia1"),
                          uiOutput("selectDudiCoinertia2"),
-                         numericInput("nfCoinertia", "Nomber of dimension to keep", 5, 2, 200),
-                         actionButton("DoCoinertia", "Compute coinertia", style = "color : white; background-color : #93bf29")
+                         
+                         numericInput("nfCoinertia",
+                                      label = tags$span("Number of dimension to keep", 
+                                                        bsButton("helpnfcoin", label = "",
+                                                                 icon = icon("question-circle" )
+                                                                 , size = "extra-small")),
+                                      5, 2, 200),
+                         bsPopover(id = "helpnfcoin",
+                                   title = "",
+                                   content = paste0(
+                                     "Number of axes of variance (dimensions) to keep. See more: ",
+                                     a("coinertia()", href = "http://sdray.github.io/ade4/reference/coinertia.html", target="_blank")),
+                                   placement = "right",
+                                   trigger = "click",
+                                   options = list(container = "body")),
+                         actionButton("DoCoinertia", "Compute coinertia", style = "color : white; background-color :  #93bf29")
                        ),
                        mainPanel = mainPanel(
                          tabsetPanel(
@@ -35,12 +49,27 @@ coinertiaserver <- function(input, output, session, projet){
     })
     
     if (length(all_Coinertia) == 0)
-      selectizeInput("NameCoinertia", "Name to refer the coinertia later", 
+      selectizeInput("NameCoinertia",
+                     label = tags$span("Coinertia analysis name ",
+                                       popify(el = bsButton("help_name_coin1", label = "", icon = icon("question-circle"), size = "extra-small"),
+                                              title = "",
+                                              content = "Type in a new name to compute a new coinertia analysis or select a previous one from the list to display its results",
+                                              placement = "right", trigger = "click",
+                                              options = list(container = "body"))
+                     ),
                      choices = all_Coinertia, options = list(create = TRUE))
     
     else{
       last <- all_Coinertia[length(all_Coinertia)]
-      selectizeInput("NameCoinertia", "Name to refer the coinertia later", choices = all_Coinertia, 
+      selectizeInput("NameCoinertia",
+                     label = tags$span("Coinertia analysis name ",
+                                       popify(el = bsButton("help_name_coin2", label = "", icon = icon("question-circle"), size = "extra-small"),
+                                              title = "",
+                                              content = "Type in a new name to compute a new coinertia analysis or select a previous one from the list to display its results",
+                                              placement = "right", trigger = "click",
+                                              options = list(container = "body"))
+                                       ),
+                                       choices = all_Coinertia, 
                      options = list(create = TRUE), selected = last)
     }
   })
@@ -49,7 +78,15 @@ coinertiaserver <- function(input, output, session, projet){
     if (length(projet$dudi) == 0)
       return("No dudi present in the project")
     
-    selectInput("DudiCoinertia1", "First dudi object", 
+    selectInput("DudiCoinertia1",
+                label = tags$span("First dudi object",
+                                  popify(el = bsButton("coin_dudi_1", label = "", icon = icon("question-circle"), size = "extra-small"),
+                                         title = "",
+                                         content = paste0("A duality diagram (object of class dudi) outputed by a one-table analysis. See more: ",
+                                                          a("coinertia()", href = "http://sdray.github.io/ade4/reference/coinertia.html", target="_blank")),
+                                        placement = "right", trigger = "click",
+                                         options = list(container = "body"))
+                ),
                 choices = names(projet$dudi),
                 selected = input$DudiCoinertia1)
   })
@@ -61,7 +98,15 @@ coinertiaserver <- function(input, output, session, projet){
     if (length(projet$dudi) == 1)
       return("Only one dudi present in the project")
     
-    selectInput("DudiCoinertia2", "Second dudi object", 
+    selectInput("DudiCoinertia2",
+                label = tags$span("Second dudi object",
+                                  popify(el = bsButton("coin_dudi_2", label = "", icon = icon("question-circle"), size = "extra-small"),
+                                         title = "",
+                                         content = paste0("A duality diagram (object of class dudi) outputed by a one-table analysis. See more: ",
+                                                          a("coinertia()", href = "http://sdray.github.io/ade4/reference/coinertia.html", target="_blank")),
+                                         placement = "right", trigger = "click",
+                                         options = list(container = "body"))
+                ),
                 choices = names(projet$dudi),
                 selected = input$DudiCoinertia2)
   })
