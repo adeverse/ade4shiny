@@ -15,7 +15,9 @@ header <- dashboardHeader(title = "Dashboard ade4 example",
                                                  style = "color : white; background-color : #58d68d")))
 
 sidebar <- dashboardSidebar(sidebarMenu(
-  menuItem("Manage data", tabName = "managedata"),
+  menuItem("Manage data",
+           menuSubItem("Load data", tabName = "managedata"),
+           menuSubItem("Subset data", tabName = "subsetdata")),
   menuItem("One table analyses",
            menuSubItem("PCA", tabName = "pca"),
            menuSubItem("COA", tabName = "coa"),
@@ -47,6 +49,7 @@ body <- dashboardBody(
   ),
   tabItems(
     LoadData,
+    subsetdata,
     acp,
     coa,
     mca,
