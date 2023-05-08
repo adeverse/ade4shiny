@@ -46,7 +46,7 @@ LoadDataServer <- function(input, output, session, projet){
            "New dataframe" = tagList(
              textInput("LoadDataName", "Choose a name to refer the data frame later"),
              fileInput("LoadDataFile", "Choose a rds, csv or txt file"),
-             textInput("LoadDataSep", "separator", ","),
+             selectInput("LoadDataSep", "separator", c(",", ";", "tab" = "\t", "space" = " ")),
              checkboxInput("LoadDataCheckHeader", "Header"),
              checkboxInput("LoadDataCheckRownames", "Rownames in first column"),
              actionButton("DoLoadData", "Load data", style = "color : white; background-color : #58d68d")
@@ -116,9 +116,8 @@ LoadDataServer <- function(input, output, session, projet){
       if (input$LoadDataCheckRownames)
         isrownames <- 1
       
-      
       tryCatch(
-      projet$data[[input$LoadDataName]] <- read.csv(input$LoadDataFile$datapath, 
+      projet$data[[input$LoadDataName]] <- read.table(input$LoadDataFile$datapath, 
                                                     header = input$LoadDataCheckHeader,
                                                     sep = input$LoadDataSep,
                                                     row.names = isrownames)
@@ -130,12 +129,12 @@ LoadDataServer <- function(input, output, session, projet){
       })
       
       if (is.null(isrownames))
-        string <- paste(input$LoadDataName, " <- read.csv(<path_to_your_dataframe>, header = ", 
+        string <- paste(input$LoadDataName, " <- read.table(<path_to_your_dataframe>, header = ", 
                         input$LoadDataCheckHeader, ", sep = ","'", 
                        input$LoadDataSep,"'", ", row.names = ", 
                        "NULL",")", sep = "")
       else
-        string <- paste(input$LoadDataName, " <- read.csv(<path_to_your_dataframe>, header = ", 
+        string <- paste(input$LoadDataName, " <- read.table(<path_to_your_dataframe>, header = ", 
                         input$LoadDataCheckHeader, ", sep = ","'", 
                         input$LoadDataSep,"'", ", row.names = ", 
                         isrownames,")", sep = "")
