@@ -1,8 +1,19 @@
 LoadData <- tabItem(tabName = "managedata",
                     sidebarLayout(
                       sidebarPanel = sidebarPanel(
-                        selectInput("LoaddataType", "Loading method", 
+                        selectInput("LoaddataType",
+                                    label = tags$span("Loading method", 
+                                                      bsButton("helploading", label = "",
+                                                               icon = icon("question-circle" )
+                                                               , size = "extra-small")),
                                     choices = c("ADE4 example", "Saved project", "New dataframe")),
+                        
+                        bsPopover(id = "helploading",
+                                title = "",
+                                content = paste0("Use already existing examples, your own data, or a previous project downloaded from the app."),
+                                placement = "right",
+                                trigger = c("hover", "focus"),
+                                options = list(container = "body")),
                         uiOutput("LoadData_listoptions")
                       ),
                       mainPanel = mainPanel(
