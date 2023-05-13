@@ -17,22 +17,23 @@ header <- dashboardHeader(title = "Dashboard ade4 example",
                                                  border-color: #094d4e")))
 
 sidebar <- dashboardSidebar(sidebarMenu(
-  menuItem("Manage data",
+  menuItem("Welcome to ade4", tabName = "introtab"),
+  menuItem("Manage data", startExpanded = TRUE,
            menuSubItem("Load data", tabName = "managedata"),
            menuSubItem("Subset data", tabName = "subsetdata")),
-  menuItem("One table analyses",
+  menuItem("One table analyses", startExpanded = TRUE,
            menuSubItem("PCA", tabName = "pca"),
            menuSubItem("COA", tabName = "coa"),
            menuSubItem("MCA", tabName = "mca")
            # menuSubItem("PCO", tabName = "pco")),
   ),
   
-  menuItem("One table with groups",
+  menuItem("One table with groups", startExpanded = TRUE,
            menuSubItem("BGA", tabName = "bga")
            # menuSubItem("WGA"),
            # menuSubItem("DA")),
   ),
-  menuItem("Two tables analyses",
+  menuItem("Two tables analyses", startExpanded = TRUE,
            menuSubItem("Coinertia", tabName = "coinertia"),
            #menuSubItem("CCA", tabName = "cca"),
            menuSubItem("PCAIV", tabName = "pcaiv")),
@@ -55,6 +56,7 @@ body <- dashboardBody(
     
   ),
   tabItems(
+    introtab,
     LoadData,
     subsetdata,
     acp,
