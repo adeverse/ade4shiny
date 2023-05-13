@@ -1,7 +1,19 @@
 subsetdata <- tabItem(tabName = "subsetdata",
                       sidebarLayout(
                         sidebarPanel = sidebarPanel(
-                          textInput("NameSubsetData", "Name of the created dataframe"),
+                          textInput("NameSubsetData", 
+                                    label = tags$span("Name of the created dataframe", 
+                                                      bsButton("helpnamesubset", label = "",
+                                                               icon = icon("question-circle" )
+                                                               , size = "extra-small"))
+                                    ),
+                          bsPopover(id = "helpnamesubset",
+                                  title = "",
+                                  content = "Name for the new dataframe that will be created. You cannot ovrewrite an existing dataframe.",
+                                  placement = "right",
+                                  trigger = c("hover", "focus"),
+                                  options = list(container = "body")),
+                        
                           uiOutput("selectDataframeSubsetData"),
                           uiOutput("SelectColumnSubsetData"),
                           actionButton("DoSubsetData", "Subset data", style = "color : white; background-color : #93bf29")
@@ -18,7 +30,14 @@ SubsetDataServer <- function(input, output, session, projet){
     if (length(projet$data) == 0)
       return("")
     
-    selectInput("DataframeSubsetData", "Choose a dataframe to subset",
+    selectInput("DataframeSubsetData",
+                label = tags$span("Choose a dataframe to subset ",
+                                  popify(el = bsButton("helpsusbsetdf", label = "", icon = icon("question-circle"), size = "extra-small"),
+                                         title = "",
+                                         content = "A dataframe, already loaded in the app, that you want to modify. Modifications will be saved in the new object and not inplace.",
+                                         placement = "right", trigger = c("hover", "focus"),
+                                         options = list(container = "body"))
+                ), 
                 names(projet$data))
   })
   
@@ -30,7 +49,14 @@ SubsetDataServer <- function(input, output, session, projet){
     if (is.null(input$DataframeSubsetData))
       return("")
     
-    selectizeInput("ColumnSubsetData", "Select the columns to remove",
+    selectizeInput("ColumnSubsetData",
+                   label = tags$span("Select the columns to remove ",
+                                     popify(el = bsButton("helpsusbsetcols", label = "", icon = icon("question-circle"), size = "extra-small"),
+                                            title = "",
+                                            content = "The unselected columns will be saved in the new object. The original dataframe will not be deleted or modified.",
+                                            placement = "right", trigger = c("hover", "focus"),
+                                            options = list(container = "body"))
+                   ), 
                    colnames(projet$data[[input$DataframeSubsetData]]), multiple = T)
     
   })
