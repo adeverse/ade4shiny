@@ -1,4 +1,5 @@
 LoadData <- tabItem(tabName = "managedata",
+                    h2("Loading in data"),
                     sidebarLayout(
                       sidebarPanel = sidebarPanel(
                         selectInput("LoaddataType",

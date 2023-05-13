@@ -1,4 +1,6 @@
 bga <- tabItem(tabName = "bga",
+               h2("Between-Group Analysis (BGA)"),
+               h4("Also called BCA for Between-Class Analysis"),
                sidebarLayout(
                  sidebarPanel = sidebarPanel(
                    uiOutput("selectizeBGA"),

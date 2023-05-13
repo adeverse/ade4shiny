@@ -1,4 +1,6 @@
 coinertie <- tabItem(tabName = "coinertia",
+                     h2("Coinertia Analysis (CA)"),
+                     h4("Perform a double inertia analysis of two tables."),
                      sidebarLayout(
                        sidebarPanel = sidebarPanel(
                          uiOutput("selectizeCoinertia"),

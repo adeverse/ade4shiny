@@ -1,4 +1,5 @@
 mca <- tabItem(tabName = "mca",
+               h2("Multiple Correspondence Analysis (MCA)"),
                sidebarLayout(
                  sidebarPanel = sidebarPanel(
                    uiOutput("selectizeMCA"),

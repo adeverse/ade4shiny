@@ -1,4 +1,5 @@
 acp <- tabItem(tabName = "pca",
+               h2("Principal component analysis (PCA)"),
                sidebarLayout(
                  sidebarPanel = sidebarPanel(
                    uiOutput("selectizeACP"),

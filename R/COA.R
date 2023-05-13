@@ -1,4 +1,5 @@
 coa <- tabItem(tabName = "coa",
+               h2("Correspondence Analysis (COA)"),
                sidebarLayout(
                  sidebarPanel = sidebarPanel(
                    uiOutput("selectizeCOA"),

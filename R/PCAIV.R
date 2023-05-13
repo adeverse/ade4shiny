@@ -1,4 +1,5 @@
 pcaIV <- tabItem(tabName = "pcaiv",
+                 h2("Principal Component Analysis with respect to Instrumental Variables (PCAIV)"),
                sidebarLayout(
                  sidebarPanel = sidebarPanel(
                    uiOutput("selectizePCAIV"),

@@ -1,4 +1,5 @@
 subsetdata <- tabItem(tabName = "subsetdata",
+                      h2("Subsetting dataframes"),
                       sidebarLayout(
                         sidebarPanel = sidebarPanel(
                           textInput("NameSubsetData", 
