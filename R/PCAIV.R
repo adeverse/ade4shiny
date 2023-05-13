@@ -4,7 +4,24 @@ pcaIV <- tabItem(tabName = "pcaiv",
                    uiOutput("selectizePCAIV"),
                    uiOutput("selectDudiPCAIV"),
                    uiOutput("selectDfPCAIV"),
-                   numericInput("nfPCAIV", "Nomber of dimension to keep", 5, 2, 200),
+                   numericInput(
+                     inputId = "nfPCAIV",
+                     label = tags$span("Number of dimension to keep", 
+                                       bsButton("helpnfpcaiv", label = "",
+                                                icon = icon("question-circle" )
+                                                , size = "extra-small")),
+                     value = 2,
+                     min = 2,
+                     max = 200
+                   ),
+                   bsPopover(id = "helpnfpcaiv",
+                             title = "",
+                             content = paste0(
+                               "Number of axes of variance (dimensions) to keep. See more: ",
+                               a("pcaiv()", href = "http://sdray.github.io/ade4/reference/pcaiv.html", target="_blank")),
+                             placement = "right",
+                             trigger = c('focus', 'hover'),
+                             options = list(container = "body")),
                    actionButton("DoPCAIV", "Compute PCAIV", style = "color : white; background-color : #93bf29")
                  ),
                  mainPanel = mainPanel(
@@ -35,12 +52,27 @@ pcaIVserver <- function(input, output, session, projet){
     })
     
     if (length(all_PCAIV) == 0)
-      selectizeInput("NamePCAIV", "Name to refer the PCAIV later", 
+      selectizeInput("NamePCAIV",
+                     label = tags$span("Analysis name",
+                                       popify(el = bsButton("hpcivaname2", label = "", icon = icon("question-circle"), size = "extra-small"),
+                                              title = "",
+                                              content = "Type in a new name to compute a new PCAIV or select a previous one from the list to display its results.",
+                                              placement = "right", trigger = c('focus', 'hover'),
+                                              options = list(container = "body")) 
+                     ), 
                      choices = all_PCAIV, options = list(create = TRUE))
     
     else{
       last <- all_PCAIV[length(all_PCAIV)]
-      selectizeInput("NamePCAIV", "Name to refer the PCAIV later", choices = all_PCAIV, 
+      selectizeInput("NamePCAIV",
+                     label = tags$span("Analysis name",
+                                       popify(el = bsButton("hpcivaname1", label = "", icon = icon("question-circle"), size = "extra-small"),
+                                              title = "",
+                                              content = "Type in a new name to compute a new PCAIV or select a previous one from the list to display its results.",
+                                              placement = "right", trigger = c('focus', 'hover'),
+                                              options = list(container = "body")) 
+                     ), 
+                     choices = all_PCAIV, 
                      options = list(create = TRUE), selected = last)
     }
   })
@@ -49,7 +81,15 @@ pcaIVserver <- function(input, output, session, projet){
     if (length(projet$dudi) == 0)
       return("No dudi object present in the project")
     
-    selectInput("DudiPCAIV", "Dudi object", 
+    selectInput("DudiPCAIV",
+                label = tags$span("Dudi object",
+                                  popify(el = bsButton("Hdudipcaiv", label = "", icon = icon("question-circle"), size = "extra-small"),
+                                         title = "",
+                                         content = paste0("A dudi object outputed by a one table-analysis, previously ran or loaded in the app. See more: ",
+                                                          a("pcaiv()", href = "http://sdray.github.io/ade4/reference/pcaiv.html", target="_blank")),
+                                         placement = "right", trigger = c('focus', 'hover'),
+                                         options = list(container = "body")) 
+                ),
                 choices = names(projet$dudi),
                 selected = input$DudiPCAIV)
   })
@@ -58,7 +98,15 @@ pcaIVserver <- function(input, output, session, projet){
     if (length(projet$data) == 0)
       return()
     
-    selectInput("DfPCAIV", "Dataframe with the same rows", 
+    selectInput("DfPCAIV",
+                label = tags$span("Dataframe with the same rows",
+                                  popify(el = bsButton("Hdfpcaiv", label = "", icon = icon("question-circle"), size = "extra-small"),
+                                         title = "",
+                                         content = paste0("A dataframe withe the same rows than the dudi object previously selected. See more: ",
+                                                          a("pcaiv()", href = "http://sdray.github.io/ade4/reference/pcaiv.html", target="_blank")),
+                                         placement = "right", trigger = c('focus', 'hover'),
+                                         options = list(container = "body")) 
+                ),
                 choices = names(projet$data),
                 selected = input$DfPCAIV)
   })
