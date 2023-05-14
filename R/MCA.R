@@ -1,4 +1,5 @@
 mca <- tabItem(tabName = "mca",
+               h2("Multiple Correspondence Analysis (MCA)"),
                sidebarLayout(
                  sidebarPanel = sidebarPanel(
                    uiOutput("selectizeMCA"),
@@ -8,14 +9,14 @@ mca <- tabItem(tabName = "mca",
                                                   bsButton("helpnfmca", label = "",
                                                            icon = icon("question-circle" )
                                                            , size = "extra-small")),
-                                5, 2, 200),
-                   bsPopover(id = "nfMCA",
+                                2, 2, 200),
+                   bsPopover(id = "helpnfmca",
                              title = "",
                              content = paste0(
                                "Number of axes of variance (dimensions) to keep. See more: ",
                                a("dudi.acm()", href = "http://sdray.github.io/ade4/reference/dudi.acm.html", target="_blank")),
                              placement = "right",
-                             trigger = "click",
+                             trigger = c("hover", "focus"),
                              options = list(container = "body")),
                    actionButton("DoMCA", "Compute MCA", style = "color : white; background-color :  #93bf29")
                  ),
@@ -52,11 +53,11 @@ mcaServer <- function(input, output, session, projet){
     
     if (length(all_MCA) == 0)
       selectizeInput("NameMCA",
-                     label = tags$span("MCA name ",
+                     label = tags$span("Analysis name ",
                                        popify(el = bsButton("help_name_mca1", label = "", icon = icon("question-circle"), size = "extra-small"),
                                               title = "",
                                               content = "Type in a new name to compute a new MCA or select a previous one from the list to display its results",
-                                              placement = "right", trigger = "click",
+                                              placement = "right", trigger = c("hover", "focus"),
                                               options = list(container = "body"))
                      ), 
                      choices = all_MCA, options = list(create = TRUE))
@@ -64,11 +65,11 @@ mcaServer <- function(input, output, session, projet){
     else{
       last <- all_MCA[length(all_MCA)]
       selectizeInput("NameMCA",
-                     label = tags$span("MCA name ",
+                     label = tags$span("Analysis name ",
                                        popify(el = bsButton("help_name_mca", label = "", icon = icon("question-circle"), size = "extra-small"),
                                               title = "",
                                               content = "Type in a new name to compute a new MCA or select a previous one from the list to display its results",
-                                              placement = "right", trigger = "click",
+                                              placement = "right", trigger = c("hover", "focus"),
                                               options = list(container = "body"))
                      ), 
                      choices = all_MCA, 
@@ -83,7 +84,7 @@ mcaServer <- function(input, output, session, projet){
                                                   title = "",
                                                   content = paste0("A dataframe (previously loaded in the app) containing only factors. See more: ",
                                                                    a("dudi.acm()", href = "http://sdray.github.io/ade4/reference/dudi.acm.html", target="_blank")),
-                                                  placement = "right", trigger = "click",
+                                                  placement = "right", trigger = c("hover", "focus"),
                                                   options = list(container = "body"))
                 ),
                 choices = names(projet$data), selected = input$DataframeMCA)

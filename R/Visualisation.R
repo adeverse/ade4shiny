@@ -1,4 +1,5 @@
 visu <- tabItem("visualisation",
+                h2("Creating graphical outputs"),
   sidebarLayout(
     sidebarPanel = sidebarPanel(
       selectInput("plottype", "Plot", 

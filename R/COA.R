@@ -1,4 +1,5 @@
 coa <- tabItem(tabName = "coa",
+               h2("Correspondence Analysis (COA)"),
                sidebarLayout(
                  sidebarPanel = sidebarPanel(
                    uiOutput("selectizeCOA"),
@@ -9,14 +10,14 @@ coa <- tabItem(tabName = "coa",
                                                   bsButton("helpnfcoa", label = "",
                                                            icon = icon("question-circle" )
                                                            , size = "extra-small")),
-                                5, 2, 200),
+                                2, 2, 200),
                    bsPopover(id = "helpnfcoa",
                              title = "",
                              content = paste0(
                                "Number of axes of variance (dimensions) to keep. See more: ",
                                a("dudi.coa()", href = "http://sdray.github.io/ade4/reference/dudi.coa.html", target="_blank")),
                              placement = "right",
-                             trigger = c("focus", "hover"),
+                             trigger = c("hover", "focus"),
                              options = list(container = "body")),
                    actionButton("DoCOA", "Compute COA", style = "color : white; background-color :  #93bf29")
                  ),
@@ -52,11 +53,11 @@ coaServer <- function(input, output, session, projet){
     
     if (length(all_COA) == 0)
       selectizeInput("NameCOA",
-                     label = tags$span("COA name ",
+                     label = tags$span("Analysis name ",
                                        popify(el = bsButton("help_name_coa", label = "", icon = icon("question-circle"), size = "extra-small"),
                                               title = "",
-                                              content = "Type in a new name to compute a new COA or select a previous COA from the list to display its results",
-                                              placement = "right", trigger = "click",
+                                              content = "Type in a new name to compute a new COA or select a previous COA from the list to display its results.",
+                                              placement = "right", trigger = c("hover", "focus"),
                                               options = list(container = "body"))
                                        ), 
                      choices = all_COA, options = list(create = TRUE))
@@ -64,11 +65,11 @@ coaServer <- function(input, output, session, projet){
     else{
       last <- all_COA[length(all_COA)]
       selectizeInput("NameCOA",
-                     label = tags$span("COA name",
+                     label = tags$span("Analysis name ",
                                        popify(el = bsButton("help_name_coa2", label = "", icon = icon("question-circle"), size = "extra-small"),
                                               title = "",
-                                              content = "Type in a new name to compute a new COA or select a previous COA from the list to display its results",
-                                              placement = "right", trigger = "click",
+                                              content = "Type in a new name to compute a new COA or select a previous COA from the list to display its results.",
+                                              placement = "right", trigger = c("hover", "focus"),
                                               options = list(container = "body"))
                      ), 
                      choices = all_COA, 
@@ -83,12 +84,12 @@ coaServer <- function(input, output, session, projet){
                 label = tags$span("Select a dataframe ",
                                   # helpPopup(title = NULL, content = paste0("A dataframe previously loaded in the app via 'Manage data' containing positive or null values. See more: ",
                                   #                          a("dudi.coa()", href = "http://sdray.github.io/ade4/reference/dudi.coa.html", target="_blank")),
-                                  #           trigger = "click")
+                                  #           trigger = c("hover", "focus"))
                                   shinyBS::popify(el = bsButton("HdfCOA", label = "", icon = icon("question-circle"), size = "extra-small"),
                                                   title = "",
                                                   content = paste0("A dataframe previously loaded in the app containing positive or null values. See more: ",
                                                                    a("dudi.coa()", href = "http://sdray.github.io/ade4/reference/dudi.coa.html", target="_blank")),
-                                                  placement = "right", trigger = "click",
+                                                  placement = "right", trigger = c("hover", "focus"),
                                                   options = list(container = "body"))
                                   ),
                                   choices = names(projet$data), selected = input$DataframeCOA)

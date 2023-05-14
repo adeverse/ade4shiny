@@ -1,4 +1,6 @@
 bga <- tabItem(tabName = "bga",
+               h2("Between-Group Analysis (BGA)"),
+               h4("Also called BCA for Between-Class Analysis"),
                sidebarLayout(
                  sidebarPanel = sidebarPanel(
                    uiOutput("selectizeBGA"),
@@ -14,7 +16,7 @@ bga <- tabItem(tabName = "bga",
                                                   bsButton("helpnfbga", label = "",
                                                            icon = icon("question-circle" )
                                                            , size = "extra-small")),
-                                5, 2, 200),
+                                2, 2, 200),
                    
                    bsPopover(id = "helpnfbga",
                              title = "",
@@ -22,7 +24,7 @@ bga <- tabItem(tabName = "bga",
                                "Number of axes of variance (dimensions) to keep. See more: ",
                                a("dudi.pca()", href = "http://sdray.github.io/ade4/reference/bca.html", target="_blank")),
                              placement = "right",
-                             trigger = "click",
+                             trigger = c("hover", "focus"),
                              options = list(container = "body")),
                    
                    actionButton("DoBGA", "Compute BGA", style = "color : white; background-color :  #93bf29")
@@ -55,11 +57,11 @@ bgaServer <- function(input, output, session, projet){
     
     if (length(all_BGA) == 0)
       selectizeInput("NameBGA",
-                     label = tags$span("Name to refer the BGA later",
+                     label = tags$span("Analysis name ",
                                        popify(el = bsButton("namebga1", label = "", icon = icon("question-circle"), size = "extra-small"),
                                               title = "",
                                               content = "Type in a new name to compute a new BGA or select a previous BGA from the list to display its results",
-                                              placement = "right", trigger = "click",
+                                              placement = "right", trigger = c("hover", "focus"),
                                               options = list(container = "body")) 
                      ),
                      choices = all_BGA, options = list(create = TRUE))
@@ -67,11 +69,11 @@ bgaServer <- function(input, output, session, projet){
     else{
       last <- all_BGA[length(all_BGA)]
       selectizeInput("NameBGA",
-                     "Name to refer the BGA later",
+                     "Analysis name ",
                      popify(el = bsButton("namebga2", label = "", icon = icon("question-circle"), size = "extra-small"),
                             title = "",
                             content = "Type in a new name to compute a new BGA or select a previous BGA from the list to display its results",
-                            placement = "right", trigger = "click",
+                            placement = "right", trigger = c("hover", "focus"),
                             options = list(container = "body")), 
       choices = all_BGA, 
       options = list(create = TRUE), selected = last)
@@ -89,7 +91,7 @@ bgaServer <- function(input, output, session, projet){
                                          title = "",
                                          content = paste0("A duality diagram (object of class dudi), outputed by a one table analysis, which is present in the app environment (previously ran or lodaded in the app). See more: ",
                                                           a("bca()", href = "http://sdray.github.io/ade4/reference/dudi.pca.html", target="_blank")),
-                                         placement = "right", trigger = "click",
+                                         placement = "right", trigger = c("hover", "focus"),
                                          options = list(container = "body")) 
                 ),
                 choices = names(projet$dudi), 
@@ -103,7 +105,7 @@ bgaServer <- function(input, output, session, projet){
                                   popify(el = bsButton("objectbga", label = "", icon = icon("question-circle"), size = "extra-small"),
                                          title = "",
                                          content = paste0("An object (dudi or dataframe) loaded in the app in which to select the grouping factor for the between group analysis."),
-                                         placement = "right", trigger = "click",
+                                         placement = "right", trigger = c("hover", "focus"),
                                          options = list(container = "body")) 
                 ),
                 choices = c(names(projet$data), names(projet$dudi)),
@@ -127,7 +129,7 @@ bgaServer <- function(input, output, session, projet){
                                            title = "",
                                            content = paste0("A factor partitioning the rows of dudi$tab in classes. Dudis$tab is the data frame that was analyzed with the one-table analysis, modified according to the transformation arguments that were used (ie centered and scaled). See more: ",
                                                             a("bca()", href = "http://sdray.github.io/ade4/reference/bca.html", target="_blank")),
-                                           placement = "right", trigger = "click",
+                                           placement = "right", trigger = c("hover", "focus"),
                                            options = list(container = "body")) 
                   ),
                   choices = names(projet$dudi[[input$ObjectGroupBGA]]$tab),
@@ -140,7 +142,7 @@ bgaServer <- function(input, output, session, projet){
                                            title = "",
                                            content = paste0("A factor partitioning the rows of dudi$tab in classes. Dudis$tab is the data frame that was analyzed with the one-table analysis, modified according to the transformation arguments that were used (ie centered and scaled). See more: ",
                                                             a("bca()", href = "http://sdray.github.io/ade4/reference/bca.html", target="_blank")),
-                                           placement = "right", trigger = "click",
+                                           placement = "right", trigger = c("hover", "focus"),
                                            options = list(container = "body")) 
                   ),
                   choices = colnames(projet$data[[input$ObjectGroupBGA]]),

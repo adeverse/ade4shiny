@@ -1,4 +1,5 @@
 acp <- tabItem(tabName = "pca",
+               h2("Principal component analysis (PCA)"),
                sidebarLayout(
                  sidebarPanel = sidebarPanel(
                    uiOutput("selectizeACP"),
@@ -10,7 +11,7 @@ acp <- tabItem(tabName = "pca",
                                         bsButton("helpnfpca", label = "",
                                         icon = icon("question-circle" )
                                         , size = "extra-small")),
-                     value = 5,
+                     value = 2,
                      min = 2,
                      max = 200
                    ),
@@ -20,7 +21,7 @@ acp <- tabItem(tabName = "pca",
                                          "Number of axes of variance (dimensions) to keep. See more: ",
                                          a("dudi.pca()", href = "http://sdray.github.io/ade4/reference/dudi.pca.html", target="_blank")),
                                        placement = "right",
-                                       trigger = "click",
+                                       trigger = c('focus', 'hover'),
                                        options = list(container = "body")),
                     ## checkbox and hover text center pca
                    checkboxInput(
@@ -37,7 +38,7 @@ acp <- tabItem(tabName = "pca",
                                "If checked, centering by the mean, if uncheck, no centring. Default : centering by mean. See more: ",
                                a("dudi.pca()", href = "http://sdray.github.io/ade4/reference/dudi.pca.html", target="_blank")),
                              placement = "right",
-                             trigger = "click",
+                             trigger = c('focus', 'hover'),
                              options = list(container = "body")),
                     ## checkbox and hovertext scale pca     
                    checkboxInput(
@@ -54,15 +55,15 @@ acp <- tabItem(tabName = "pca",
                           "Should column vectors be normed for the row.w weighting ? Yes if checked, no if unchecked. Default : yes. See more: ",
                           a("dudi.pca()", href = "http://sdray.github.io/ade4/reference/dudi.pca.html", target="_blank")),
                         placement = "right",
-                        trigger = "click",
+                        trigger = c('focus', 'hover'),
                         options = list(container = "body")),
                    hr(),
-                   p(markdown("**Row weight**")),
+                   p(markdown("**Row weights**")),
                    ## checkbox and hovertext row weights pca     
                    uiOutput("selectDfRw"),
                    uiOutput("selectColumnRw"),
                  hr(),
-                 p(markdown("**Col weight**")),
+                 p(markdown("**Column weights**")),
                  uiOutput("selectDfCw"),
                  uiOutput("selectColumnCw"),
 
@@ -100,14 +101,27 @@ acpServer <- function(input, output, session, projet){
     })
     
     if (length(all_PCA) == 0)
-      selectizeInput("NameACP", "Name to refer the PCA later ",
+      selectizeInput("NameACP",
+                     label = tags$span("Analysis name ",
+                                       popify(el = bsButton("hpcaname1", label = "", icon = icon("question-circle"), size = "extra-small"),
+                                              title = "",
+                                              content = "Type in a new name to compute a new PCA or select a previous PCA from the list to display its results.",
+                                              placement = "right", trigger = c('focus', 'hover'),
+                                              options = list(container = "body")) 
+                     ),
                      choices = all_PCA, 
                      options = list(create = TRUE))
     
     else{
       last <- all_PCA[length(all_PCA)]
       selectizeInput("NameACP", 
-                     label = "Name to refer the PCA later ",
+                     label = tags$span("Analysis name ",
+                               popify(el = bsButton("hpcaname2", label = "", icon = icon("question-circle"), size = "extra-small"),
+                                      title = "",
+                                      content = "Type in a new name to compute a new PCA or select a previous PCA from the list to display its results.",
+                                      placement = "right", trigger = c('focus', 'hover'),
+                                      options = list(container = "body")) 
+                     ),
                      choices = all_PCA, 
                      options = list(create = TRUE), selected = last)
     }
@@ -119,7 +133,14 @@ acpServer <- function(input, output, session, projet){
     if (length(projet$data) == 0 & length(projet$dudi) == 0)
       return("")
     
-    selectInput("DfRw", label = "Select an object which contains the row weights",
+    selectInput("DfRw",
+                label = tags$span("Select an object which contains the row weights",
+                          popify(el = bsButton("hdfrw", label = "", icon = icon("question-circle"), size = "extra-small"),
+                                 title = "",
+                                 content = "None for default uniform row weights. Custom weights are useful for two table analyses: select an object in this box and one of its column in the box that will appear below.",
+                                 placement = "right", trigger = c('focus', 'hover'),
+                                 options = list(container = "body")) 
+                ),
                 choices = c("None", names(projet$data), names(projet$dudi)))
     
   })
@@ -128,7 +149,14 @@ acpServer <- function(input, output, session, projet){
     if (length(projet$data) == 0 & length(projet$dudi) == 0)
       return("")
     
-    selectInput("DfCw", label = "Select an object which contains the col weights",
+    selectInput("DfCw",
+                label = tags$span("Select an object which contains the column weights",
+                                  popify(el = bsButton("hdfcw", label = "", icon = icon("question-circle"), size = "extra-small"),
+                                         title = "",
+                                         content = "None for default uniform column weights. Custom weights are useful for two table analyses: select an object in this box and one of its column in the box that will appear below.",
+                                         placement = "right", trigger = c('focus', 'hover'),
+                                         options = list(container = "body")) 
+                ),
                 choices = c("None", names(projet$data), names(projet$dudi)))
     
   })
@@ -177,7 +205,7 @@ acpServer <- function(input, output, session, projet){
   # addPopover(session, id = "HdfPCA", title = "", content = paste0(
   #   "A dataframe with n rows (individuals) and p columns (numeric variables) previously loaded in the app. See more: ",
   #   a("dudi.pca()", href = "http://sdray.github.io/ade4/reference/dudi.pca.html", target="_blank")),
-  #   placement = "right", trigger = "click",
+  #   placement = "right", trigger = c('focus', 'hover'),
   #   options = list(container = "body"))
   #)
   
@@ -188,7 +216,7 @@ acpServer <- function(input, output, session, projet){
                                          title = "",
                                          content = paste0("A dataframe with n rows (individuals) and p columns (numeric variables) previously loaded in the app. See more: ",
                                            a("dudi.pca()", href = "http://sdray.github.io/ade4/reference/dudi.pca.html", target="_blank")),
-                                         placement = "right", trigger = "click",
+                                         placement = "right", trigger = c('focus', 'hover'),
                                          options = list(container = "body")) 
                                   ),
                 choices = names(projet$data), selected = input$DataframeACP)

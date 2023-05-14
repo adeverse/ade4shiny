@@ -3,7 +3,7 @@ pco <- tabItem(tabName = "pco",
                  sidebarPanel = sidebarPanel(
                    uiOutput("selectizePCO"),
                    uiOutput("SelectDataframePCO"),
-                   numericInput("nfPCO", "Number of dimension to keep", 5, 2, 200),
+                   numericInput("nfPCO", "Number of dimension to keep", 2, 2, 200),
                    actionButton("DoPCO", "Compute PCO", style = "color : white; background-color : #58d68d")
                  ),
                  mainPanel = mainPanel(
