@@ -1,3 +1,5 @@
+# Permet de faire une BCA, d'afficher des outputs et de stocker le dudi pour plus tard
+
 bga <- tabItem(tabName = "bga",
                h2("Between-Group Analysis (BGA)"),
                h4("Also called BCA for Between-Class Analysis"),
@@ -49,6 +51,7 @@ bga <- tabItem(tabName = "bga",
 
 bgaServer <- function(input, output, session, projet){
   
+  # Permet de donner un nom à la BCA ou de choisir une BCA existante
   output$selectizeBGA <- renderUI({
     all_BGA <- sapply(names(projet$dudi), function(x){
       if ("between" %in% class(projet$dudi[[x]]))
@@ -81,6 +84,7 @@ bgaServer <- function(input, output, session, projet){
     
   })
   
+  # Permet de choisir le dataframe pour la bca
   output$selectDudiBGA <- renderUI({
     if (length(projet$dudi) == 0)
       return("No dudi object in the project")
@@ -98,6 +102,7 @@ bgaServer <- function(input, output, session, projet){
                 selected = input$DudiBGA)
   })
   
+  # Permet de choisir l'objet contenant le vecteur de group de la bca
   output$selectObjectGroupBGA <-renderUI(
     
     selectInput("ObjectGroupBGA",
@@ -113,7 +118,9 @@ bgaServer <- function(input, output, session, projet){
     
   )
   
-  
+  # Permet de choisir la colonne de l'objet qui contient le grouping factor
+  # Si l'objet est un dudi, on choisit une colonne parmi dudi$tab
+  # Si l'objet est un dataframe, on choisit une colonne
   output$selectGroupBGA <- renderUI({
     if (length(projet$dudi) == 0)
       return("No dudi object in the project")
@@ -150,6 +157,7 @@ bgaServer <- function(input, output, session, projet){
   })
   
   
+  # Permet de choisir quoi afficher dans l'onglet output
   output$selectoutputBGA <- renderUI({
     if (is.null(input$NameBGA) | !(input$NameBGA %in% names(projet$dudi)))
       return()
@@ -163,7 +171,7 @@ bgaServer <- function(input, output, session, projet){
                 keep)
   })
   
-  
+  # Quand on clique sur le bouton pour faire l'analyse
   observeEvent(input$DoBGA, {
     if (input$NameBGA == ""){
       alert("Please enter a name")
@@ -188,6 +196,7 @@ bgaServer <- function(input, output, session, projet){
       temp <- bca(dud, fac = fact,nf = input$nfBGA, scannf = F)
       projet$dudi[[input$NameBGA]] <- temp
       
+      # Ecrit le code pour faire l'analyse dans projet$code
       if ("dudi" %in% class(projet$dudi[[input$ObjectGroupBGA]]))
         string <- paste(input$NameBGA, " <- bca(", input$DudiBGA, ", fac = ", 
                         "as.factor(", input$ObjectGroupBGA, "$tab[,", '"',input$GroupBGA,'"',"])",

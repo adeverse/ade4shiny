@@ -1,12 +1,5 @@
-############# Sourcing modules
-# source("modules/LoadData.R")
-# source("modules/ACP.R")
-# source("modules/Visualisation.R")
-# source("modules/COA.R")
-# source("modules/BGA.R")
-# source("modules/Coinertia.R")
-
-header <- dashboardHeader(title = "Dashboard ade4 example", 
+# Header with buttons to save data and code
+header <- dashboardHeader(title = "ADE4", 
                           tags$li(class = "dropdown", 
                                   downloadButton("savedata", "Save data",
                                                  style = "color : white; background-color : #117d89;
@@ -16,6 +9,8 @@ header <- dashboardHeader(title = "Dashboard ade4 example",
                                                  style = "color : white; background-color : #117d89;
                                                  border-color: #094d4e")))
 
+# Side bar with all the tabs
+## Commented tabs are tabs done in ade4tkgui but not implemented in this app yet
 sidebar <- dashboardSidebar(sidebarMenu(
   menuItem("Welcome to ade4", tabName = "introtab"),
   menuItem("Manage data", startExpanded = TRUE,
@@ -43,6 +38,7 @@ sidebar <- dashboardSidebar(sidebarMenu(
 
 body <- dashboardBody(
   useShinyjs(),
+  # Add custom css color (lbbe logo colors to header)
   tags$head(
     tags$link(rel = "stylesheet", type = "text/css", href = "custom.css"),
     tags$link(rel = "stylesheet", href = "https://use.fontawesome.com/releases/v5.8.1/css/all.css", 
@@ -56,6 +52,7 @@ body <- dashboardBody(
     
   ),
   tabItems(
+    # Done in corresponding modules in the R/ folder
     introtab,
     LoadData,
     subsetdata,

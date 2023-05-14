@@ -1,5 +1,7 @@
-introtab <- tabItem(tabName = "introtab",
+## Premier onglet decrivant l'appli et le package ADE4
 
+introtab <- tabItem(tabName = "introtab",
+                    # Logo
                     fluidRow( column(width = 3, tags$img(src = 'https://sdray.github.io/ade4/logo.svg')),
                               #column(width = 1),
                               column(width = 9, h2("Welcome to ade4's shiny dashboard !"), br(),

@@ -1,6 +1,8 @@
-setwd("C:/Users/marti/Documents/Cours/M2/Projet/shiny_ade4/")
+## Setting working directory to shiny directory
+setwd(dirname(rstudioapi::getSourceEditorContext()$path))
 
 
+# Loading libraries
 library(shiny)
 library(shinydashboard)
 library(shinyjs)
@@ -11,9 +13,5 @@ library(xfun)
 library(factoextra)
 library(shinyBS)
 
+# Run the shiny app
 runApp(".")
-
-## Graph interactif Explor github
-## Pedagogie
-
-## Modifier visualisation + explicite

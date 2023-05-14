@@ -1,9 +1,12 @@
+# Permet de choisir un plot à faire, de choisir les options correspondantes,
+# de l'afficher et de l'exporter au format voulu
+
 visu <- tabItem("visualisation",
                 h2("Creating graphical outputs"),
   sidebarLayout(
     sidebarPanel = sidebarPanel(
       selectInput("plottype", "Plot", 
-                  choices = c("Label", "Class", "Value")),
+                  choices = c("Label", "Class")),
       hr(),
       uiOutput("visualisation_listoption"),
       #checkboxInput("AddPlot", "Add to plot"),
@@ -24,6 +27,7 @@ visu <- tabItem("visualisation",
 
 visuServer <- function(input, output, session, projet){
   
+  # Permet d'adapter l'ui en fonction du type de plot
   output$visualisation_listoption <- renderUI({
     
     switch(input$plottype,
@@ -95,7 +99,7 @@ visuServer <- function(input, output, session, projet){
     
   })
   
-  
+  # Permet d'adapter le calcul du plot en fonction du type de plot
   observeEvent(input$DoRenderPlot,
                switch(input$plottype,
                       
@@ -170,6 +174,7 @@ visuServer <- function(input, output, session, projet){
                     ))
   
   
+  # Permet d'exporter le plot avec les dimensions voulues au format voulu
   output$exportplot <- downloadHandler(
     filename = function(){
       paste("plot_ade4", input$plotformat, sep = ".")}

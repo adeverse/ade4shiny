@@ -1,3 +1,5 @@
+# Permet de faire une PCAIV, d'afficher des outputs et de stocker le dudi pour plus tard
+
 pcaIV <- tabItem(tabName = "pcaiv",
                  h2("Principal Component Analysis with respect to Instrumental Variables (PCAIV)"),
                sidebarLayout(
@@ -46,6 +48,7 @@ pcaIV <- tabItem(tabName = "pcaiv",
 
 pcaIVserver <- function(input, output, session, projet){
   
+  # Permet de donner un nom à la PCAIV ou de choisir une PCAIV existante
   output$selectizePCAIV <- renderUI({
     all_PCAIV <- sapply(names(projet$dudi), function(x){
       if ("pcaiv" %in% class(projet$dudi[[x]]))
@@ -78,6 +81,7 @@ pcaIVserver <- function(input, output, session, projet){
     }
   })
   
+  # Permet de choisir l'objet dudi pour faire l'analyse
   output$selectDudiPCAIV <- renderUI({
     if (length(projet$dudi) == 0)
       return("No dudi object present in the project")
@@ -95,6 +99,7 @@ pcaIVserver <- function(input, output, session, projet){
                 selected = input$DudiPCAIV)
   })
   
+  # Permet de choisir le dataframe pour faire l'analyse
   output$selectDfPCAIV <- renderUI({
     if (length(projet$data) == 0)
       return()
@@ -112,6 +117,7 @@ pcaIVserver <- function(input, output, session, projet){
                 selected = input$DfPCAIV)
   })
   
+  # Permet de choisir quoi afficher dans l'onglet output
   output$selectdatatablePCAIV <- renderUI({
     if (length(projet$dudi) < 2)
       return()
@@ -131,6 +137,7 @@ pcaIVserver <- function(input, output, session, projet){
     
   })
   
+  # Quand on clique sur le bouton pour faire l'analyse
   observeEvent(input$DoPCAIV, {
     if (input$NamePCAIV == ""){
       alert("Please enter a name")
@@ -150,6 +157,7 @@ pcaIVserver <- function(input, output, session, projet){
       temp <- pcaiv(dudi, df ,nf = input$nfPCAIV, scannf = F)
       projet$dudi[[input$NamePCAIV]] <- temp
       
+      # Rajoute le code pour faire l'analsye dans projet$code
       string <- paste(input$NamePCAIV, " <- pcaiv(", input$DudiPCAIV, 
                       ", ", input$DfPCAIV, ", nf = ", input$nfPCAIV, 
                       ", scannf = ", F,")", sep = "")
@@ -207,6 +215,7 @@ pcaIVserver <- function(input, output, session, projet){
     if (is.null(input$dataframePCAIV))
       return(data.frame(list()))
     
+    # Pour afficher plus joliement les row et col weight
     dt$cw <- list(col.weight = dt$cw)
     dt$lw <- list(row.weight = dt$lw)
     

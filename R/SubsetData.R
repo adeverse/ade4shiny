@@ -1,3 +1,5 @@
+## Permet de créer un nouveau dataframe en enlevant des colonnes à un dataframe existant
+
 subsetdata <- tabItem(tabName = "subsetdata",
                       h2("Subsetting dataframes"),
                       sidebarLayout(
@@ -27,6 +29,7 @@ subsetdata <- tabItem(tabName = "subsetdata",
 
 SubsetDataServer <- function(input, output, session, projet){
   
+  # Permet de choisir le dataframe à subset
   output$selectDataframeSubsetData <- renderUI({
     if (length(projet$data) == 0)
       return("")
@@ -43,6 +46,7 @@ SubsetDataServer <- function(input, output, session, projet){
   })
   
   
+  # Permet de choisir les colonnes à enlever
   output$SelectColumnSubsetData <- renderUI({
     if (length(projet$data) == 0)
       return("")
@@ -64,6 +68,7 @@ SubsetDataServer <- function(input, output, session, projet){
   
   
   
+  # Affiche le datframe selectionné
   output$DatatableSubsetData <- renderDataTable({
     if (length(projet$data) == 0)
       return(data.frame(list()))
@@ -75,6 +80,7 @@ SubsetDataServer <- function(input, output, session, projet){
     
     })
   
+  # Quand on clique sur le bouton
   observeEvent(input$DoSubsetData, {
     if (input$NameSubsetData == ""){
       alert("Please enter a name")
@@ -96,7 +102,7 @@ SubsetDataServer <- function(input, output, session, projet){
     
     projet$data[[input$NameSubsetData]] <- df
     
-    
+    # Rajoute le code dans projet$code
     string <- paste(input$NameSubsetData, " <- ", input$DataframeSubsetData, 
                     "[, c('", keep_string, ")]",sep = "")
     

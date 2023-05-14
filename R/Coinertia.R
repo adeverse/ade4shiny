@@ -1,3 +1,5 @@
+# Permet de faire une Coinertie, d'afficher des outputs et de stocker le dudi pour plus tard
+
 coinertie <- tabItem(tabName = "coinertia",
                      h2("Coinertia Analysis (CA)"),
                      h4("Perform a double inertia analysis of two tables."),
@@ -44,6 +46,7 @@ coinertie <- tabItem(tabName = "coinertia",
 
 coinertiaserver <- function(input, output, session, projet){
   
+  # Permet de donner un nom à la coinertie ou de choisir une coinertie existante
   output$selectizeCoinertia <- renderUI({
     all_Coinertia <- sapply(names(projet$dudi), function(x){
       if ("coinertia" %in% class(projet$dudi[[x]]))
@@ -76,6 +79,7 @@ coinertiaserver <- function(input, output, session, projet){
     }
   })
   
+  # Permet de choisir le premier objet dudi pour l'analyse
   output$selectDudiCoinertia1 <- renderUI({
     if (length(projet$dudi) == 0)
       return("No dudi present in the project")
@@ -93,6 +97,7 @@ coinertiaserver <- function(input, output, session, projet){
                 selected = input$DudiCoinertia1)
   })
   
+  # Permet de choisir le 2e objet dudi pour l'analyse
   output$selectDudiCoinertia2 <- renderUI({
     if (length(projet$dudi) == 0)
       return()
@@ -113,6 +118,7 @@ coinertiaserver <- function(input, output, session, projet){
                 selected = input$DudiCoinertia2)
   })
   
+  # Permet de choisir quoi afficher dans l'onglet output
   output$selectdatatableCoinertia <- renderUI({
     if (length(projet$dudi) < 2)
       return()
@@ -132,6 +138,7 @@ coinertiaserver <- function(input, output, session, projet){
     
   })
   
+  # Quand on clique sur le bouton pour lancer l'analyse
   observeEvent(input$DoCoinertia, {
     if (is.null(input$NameCoinertia)){
       alert("Please enter a name")
@@ -146,7 +153,7 @@ coinertiaserver <- function(input, output, session, projet){
     dud1 <- projet$dudi[[input$DudiCoinertia1]]
     dud2 <- projet$dudi[[input$DudiCoinertia2]]
     
-    if (identical(dud1$lw, dud2$lw) == FALSE)
+    if (identical(dud1$lw, dud2$lw) == FALSE) # Si les row weights sont différents
       alert("Be careful, the row weight are different")
     
     tryCatch({
@@ -154,7 +161,7 @@ coinertiaserver <- function(input, output, session, projet){
       temp <- coinertia(dud1, dud2 ,nf = input$nfCoinertia, scannf = F)
       projet$dudi[[input$NameCoinertia]] <- temp
       
-      
+      # Rajoute le code pour faire l'analyse dans projet$code
       string <- paste(input$NameCoinertia, " <- coinertia(", input$DudiCoinertia1, 
                       ", ", input$DudiCoinertia2, ", nf = ", input$nfCoinertia, 
                       ", scannf = ", F,")", sep = "")

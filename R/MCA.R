@@ -1,3 +1,5 @@
+# Permet de faire une MCA, d'afficher des outputs et de stocker le dudi pour plus tard
+
 mca <- tabItem(tabName = "mca",
                h2("Multiple Correspondence Analysis (MCA)"),
                sidebarLayout(
@@ -45,6 +47,7 @@ mca <- tabItem(tabName = "mca",
 
 mcaServer <- function(input, output, session, projet){
   
+  # Permet de donner un nom à la MCA ou de choisir une MCA existante
   output$selectizeMCA <- renderUI({
     all_MCA <- sapply(names(projet$dudi), function(x){
       if ("acm" %in% class(projet$dudi[[x]]))
@@ -77,6 +80,7 @@ mcaServer <- function(input, output, session, projet){
     }
   })
   
+  # Permet de choisir le dataframe pour faire la MCA
   output$SelectDataframeMCA <- renderUI(
     selectInput("DataframeMCA",
                 label = tags$span("Select a dataframe ",
@@ -90,6 +94,7 @@ mcaServer <- function(input, output, session, projet){
                 choices = names(projet$data), selected = input$DataframeMCA)
   )
   
+  # Permet de choisir quoi afficher dans l'onglet output
   output$selectoutputMCA2 <- renderUI({
     if(input$selectoutputMCA == "Eigenvalues")
       return()
@@ -123,6 +128,7 @@ mcaServer <- function(input, output, session, projet){
     
   })
   
+  # Quand on clique sur le bouton pour faire la MCA
   observeEvent(input$DoMCA, {
     if (input$NameMCA == ""){
       alert("Please enter a name")
@@ -142,6 +148,7 @@ mcaServer <- function(input, output, session, projet){
       
       projet$dudi[[input$NameMCA]] <- temp
       
+      # Ecrit le code pour faire l'analyse dans projet$code
       string <- paste(input$NameMCA, " <- dudi.acm(", input$DataframeMCA, 
                       ", nf = ", input$nfMCA, ", scannf = ", F,")", sep = "")
       

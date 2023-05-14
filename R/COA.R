@@ -1,3 +1,5 @@
+# Permet de faire une COA, d'afficher des outputs et de stocker le dudi pour plus tard
+
 coa <- tabItem(tabName = "coa",
                h2("Correspondence Analysis (COA)"),
                sidebarLayout(
@@ -45,6 +47,7 @@ coa <- tabItem(tabName = "coa",
 
 coaServer <- function(input, output, session, projet){
   
+  # Permet de donner un nom à la COA ou de choisir une COA existante
   output$selectizeCOA <- renderUI({
     all_COA <- sapply(names(projet$dudi), function(x){
       if ("coa" %in% class(projet$dudi[[x]]))
@@ -78,6 +81,7 @@ coaServer <- function(input, output, session, projet){
     
   })
   
+  # Permet de choisir le dataframe pour faire la COA
   output$SelectDataframeCOA <- renderUI({
     selectInput("DataframeCOA",
                 #  label = "Select a dataframe ",
@@ -95,6 +99,7 @@ coaServer <- function(input, output, session, projet){
                                   choices = names(projet$data), selected = input$DataframeCOA)
   })
   
+  # Permet de choisir quoi afficher dans l'onglet output
   output$selectoutputCOA2 <- renderUI({
     if (is.null(input$selectoutputCOA))
       return("")
@@ -124,6 +129,7 @@ coaServer <- function(input, output, session, projet){
     
   })
   
+  # Quand on clique sur le bouton pour faire la COA
   observeEvent(input$DoCOA, {
     if (input$NameCOA == ""){
       alert("Please enter a name")
@@ -143,6 +149,7 @@ coaServer <- function(input, output, session, projet){
       
       projet$dudi[[input$NameCOA]] <- temp
       
+      # Rajoute le code dans projet$code
       string <- paste(input$NameCOA, " <- dudi.coa(", input$DataframeCOA, 
                       ", nf = ", input$nfCOA, ", scannf = ", F,")", sep = "")
       
@@ -208,22 +215,6 @@ coaServer <- function(input, output, session, projet){
     
     ade4:::screeplot.dudi(projet$dudi[[input$NameCOA]], main = input$NameCOA)
   })
-  
-  
-  # output$screeplotCOA <- renderPlot({
-  #   if (is.null(projet$dudi[[input$NameCOA]]))
-  #     return(0)
-  #   
-  #   color_bar <- c(rep("black", projet$dudi[[input$NameCOA]]$nf), 
-  #                  rep("grey", length(projet$dudi[[input$NameCOA]]$eig) - projet$dudi[[input$NameCOA]]$nf))
-  #   
-  #   
-  #   barplot(projet$dudi[[input$NameCOA]]$eig, 
-  #           main = "Screeplot - Eigenvalues", 
-  #           names.arg = 1:length(projet$dudi[[input$NameCOA]]$eig), 
-  #           col = color_bar)
-  #   
-  # })
   
   
 }

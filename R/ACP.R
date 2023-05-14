@@ -1,3 +1,5 @@
+# Permet de faire une ACP, d'afficher des outputs et de stocker le dudi pour plus tard
+
 acp <- tabItem(tabName = "pca",
                h2("Principal component analysis (PCA)"),
                sidebarLayout(
@@ -94,6 +96,7 @@ acp <- tabItem(tabName = "pca",
 
 acpServer <- function(input, output, session, projet){
   
+  # Permet de donner un nom à l'ACP ou de choisir une ACP existante
   output$selectizeACP <- renderUI({
     all_PCA <- sapply(names(projet$dudi), function(x){
       if ("pca" %in% class(projet$dudi[[x]]))
@@ -129,6 +132,7 @@ acpServer <- function(input, output, session, projet){
   })
   
   
+  # Permet de choisir le dataframe qui contient les row weights
   output$selectDfRw <- renderUI({
     if (length(projet$data) == 0 & length(projet$dudi) == 0)
       return("")
@@ -145,6 +149,7 @@ acpServer <- function(input, output, session, projet){
     
   })
   
+  # Permet de choisir le dataframe qui contient les col weights
   output$selectDfCw <- renderUI({
     if (length(projet$data) == 0 & length(projet$dudi) == 0)
       return("")
@@ -161,6 +166,7 @@ acpServer <- function(input, output, session, projet){
     
   })
   
+  # Permet de choisir la colonne du dataframe qui contient les row weights
   output$selectColumnRw <- renderUI({
     if (is.null(input$DfRw))
       return("")
@@ -180,6 +186,7 @@ acpServer <- function(input, output, session, projet){
     
   })
   
+  # Permet de choisir la colonne du dataframe qui contient les col weights
   output$selectColumnCw <- renderUI({
     if (is.null(input$DfCw))
       return("")
@@ -209,6 +216,7 @@ acpServer <- function(input, output, session, projet){
   #   options = list(container = "body"))
   #)
   
+  # Permet de choisir le dataframe pour faire l'acp
   output$SelectDataframeACP <- renderUI({
     selectInput("DataframeACP",
                 label = tags$span("Select a dataframe ",
@@ -222,6 +230,7 @@ acpServer <- function(input, output, session, projet){
                 choices = names(projet$data), selected = input$DataframeACP)
   })
   
+  # Permet de choisir quoi afficher dans l'onglet output
   output$selectoutputPCA2 <- renderUI({
     if(input$selectoutputPCA == "Eigenvalues")
       return()
@@ -253,6 +262,8 @@ acpServer <- function(input, output, session, projet){
     }
   })
   
+  
+  # Quand on clique sur le bouton pour faire l'ACP
   observeEvent(input$DoACP, {
     if (input$NameACP == ""){
       alert("Please enter a name")
@@ -266,7 +277,7 @@ acpServer <- function(input, output, session, projet){
     
     df <- projet$data[[input$DataframeACP]]
     
-    tryCatch({
+    tryCatch({ # Essaie de faire l'ACP
       
       if (input$DfRw == "None"){
         row.weight <- rep(1, nrow(df))/nrow(df)
@@ -317,6 +328,7 @@ acpServer <- function(input, output, session, projet){
     
     projet$dudi[[input$NameACP]] <- temp
     
+    # Ecrit le code pour faire l'acp dans projet$code
     string <- paste(input$NameACP, " <- dudi.pca(", input$DataframeACP, ", nf = ", input$nfPCA, ", scannf = ", F,
                     ", center = ",input$docenterACP, ", scale = ", input$doscaleACP, 
                     ", row.w = ", string_rw, ", col.w = ", string_cw,")", sep = "")

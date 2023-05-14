@@ -1,3 +1,8 @@
+## Permet d'importer des jeux de données de 3 manières :
+### Depuis les exemples d'ADE4
+### Depuis un ancien projet créé par l'appli
+### Depuis un dataframe ou un vecteur au format csv-like.
+
 LoadData <- tabItem(tabName = "managedata",
                     h2("Loading in data"),
                     sidebarLayout(
@@ -34,6 +39,9 @@ LoadData <- tabItem(tabName = "managedata",
 
 LoadDataServer <- function(input, output, session, projet){
   
+  
+  ## Change l'UI in se basant sur la valeur de input$LoaddataType
+  ### qui donne le choix entre les 3 façons d'importer les données
   output$LoadData_listoptions <- renderUI({
     
     switch(input$LoaddataType,
@@ -69,6 +77,7 @@ LoadDataServer <- function(input, output, session, projet){
 
   
   
+  # Quand on clique sur le bouton pour charger un projet existant
   observeEvent(input$LoadProjectFile,{
     
     object <- readRDS(input$LoadProjectFile$datapath)
@@ -77,6 +86,7 @@ LoadDataServer <- function(input, output, session, projet){
     
   })
   
+  # Select input qui permet de choisir quel dataframe afficher dans l'onglet Dataframe
   output$selectdataframenameLoadData <- renderUI({
     if (length(projet$data) == 0)
       return(NULL)
@@ -88,6 +98,7 @@ LoadDataServer <- function(input, output, session, projet){
     })
   
   
+  # Select input qui permet de choisir quel dudi afficher dans l'onglet Dudi
   output$selectdudinameLoadData <- renderUI({
     if (length(projet$dudi) == 0)
       return(NULL)
@@ -98,9 +109,11 @@ LoadDataServer <- function(input, output, session, projet){
     
   })
   
+  
+  # Quand on clique sur le bouton pour charger un dataframe depuis un fichier
   observeEvent(input$DoLoadData, {
     
-    if (length(input$LoadDataFile$datapath) == 0){
+    if (length(input$LoadDataFile$datapath) == 0){ # Si aucun fichier en entrée
       alert("Please choose a rds or csv file")
       return(0)
     }
@@ -111,7 +124,7 @@ LoadDataServer <- function(input, output, session, projet){
     }
     
     
-    if (file_ext(input$LoadDataFile$datapath) == "rds"){
+    if (file_ext(input$LoadDataFile$datapath) == "rds"){ # Si le fichier est un rds
       
       projet$data[[input$LoadDataName]] <- readRDS(input$LoadDataFile$datapath)
       
@@ -122,13 +135,12 @@ LoadDataServer <- function(input, output, session, projet){
       
     }
     
-    else if (file_ext(input$LoadDataFile$datapath) == "csv" | 
-             file_ext(input$LoadDataFile$datapath) == "txt"){
+    else {
       isrownames <- NULL
       if (input$LoadDataCheckRownames)
         isrownames <- 1
       
-      tryCatch(
+      tryCatch( # Essaie de read le fichier en entrée
       projet$data[[input$LoadDataName]] <- read.table(input$LoadDataFile$datapath, 
                                                     header = input$LoadDataCheckHeader,
                                                     sep = input$LoadDataSep,
@@ -140,6 +152,7 @@ LoadDataServer <- function(input, output, session, projet){
         
       })
       
+      # Rajoute le code d'importation du fichier dans projet$code
       if (is.null(isrownames))
         string <- paste(input$LoadDataName, " <- read.table(<path_to_your_dataframe>, header = ", 
                         input$LoadDataCheckHeader, ", sep = ","'", 
@@ -153,12 +166,9 @@ LoadDataServer <- function(input, output, session, projet){
       projet$code <- paste(projet$code, string, sep = "\n\n# Load data from a new dataframe\n")
       
     }
-    else {
-      alert("Please enter a rds or csv file") 
-      return(0)
-    }
   })
   
+  # Affiche le dataframe dans l'onglet Dataframe
   output$LoadDataDatatable <- renderDataTable({
     if (length(projet$data) == 0)
       return(data.frame(list()))
@@ -173,15 +183,16 @@ LoadDataServer <- function(input, output, session, projet){
     })
   
   
+  # Quand on clique sur le bouton pour charger un example d'ADE4
   observeEvent(input$DoLoadExample,{
-    projet$data <- list()
-    projet$dudi <- list()
     
     temp <- get(data(list = c(input$examples)))
     
+    # Si l'example est juste un data frame
     if (class(temp) == "data.frame" & "dudi" %in% class(temp) == FALSE)
       projet$data[[input$examples]] <- temp
     
+    # Si l'example est une liste d'objets
     if (class(temp) == "list")
       for(i in names(temp)){
         
@@ -197,11 +208,13 @@ LoadDataServer <- function(input, output, session, projet){
         }
       }
     
+    # Rajoute le code pour load les data dans projet$code
     string <- paste("data(", input$examples,")", sep = "")
     
     projet$code <- paste(projet$code, string, sep = "\n\n# Load data from ade4 examples\n")
   })
   
+  # Affiche le dudi selectionné dans l'onglet
   output$textdudiLoadData <- renderPrint({
     if (length(projet$dudi) == 0)
       return("No dudi object in the current project")
