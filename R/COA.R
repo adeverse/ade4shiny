@@ -16,7 +16,7 @@ coa <- tabItem(tabName = "coa",
                                "Number of axes of variance (dimensions) to keep. See more: ",
                                a("dudi.coa()", href = "http://sdray.github.io/ade4/reference/dudi.coa.html", target="_blank")),
                              placement = "right",
-                             trigger = "click",
+                             trigger = c("focus", "hover"),
                              options = list(container = "body")),
                    actionButton("DoCOA", "Compute COA", style = "color : white; background-color :  #93bf29")
                  ),
