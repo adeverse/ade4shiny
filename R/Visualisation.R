@@ -142,7 +142,7 @@ visuServer <- function(input, output, session, projet){
                         else
                           df <- projet$dudi[[input$objectClass]][[input$xyClass]]
                         
-                        fact <- projet$data[[input$dataClassFactor]][,input$ClassGroupingFactor]
+                        fact <- as.factor(projet$data[[input$dataClassFactor]][,input$ClassGroupingFactor])
                         
                         if (input$dataClassWeight == "none")
                           rw <- rep(1, length(fact))
