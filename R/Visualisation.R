@@ -43,7 +43,7 @@ visuServer <- function(input, output, session, projet){
                  
                  else if (input$objectLabel %in% names(projet$dudi))
                    selectInput("xyLabel", "XY coordinates", 
-                              choices = c("Variables" = "co", "Individuals" = "li"),
+                              choices = c("Individuals" = "li", "Variables" = "co"),
                               selected = input$xyLabel)
                }
              },
@@ -110,7 +110,11 @@ visuServer <- function(input, output, session, projet){
                             projet$plot <- ade4:::s.label(projet$data[[input$objectLabel]], 
                                                   xax = input$xLabel,
                                                   yax = input$yLabel)
-                                                  #add.plot = input$AddPlot)
+                            # Ajout du code pour faire le plot dans projet$code
+                            string <- paste("s.label(", input$objectLabel, ", xax = ", 
+                                            input$xLabel, ", yax = ", input$yLabel, ")", sep = "")
+                            
+                            projet$code <- paste(projet$code, string, sep = "\n\n# Computing Label plot\n")
                             
                           }, error = function(e){
                             alert("The dataframe is not suited for the plot")
@@ -126,6 +130,10 @@ visuServer <- function(input, output, session, projet){
                                                   xax = input$xLabel,
                                                   yax = input$yLabel) 
                                                   #add.plot = input$AddPlot)
+                            string <- paste("s.label(", input$objectLabel, "$", input$xyLabel, 
+                                            ", xax = ", input$xLabel, ", yax = ", input$yLabel, ")", sep = "")
+                            
+                            projet$code <- paste(projet$code, string, sep = "\n\n# Computing Label plot\n")
                             
                           }, error = function(e){
                             alert("The dataframe is not suited for the plot")
@@ -140,25 +148,41 @@ visuServer <- function(input, output, session, projet){
                     "Class" = output$PlotVisualisation <- renderPlot({
                       isolate({
                         
-                        if (input$objectClass %in% names(projet$data))
+                        if (input$objectClass %in% names(projet$data)){
                           df <- projet$data[[input$objectClass]]
+                          string_df <- input$objectClass
+                        }
                         
-                        else
+                        else{
                           df <- projet$dudi[[input$objectClass]][[input$xyClass]]
+                          string_df <- paste(input$objectClass, "$", input$xyClass, sep = "")
+                        }
                         
                         fact <- as.factor(projet$data[[input$dataClassFactor]][,input$ClassGroupingFactor])
+                        string_fact <- paste("as.factor(", input$dataClassFactor, "$", 
+                                             input$ClassGroupingFactor, ")", sep = "")
                         
-                        if (input$dataClassWeight == "none")
+                        if (input$dataClassWeight == "none"){
                           rw <- rep(1, length(fact))
+                          string_rw <- paste("rep(1, ",length(fact), ")", sep = "")
+                        }
                         
-                        else
+                        else{
                           rw <- projet$data[[input$dataClassWeight]][,input$RowWeightClass]
+                          string_rw <- paste(input$dataClassWeight, "$", input$RowWeightClass, sep = "")
+                        }
                           
                         
                         tryCatch({
                           projet$plot <- ade4:::s.class(dfxy = df, fac = fact, wt = rw,
                                          xax = input$xClass,
                                          yax = input$yClass) 
+                          
+                          string <- paste("s.class(dfxy = ", string_df, ", fac = ", string_fact,
+                                          ", wt = ", string_rw, ", xax = ", input$xClass,
+                                          ", yax = ", input$yClass, ")",sep = "")
+                          
+                          projet$code <- paste(projet$code, string, sep = "\n\n# Computing Class plot\n")
                           
                         }, error = function(e){
                           alert("The dataframe is not suited for the plot")
