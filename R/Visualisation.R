@@ -63,7 +63,7 @@ visuServer <- function(input, output, session, projet){
                  
                  else if (input$objectClass %in% names(projet$dudi))
                    selectInput("xyClass", "XY coordinates", 
-                               choices = c("Variables" = "co", "Individuals" = "li"),
+                               choices = c("Individuals" = "li", "Variables" = "co"),
                                selected = input$xyClass)
                }
              },
@@ -156,6 +156,11 @@ visuServer <- function(input, output, session, projet){
                         else{
                           df <- projet$dudi[[input$objectClass]][[input$xyClass]]
                           string_df <- paste(input$objectClass, "$", input$xyClass, sep = "")
+                          
+                          if ("between" %in% class(projet$dudi[[input$objectClass]]) & input$xyClass == "li"){
+                            df <- projet$dudi[[input$objectClass]]$ls
+                            string_df <- paste(input$objectClass, "$ls", sep = "")
+                          }
                         }
                         
                         fact <- as.factor(projet$data[[input$dataClassFactor]][,input$ClassGroupingFactor])
@@ -171,7 +176,7 @@ visuServer <- function(input, output, session, projet){
                           rw <- projet$data[[input$dataClassWeight]][,input$RowWeightClass]
                           string_rw <- paste(input$dataClassWeight, "$", input$RowWeightClass, sep = "")
                         }
-                          
+                        
                         
                         tryCatch({
                           projet$plot <- ade4:::s.class(dfxy = df, fac = fact, wt = rw,
