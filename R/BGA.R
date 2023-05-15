@@ -51,7 +51,7 @@ bga <- tabItem(tabName = "bga",
 
 bgaServer <- function(input, output, session, projet){
   
-  # Permet de donner un nom à la BCA ou de choisir une BCA existante
+  # Permet de donner un nom a la BCA ou de choisir une BCA existante
   output$selectizeBGA <- renderUI({
     all_BGA <- sapply(names(projet$dudi), function(x){
       if ("between" %in% class(projet$dudi[[x]]))
@@ -72,12 +72,12 @@ bgaServer <- function(input, output, session, projet){
     else{
       last <- all_BGA[length(all_BGA)]
       selectizeInput("NameBGA",
-                     "Analysis name ",
+                     label = tags$span("Analysis name ",
                      popify(el = bsButton("namebga2", label = "", icon = icon("question-circle"), size = "extra-small"),
                             title = "",
                             content = "Type in a new name to compute a new BGA or select a previous BGA from the list to display its results",
                             placement = "right", trigger = c("hover", "focus"),
-                            options = list(container = "body")), 
+                            options = list(container = "body"))), 
       choices = all_BGA, 
       options = list(create = TRUE), selected = last)
     }

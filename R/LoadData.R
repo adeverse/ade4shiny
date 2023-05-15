@@ -83,6 +83,7 @@ LoadDataServer <- function(input, output, session, projet){
     object <- readRDS(input$LoadProjectFile$datapath)
     projet$data <- object$data
     projet$dudi <- object$dudi
+    projet$code <- object$code
     
   })
   
