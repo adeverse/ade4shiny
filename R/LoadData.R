@@ -3,6 +3,7 @@
 ### Depuis un ancien projet créé par l'appli
 ### Depuis un dataframe ou un vecteur au format csv-like.
 
+
 LoadData <- tabItem(tabName = "managedata",
                     h2("Loading in data"),
                     sidebarLayout(
@@ -12,7 +13,7 @@ LoadData <- tabItem(tabName = "managedata",
                                                       bsButton("helploading", label = "",
                                                                icon = icon("question-circle" )
                                                                , size = "extra-small")),
-                                    choices = c("ADE4 example", "Saved project", "New dataframe")),
+                                    choices = c("ADE4 example", "Saved project", "New dataframe", "ADE4 data set")),
                         
                         bsPopover(id = "helploading",
                                 title = "",
@@ -43,17 +44,16 @@ LoadDataServer <- function(input, output, session, projet){
   ## Change l'UI in se basant sur la valeur de input$LoaddataType
   ### qui donne le choix entre les 3 façons d'importer les données
   output$LoadData_listoptions <- renderUI({
-    
+
     switch(input$LoaddataType,
-           
            "ADE4 example" = tagList(
              selectInput("examples", "Choose an example", choices = 
-                           list(PCA = c("aravo", "baran95"), 
-                                COA = c("aminoacyl", "microsatt"),
-                                MCA = c("ours", "banque"),
-                                BCA = c("meaudret", "avimedi"),
-                                Coinertia = c("doubs", "aviurba"),
-                                PCAIV = c("rhone", "avimedi")),
+                           list('PCA' = c("aravo", "baran95"), 
+                                'COA' = c("aminoacyl", "microsatt"),
+                                'MCA' = c("ours", "banque"),
+                                'BCA' = c("meaudret", "avimedi"),
+                                'Coinertia' = c("doubs", "aviurba"),
+                                'PCAIV' = c("rhone", "avimedi")),
                          selected = input$examples),
              if (length(input$examples) != 0) 
                p(description[[input$examples]]),
@@ -69,10 +69,12 @@ LoadDataServer <- function(input, output, session, projet){
              checkboxInput("LoadDataCheckHeader", "Header"),
              checkboxInput("LoadDataCheckRownames", "Rownames in first column"),
              actionButton("DoLoadData", "Load data", style = "color : white; background-color : #93bf29")
+           ),
+           "ADE4 data set" = tagList(
+             textInput("LoadDataSetName", "Choose the data set name"),
+             actionButton("DoLoadDataSet", "Load data set", style = "color : white; background-color : #93bf29")
            )
           )
-    
-    
   })
 
   
@@ -112,7 +114,7 @@ LoadDataServer <- function(input, output, session, projet){
   
   
   # Quand on clique sur le bouton pour charger un dataframe depuis un fichier
-  observeEvent(input$DoLoadData, {
+  observeEvent(input$"DoLoadData", {
     
     if (length(input$LoadDataFile$datapath) == 0){ # Si aucun fichier en entrée
       alert("Please choose a rds or csv file")
@@ -229,6 +231,45 @@ LoadDataServer <- function(input, output, session, projet){
     return(projet$dudi[[input$DudinameLoadData]])
     
   })
+  
+    # Quand on clique sur le bouton pour charger un jeu de données d'ADE4
+  observeEvent(input$DoLoadDataSet,{
+    lsd1 <- isolate(data(package="ade4")$results[,3])
+
+    if (!(input$LoadDataSetName %in% lsd1)) {
+      alert("No such data set in ade4")
+      return(0)
+    }
+
+    temp <- get(data(list = c(input$LoadDataSetName)))
+    
+    # Si l'example est juste un data frame
+    if (class(temp) == "data.frame" & "dudi" %in% class(temp) == FALSE)
+      projet$data[[input$LoadDataSetName]] <- temp
+    
+    # Si l'example est une liste d'objets
+    if (class(temp) == "list")
+      for(i in names(temp)){
+        
+        if("dudi" %in% class(temp[[i]]))
+          projet$dudi[[paste(input$LoadDataSetName, "$", i, sep = "")]] <- temp[[i]]
+        
+        else if (class(temp[[i]]) == "data.frame")
+          projet$data[[paste(input$LoadDataSetName, "$", i, sep = "")]] <- temp[[i]]
+        
+        else if (class(temp[[i]]) == "character" | class(temp[[i]]) == "factor") {
+          temp[[i]] <- list(X = temp[[i]])
+          projet$data[[paste(input$LoadDataSetName, "$", i, sep = "")]] <- as.data.frame(temp[[i]])
+        }
+      }
+    
+    # Rajoute le code pour load les data dans projet$code
+    string <- paste("data(", input$LoadDataSetName,")", sep = "")
+    
+    projet$code <- paste(projet$code, string, sep = "\n\n# Load data from ade4 data set\n")
+  })
+  
+
   
   
 }
