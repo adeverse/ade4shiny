@@ -4,26 +4,26 @@ introtab <- tabItem(tabName = "introtab",
                     # Logo
                     fluidRow( column(width = 3, tags$img(src = 'https://sdray.github.io/ade4/logo.svg')),
                               #column(width = 1),
-                              column(width = 9, h2("Welcome to ade4's shiny dashboard !"), br(),
-                 h4( em("Ade4"), " (Analysis of Ecological Data : Exploratory and Euclidean Methods in Environmental Sciences) is a", br(), "R package dedicated to statistical analysis of environmental data.", br(),
-                     "It is developped at the", a("Laboratoire de Biométrie et Biologie Évolutive (LBBE) ", href = "https://lbbe-web.univ-lyon1.fr/en"), "in Claude Bernard Lyon 1 University.", br(),
-                      "Learn more about ade4 ", a("here!", href = "https://sdray.github.io/ade4/index.html", target="_blank"))
+                              column(width = 9, h2("Welcome to ade4's Shiny dashboard !"), br(),
+                 h4( em("Ade4"), " (Analysis of Ecological Data : Exploratory and Euclidean Methods in Environmental Sciences) is an", "R package dedicated to statistical analysis of environmental data.",
+                     "It is developped at the", a("Laboratoire de Biométrie et Biologie Évolutive (LBBE) ", href = "https://lbbe-web.univ-lyon1.fr/en"), "in Claude Bernard Lyon 1 University.",
+                      "Learn more about ade4 ", a("here!", href = "https://sdray.github.io/ade4/index.html"))
                               )
                     ),
       
                fluidRow(
                  box(title = "What to use this dashboard for",
-                     "We provide a clickable interface to help you get started with data analysis using R and ade4.", br(), br(),
+                     "This is a clickable interface to help you get started with data analysis using R and ade4.", br(), br(),
                      tags$div(
                        tags$ul(
                          tags$li("Explore the dashboard using ade4 built-in datasets, or start analysing your own data."),
                          tags$li("Download the analysis results and the R script allowing you to reproduce it on your own."),
-                         tags$li("Load the results back in and carry on with your analysis."),
-                         tags$li("Create graphical outputs to display your results thanks to our 'Visualisation' tab.")
+                         tags$li("Load the results back in and carry on with your analyses."),
+                         tags$li("Create graphical outputs to display your results with the 'Visualisation' tab.")
                        )),
                      ),
                  
-                 box(title = "Currently implemented analysis", strong("One-table analyses"), br(),
+                 box(title = "Currently implemented analysis (more to come soon !)", strong("One-table analyses"), br(),
                      tags$div(
                        tags$ul(
                          tags$li("Principal Component Analysis (PCA)"),

@@ -1,6 +1,6 @@
 # Header with buttons to save data and code
 header <- dashboardHeader(title = "ADE4", 
-                          tags$li(class = "dropdown", 
+                           tags$li(class = "dropdown", 
                                   downloadButton("savedata", "Save data",
                                                  style = "color : white; background-color : #117d89;
                                                  border-color #094d4e")),
@@ -39,6 +39,16 @@ sidebar <- dashboardSidebar(sidebarMenu(
 body <- dashboardBody(
   useShinyjs(),
   # Add custom css color (lbbe logo colors to header)
+  tags$style(HTML(                       
+		"
+		 /* App window sizing*/
+		 body{
+		 min-width: 900px;
+		 margin: auto;
+		 overflow: auto;
+		 }
+		"
+  )),
   tags$head(
     tags$link(rel = "stylesheet", type = "text/css", href = "custom.css"),
     tags$link(rel = "stylesheet", href = "https://use.fontawesome.com/releases/v5.8.1/css/all.css", 
