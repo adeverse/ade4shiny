@@ -23,7 +23,7 @@ introtab <- tabItem(tabName = "introtab",
                        )),
                      ),
                  
-                 box(title = "Currently implemented analysis (more to come soon !)", strong("One-table analyses"), br(),
+                 box(title = "Currently implemented analyses (more to come soon !)", strong("One-table analyses"), br(),
                      tags$div(
                        tags$ul(
                          tags$li("Principal Component Analysis (PCA)"),
@@ -51,8 +51,13 @@ introtab <- tabItem(tabName = "introtab",
                h3("Vignettes"),
                fluidRow(
                      tags$div(tags$ul(
-                       tags$li(a("Description of environmental variables structures", href = 'https://sdray.github.io/ade4/articles/ChapEnvVarStruct.html'),
-                               tags$li(a("Description of species structures", href = 'https://sdray.github.io/ade4/articles/ChapSpeciesStruct.html'))
+                       tags$li(a("Graphical representation of multivariate data", href = 'https://cran.r-project.org/web/packages/adegraphics/vignettes/adegraphics.html'),
+                               tags$li(a("Description of environmental variables structures", href = 'https://sdray.github.io/ade4/articles/ChapEnvVarStruct.html')),
+                               tags$li(a("Description of species structures", href = 'https://sdray.github.io/ade4/articles/ChapSpeciesStruct.html')),
+                               tags$li(a("Taking into account groups of sites", href = 'https://sdray.github.io/ade4/articles/ChapBetGr.html')),
+                               tags$li(a("Description of species-environment relationships", href = 'https://sdray.github.io/ade4/articles/Chap2tables.html')),
+                               tags$li(a("Analysing Changes in Structures", href = 'https://sdray.github.io/ade4/articles/ChapKtables.html')),
+                               tags$li(a("Analysing Changes in Co-Structures", href = 'https://sdray.github.io/ade4/articles/Chap2Ktables.html'))
                        )))),
               )
               

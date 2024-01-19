@@ -17,7 +17,7 @@ LoadData <- tabItem(tabName = "managedata",
                         
                         bsPopover(id = "helploading",
                                 title = "",
-                                content = paste0("Use already existing examples, your own data, or a previous project downloaded from the app."),
+                                content = paste0("Use basic ade4 examples, your own data, a previously downloaded project, or any ade4 data set."),
                                 placement = "right",
                                 trigger = c("hover", "focus"),
                                 options = list(container = "body")),
