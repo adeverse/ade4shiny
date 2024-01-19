@@ -12,7 +12,7 @@ introtab <- tabItem(tabName = "introtab",
                     ),
       
                fluidRow(
-                 box(title = "What to use this dashboard for",
+                 box(title = "What to use this dashboard for:",
                      "This is a clickable interface to help you get started with data analysis using R and ade4.", br(), br(),
                      tags$div(
                        tags$ul(
