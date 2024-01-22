@@ -17,7 +17,7 @@ coa <- tabItem(tabName = "coa",
                              title = "",
                              content = paste0(
                                "Number of axes of variance (dimensions) to keep. See more: ",
-                               a("dudi.coa()", href = "http://sdray.github.io/ade4/reference/dudi.coa.html", target="_blank")),
+                               a("dudi.coa()", href = "http://adeverse.github.io/ade4/reference/dudi.coa.html", target="_blank")),
                              placement = "right",
                              trigger = c("hover", "focus"),
                              options = list(container = "body")),
@@ -87,12 +87,12 @@ coaServer <- function(input, output, session, projet){
                 #  label = "Select a dataframe ",
                 label = tags$span("Select a dataframe ",
                                   # helpPopup(title = NULL, content = paste0("A dataframe previously loaded in the app via 'Manage data' containing positive or null values. See more: ",
-                                  #                          a("dudi.coa()", href = "http://sdray.github.io/ade4/reference/dudi.coa.html", target="_blank")),
+                                  #                          a("dudi.coa()", href = "http://adeverse.github.io/ade4/reference/dudi.coa.html", target="_blank")),
                                   #           trigger = c("hover", "focus"))
                                   shinyBS::popify(el = bsButton("HdfCOA", label = "", icon = icon("question-circle"), size = "extra-small"),
                                                   title = "",
                                                   content = paste0("A dataframe previously loaded in the app containing positive or null values. See more: ",
-                                                                   a("dudi.coa()", href = "http://sdray.github.io/ade4/reference/dudi.coa.html", target="_blank")),
+                                                                   a("dudi.coa()", href = "http://adeverse.github.io/ade4/reference/dudi.coa.html", target="_blank")),
                                                   placement = "right", trigger = c("hover", "focus"),
                                                   options = list(container = "body"))
                                   ),

@@ -16,7 +16,7 @@ mca <- tabItem(tabName = "mca",
                              title = "",
                              content = paste0(
                                "Number of axes of variance (dimensions) to keep. See more: ",
-                               a("dudi.acm()", href = "http://sdray.github.io/ade4/reference/dudi.acm.html", target="_blank")),
+                               a("dudi.acm()", href = "http://adeverse.github.io/ade4/reference/dudi.acm.html", target="_blank")),
                              placement = "right",
                              trigger = c("hover", "focus"),
                              options = list(container = "body")),
@@ -87,7 +87,7 @@ mcaServer <- function(input, output, session, projet){
                                   shinyBS::popify(el = bsButton("help_dfmca", label = "", icon = icon("question-circle"), size = "extra-small"),
                                                   title = "",
                                                   content = paste0("A dataframe (previously loaded in the app) containing only factors. See more: ",
-                                                                   a("dudi.acm()", href = "http://sdray.github.io/ade4/reference/dudi.acm.html", target="_blank")),
+                                                                   a("dudi.acm()", href = "http://adeverse.github.io/ade4/reference/dudi.acm.html", target="_blank")),
                                                   placement = "right", trigger = c("hover", "focus"),
                                                   options = list(container = "body"))
                 ),

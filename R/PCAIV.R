@@ -21,7 +21,7 @@ pcaIV <- tabItem(tabName = "pcaiv",
                              title = "",
                              content = paste0(
                                "Number of axes of variance (dimensions) to keep. See more: ",
-                               a("pcaiv()", href = "http://sdray.github.io/ade4/reference/pcaiv.html", target="_blank")),
+                               a("pcaiv()", href = "http://adeverse.github.io/ade4/reference/pcaiv.html", target="_blank")),
                              placement = "right",
                              trigger = c('focus', 'hover'),
                              options = list(container = "body")),
@@ -91,7 +91,7 @@ pcaIVserver <- function(input, output, session, projet){
                                   popify(el = bsButton("Hdudipcaiv", label = "", icon = icon("question-circle"), size = "extra-small"),
                                          title = "",
                                          content = paste0("A dudi object outputed by a one table-analysis, previously ran or loaded in the app. See more: ",
-                                                          a("pcaiv()", href = "http://sdray.github.io/ade4/reference/pcaiv.html", target="_blank")),
+                                                          a("pcaiv()", href = "http://adeverse.github.io/ade4/reference/pcaiv.html", target="_blank")),
                                          placement = "right", trigger = c('focus', 'hover'),
                                          options = list(container = "body")) 
                 ),
@@ -109,7 +109,7 @@ pcaIVserver <- function(input, output, session, projet){
                                   popify(el = bsButton("Hdfpcaiv", label = "", icon = icon("question-circle"), size = "extra-small"),
                                          title = "",
                                          content = paste0("A dataframe withe the same rows than the dudi object previously selected. See more: ",
-                                                          a("pcaiv()", href = "http://sdray.github.io/ade4/reference/pcaiv.html", target="_blank")),
+                                                          a("pcaiv()", href = "http://adeverse.github.io/ade4/reference/pcaiv.html", target="_blank")),
                                          placement = "right", trigger = c('focus', 'hover'),
                                          options = list(container = "body")) 
                 ),

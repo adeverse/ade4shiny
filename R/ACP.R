@@ -21,7 +21,7 @@ acp <- tabItem(tabName = "pca",
                                       title = "",
                                        content = paste0(
                                          "Number of axes of variance (dimensions) to keep. See more: ",
-                                         a("dudi.pca()", href = "http://sdray.github.io/ade4/reference/dudi.pca.html", target="_blank")),
+                                         a("dudi.pca()", href = "http://adeverse.github.io/ade4/reference/dudi.pca.html", target="_blank")),
                                        placement = "right",
                                        trigger = c('focus', 'hover'),
                                        options = list(container = "body")),
@@ -38,7 +38,7 @@ acp <- tabItem(tabName = "pca",
                              title = "",
                              content = paste0(
                                "If checked, centering by the mean, if uncheck, no centring. Default : centering by mean. See more: ",
-                               a("dudi.pca()", href = "http://sdray.github.io/ade4/reference/dudi.pca.html", target="_blank")),
+                               a("dudi.pca()", href = "http://adeverse.github.io/ade4/reference/dudi.pca.html", target="_blank")),
                              placement = "right",
                              trigger = c('focus', 'hover'),
                              options = list(container = "body")),
@@ -55,7 +55,7 @@ acp <- tabItem(tabName = "pca",
                         title = "",
                         content = paste0(
                           "Should column vectors be normed for the row.w weighting ? Yes if checked, no if unchecked. Default : yes. See more: ",
-                          a("dudi.pca()", href = "http://sdray.github.io/ade4/reference/dudi.pca.html", target="_blank")),
+                          a("dudi.pca()", href = "http://adeverse.github.io/ade4/reference/dudi.pca.html", target="_blank")),
                         placement = "right",
                         trigger = c('focus', 'hover'),
                         options = list(container = "body")),
@@ -211,7 +211,7 @@ acpServer <- function(input, output, session, projet){
   #delay(400,
   # addPopover(session, id = "HdfPCA", title = "", content = paste0(
   #   "A dataframe with n rows (individuals) and p columns (numeric variables) previously loaded in the app. See more: ",
-  #   a("dudi.pca()", href = "http://sdray.github.io/ade4/reference/dudi.pca.html", target="_blank")),
+  #   a("dudi.pca()", href = "http://adeverse.github.io/ade4/reference/dudi.pca.html", target="_blank")),
   #   placement = "right", trigger = c('focus', 'hover'),
   #   options = list(container = "body"))
   #)
@@ -223,7 +223,7 @@ acpServer <- function(input, output, session, projet){
                                   popify(el = bsButton("HdfPCA", label = "", icon = icon("question-circle"), size = "extra-small"),
                                          title = "",
                                          content = paste0("A dataframe with n rows (individuals) and p columns (numeric variables) previously loaded in the app. See more: ",
-                                           a("dudi.pca()", href = "http://sdray.github.io/ade4/reference/dudi.pca.html", target="_blank")),
+                                           a("dudi.pca()", href = "http://adeverse.github.io/ade4/reference/dudi.pca.html", target="_blank")),
                                          placement = "right", trigger = c('focus', 'hover'),
                                          options = list(container = "body")) 
                                   ),

@@ -24,7 +24,7 @@ bga <- tabItem(tabName = "bga",
                              title = "",
                              content = paste0(
                                "Number of axes of variance (dimensions) to keep. See more: ",
-                               a("dudi.pca()", href = "http://sdray.github.io/ade4/reference/bca.html", target="_blank")),
+                               a("dudi.pca()", href = "http://adeverse.github.io/ade4/reference/bca.html", target="_blank")),
                              placement = "right",
                              trigger = c("hover", "focus"),
                              options = list(container = "body")),
@@ -94,7 +94,7 @@ bgaServer <- function(input, output, session, projet){
                                   popify(el = bsButton("dudiobjectbga", label = "", icon = icon("question-circle"), size = "extra-small"),
                                          title = "",
                                          content = paste0("A duality diagram (object of class dudi), outputed by a one table analysis, which is present in the app environment (previously ran or lodaded in the app). See more: ",
-                                                          a("bca()", href = "http://sdray.github.io/ade4/reference/dudi.pca.html", target="_blank")),
+                                                          a("bca()", href = "http://adeverse.github.io/ade4/reference/dudi.pca.html", target="_blank")),
                                          placement = "right", trigger = c("hover", "focus"),
                                          options = list(container = "body")) 
                 ),
@@ -135,7 +135,7 @@ bgaServer <- function(input, output, session, projet){
                                     popify(el = bsButton("groupbga1", label = "", icon = icon("question-circle"), size = "extra-small"),
                                            title = "",
                                            content = paste0("A factor partitioning the rows of dudi$tab in classes. Dudis$tab is the data frame that was analyzed with the one-table analysis, modified according to the transformation arguments that were used (ie centered and scaled). See more: ",
-                                                            a("bca()", href = "http://sdray.github.io/ade4/reference/bca.html", target="_blank")),
+                                                            a("bca()", href = "http://adeverse.github.io/ade4/reference/bca.html", target="_blank")),
                                            placement = "right", trigger = c("hover", "focus"),
                                            options = list(container = "body")) 
                   ),
@@ -148,7 +148,7 @@ bgaServer <- function(input, output, session, projet){
                                     popify(el = bsButton("groupbga2", label = "", icon = icon("question-circle"), size = "extra-small"),
                                            title = "",
                                            content = paste0("A factor partitioning the rows of dudi$tab in classes. Dudis$tab is the data frame that was analyzed with the one-table analysis, modified according to the transformation arguments that were used (ie centered and scaled). See more: ",
-                                                            a("bca()", href = "http://sdray.github.io/ade4/reference/bca.html", target="_blank")),
+                                                            a("bca()", href = "http://adeverse.github.io/ade4/reference/bca.html", target="_blank")),
                                            placement = "right", trigger = c("hover", "focus"),
                                            options = list(container = "body")) 
                   ),

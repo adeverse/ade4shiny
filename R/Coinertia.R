@@ -19,7 +19,7 @@ coinertie <- tabItem(tabName = "coinertia",
                                    title = "",
                                    content = paste0(
                                      "Number of axes of variance (dimensions) to keep. See more: ",
-                                     a("coinertia()", href = "http://sdray.github.io/ade4/reference/coinertia.html", target="_blank")),
+                                     a("coinertia()", href = "http://adeverse.github.io/ade4/reference/coinertia.html", target="_blank")),
                                    placement = "right",
                                    trigger = c("hover", "focus"),
                                    options = list(container = "body")),
@@ -89,7 +89,7 @@ coinertiaserver <- function(input, output, session, projet){
                                   popify(el = bsButton("coin_dudi_1", label = "", icon = icon("question-circle"), size = "extra-small"),
                                          title = "",
                                          content = paste0("A duality diagram (object of class dudi) outputed by a one-table analysis. See more: ",
-                                                          a("coinertia()", href = "http://sdray.github.io/ade4/reference/coinertia.html", target="_blank")),
+                                                          a("coinertia()", href = "http://adeverse.github.io/ade4/reference/coinertia.html", target="_blank")),
                                         placement = "right", trigger = c("hover", "focus"),
                                          options = list(container = "body"))
                 ),
@@ -110,7 +110,7 @@ coinertiaserver <- function(input, output, session, projet){
                                   popify(el = bsButton("coin_dudi_2", label = "", icon = icon("question-circle"), size = "extra-small"),
                                          title = "",
                                          content = paste0("A duality diagram (object of class dudi) outputed by a one-table analysis. See more: ",
-                                                          a("coinertia()", href = "http://sdray.github.io/ade4/reference/coinertia.html", target="_blank")),
+                                                          a("coinertia()", href = "http://adeverse.github.io/ade4/reference/coinertia.html", target="_blank")),
                                          placement = "right", trigger = c("hover", "focus"),
                                          options = list(container = "body"))
                 ),
