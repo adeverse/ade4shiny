@@ -80,6 +80,10 @@ LoadDataServer <- function(input, output, session, projet){
   
   
   # Quand on clique sur le bouton pour charger un projet existant
+  # On peut créer un projet dans R en enregistrant une liste au format RDS:
+  #	dune4 <- list(data=dunedata)
+  # saveRDS(dune4, "dune4.rds")
+  #
   observeEvent(input$LoadProjectFile,{
     
     object <- readRDS(input$LoadProjectFile$datapath)

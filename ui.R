@@ -19,7 +19,8 @@ sidebar <- dashboardSidebar(sidebarMenu(
   menuItem("One table analyses", startExpanded = TRUE,
            menuSubItem("PCA", tabName = "pca"),
            menuSubItem("COA", tabName = "coa"),
-           menuSubItem("MCA", tabName = "mca")
+           menuSubItem("MCA", tabName = "mca"),
+           menuSubItem("HSA", tabName = "hsa")
            # menuSubItem("PCO", tabName = "pco")),
   ),
   
@@ -69,7 +70,8 @@ body <- dashboardBody(
     acp,
     coa,
     mca,
-    pco,
+    hsa,
+    # pco,
     bga,
     coinertie,
     cca,

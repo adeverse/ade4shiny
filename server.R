@@ -40,6 +40,9 @@ server <- function(input, output, session) {
   # R/MCA.R
   mcaServer(input, output, session, projet)
   
+  # R/HSA.R
+  hsaServer(input, output, session, projet)
+  
   # R/PCO.R
   ## pcoServer(input, output, session, projet)
   

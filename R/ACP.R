@@ -69,7 +69,7 @@ acp <- tabItem(tabName = "pca",
                  uiOutput("selectDfCw"),
                  uiOutput("selectColumnCw"),
 
-                   actionButton("DoACP", "Compute ACP", style = "color : white; background-color : #93bf29")
+                   actionButton("DoACP", "Compute PCA", style = "color : white; background-color : #93bf29")
                  ),
                  mainPanel = mainPanel(
                    tabsetPanel(
