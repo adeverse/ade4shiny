@@ -133,7 +133,7 @@ hsaServer <- function(input, output, session, projet){
                                   popify(el = bsButton("HdfHSA", label = "", icon = icon("question-circle"), size = "extra-small"),
                                          title = "",
                                          content = paste0("A dataframe with n rows (individuals) and p columns (numeric variables) previously loaded in the app. See more: ",
-                                           a("dudi.hillsmith()", href = "http://sdray.github.io/ade4/reference/dudi.hillsmith.html", target="_blank")),
+                                           a("dudi.hillsmith()", href = "http://adeverse.github.io/ade4/reference/dudi.hillsmith.html", target="_blank")),
                                          placement = "right", trigger = c('focus', 'hover', 'click'),
                                          options = list(container = "body")) 
                                   ),

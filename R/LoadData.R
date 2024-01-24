@@ -72,7 +72,7 @@ LoadDataServer <- function(input, output, session, projet){
            ),
            "ADE4 data set" = tagList(
              textInput("LoadDataSetName", "Choose the data set name"),
-             actionButton("DoHelpDataSet", "Data set help", style = "color : white; background-color : #93bf29"),
+             # actionButton("DoHelpDataSet", "Data set help", style = "color : white; background-color : #93bf29"),
              actionButton("DoLoadDataSet", "Load data set", style = "color : white; background-color : #93bf29")
            )
           )
@@ -237,24 +237,24 @@ LoadDataServer <- function(input, output, session, projet){
     
   })
   
-    # Quand on clique sur le bouton pour l'aide sur un jeu de données d'ADE4
-  observeEvent(input$DoHelpDataSet,{
-    lsd1 <- isolate(data(package="ade4")$results[,3])
-
-    if (!(input$LoadDataSetName %in% lsd1)) {
-      alert("No such data set in ade4")
-      return(0)
-    }
-
-    temp <- get(data(list = c(input$LoadDataSetName)))
-    
-    browseURL(paste0("http://127.0.0.1:31770/library/ade4/html/", input$LoadDataSetName, ".html"))
-
-    # Rajoute le code pour load les data dans projet$code
-    string <- paste0("help(", input$LoadDataSetName,")")
-    
-    projet$code <- paste(projet$code, string, sep = "\n\n# help about ade4 data set\n")
-  })
+#   # Quand on clique sur le bouton pour l'aide sur un jeu de données d'ADE4
+#  observeEvent(input$DoHelpDataSet,{
+#    lsd1 <- isolate(data(package="ade4")$results[,3])
+#
+#    if (!(input$LoadDataSetName %in% lsd1)) {
+#      alert("No such data set in ade4")
+#      return(0)
+#    }
+#
+#    temp <- get(data(list = c(input$LoadDataSetName)))
+#    
+#    browseURL(paste0("http://127.0.0.1:31770/library/ade4/html/", input$LoadDataSetName, ".html"))
+#
+#    # Rajoute le code pour load les data dans projet$code
+#    string <- paste0("help(", input$LoadDataSetName,")")
+#    
+#    projet$code <- paste(projet$code, string, sep = "\n\n# help about ade4 data set\n")
+#  })
 
 
     # Quand on clique sur le bouton pour charger un jeu de données d'ADE4
