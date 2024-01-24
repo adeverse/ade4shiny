@@ -14,7 +14,7 @@ subsetdata <- tabItem(tabName = "subsetdata",
                                   title = "",
                                   content = "Name for the new dataframe that will be created. You cannot ovrewrite an existing dataframe.",
                                   placement = "right",
-                                  trigger = c("hover", "focus"),
+                                  trigger = c("hover", "focus", "click"),
                                   options = list(container = "body")),
                         
                           uiOutput("selectDataframeSubsetData"),
@@ -39,7 +39,7 @@ SubsetDataServer <- function(input, output, session, projet){
                                   popify(el = bsButton("helpsusbsetdf", label = "", icon = icon("question-circle"), size = "extra-small"),
                                          title = "",
                                          content = "A dataframe, already loaded in the app, that you want to modify. Modifications will be saved in the new object and not inplace.",
-                                         placement = "right", trigger = c("hover", "focus"),
+                                         placement = "right", trigger = c("hover", "focus", "click"),
                                          options = list(container = "body"))
                 ), 
                 names(projet$data))
@@ -59,7 +59,7 @@ SubsetDataServer <- function(input, output, session, projet){
                                      popify(el = bsButton("helpsusbsetcols", label = "", icon = icon("question-circle"), size = "extra-small"),
                                             title = "",
                                             content = "The unselected columns will be saved in the new object. The original dataframe will not be deleted or modified.",
-                                            placement = "right", trigger = c("hover", "focus"),
+                                            placement = "right", trigger = c("hover", "focus", "click"),
                                             options = list(container = "body"))
                    ), 
                    colnames(projet$data[[input$DataframeSubsetData]]), multiple = T)

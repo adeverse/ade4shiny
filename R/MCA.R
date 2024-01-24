@@ -18,7 +18,7 @@ mca <- tabItem(tabName = "mca",
                                "Number of axes of variance (dimensions) to keep. See more: ",
                                a("dudi.acm()", href = "http://adeverse.github.io/ade4/reference/dudi.acm.html", target="_blank")),
                              placement = "right",
-                             trigger = c("hover", "focus"),
+                             trigger = c("hover", "focus", "click"),
                              options = list(container = "body")),
                    actionButton("DoMCA", "Compute MCA", style = "color : white; background-color :  #93bf29")
                  ),
@@ -60,7 +60,7 @@ mcaServer <- function(input, output, session, projet){
                                        popify(el = bsButton("help_name_mca1", label = "", icon = icon("question-circle"), size = "extra-small"),
                                               title = "",
                                               content = "Type in a new name to compute a new MCA or select a previous one from the list to display its results",
-                                              placement = "right", trigger = c("hover", "focus"),
+                                              placement = "right", trigger = c("hover", "focus", "click"),
                                               options = list(container = "body"))
                      ), 
                      choices = all_MCA, options = list(create = TRUE))
@@ -72,7 +72,7 @@ mcaServer <- function(input, output, session, projet){
                                        popify(el = bsButton("help_name_mca", label = "", icon = icon("question-circle"), size = "extra-small"),
                                               title = "",
                                               content = "Type in a new name to compute a new MCA or select a previous one from the list to display its results",
-                                              placement = "right", trigger = c("hover", "focus"),
+                                              placement = "right", trigger = c("hover", "focus", "click"),
                                               options = list(container = "body"))
                      ), 
                      choices = all_MCA, 
@@ -88,7 +88,7 @@ mcaServer <- function(input, output, session, projet){
                                                   title = "",
                                                   content = paste0("A dataframe (previously loaded in the app) containing only factors. See more: ",
                                                                    a("dudi.acm()", href = "http://adeverse.github.io/ade4/reference/dudi.acm.html", target="_blank")),
-                                                  placement = "right", trigger = c("hover", "focus"),
+                                                  placement = "right", trigger = c("hover", "focus", "click"),
                                                   options = list(container = "body"))
                 ),
                 choices = names(projet$data), selected = input$DataframeMCA)

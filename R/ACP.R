@@ -23,7 +23,7 @@ acp <- tabItem(tabName = "pca",
                                          "Number of axes of variance (dimensions) to keep. See more: ",
                                          a("dudi.pca()", href = "http://adeverse.github.io/ade4/reference/dudi.pca.html", target="_blank")),
                                        placement = "right",
-                                       trigger = c('focus', 'hover'),
+                                       trigger = c('focus', 'hover', 'click'),
                                        options = list(container = "body")),
                     ## checkbox and hover text center pca
                    checkboxInput(
@@ -40,7 +40,8 @@ acp <- tabItem(tabName = "pca",
                                "If checked, centering by the mean, if uncheck, no centring. Default : centering by mean. See more: ",
                                a("dudi.pca()", href = "http://adeverse.github.io/ade4/reference/dudi.pca.html", target="_blank")),
                              placement = "right",
-                             trigger = c('focus', 'hover'),
+                             # trigger = c('focus', 'hover', 'click'),
+                             trigger = c('focus', 'hover', 'click'),
                              options = list(container = "body")),
                     ## checkbox and hovertext scale pca     
                    checkboxInput(
@@ -57,7 +58,7 @@ acp <- tabItem(tabName = "pca",
                           "Should column vectors be normed for the row.w weighting ? Yes if checked, no if unchecked. Default : yes. See more: ",
                           a("dudi.pca()", href = "http://adeverse.github.io/ade4/reference/dudi.pca.html", target="_blank")),
                         placement = "right",
-                        trigger = c('focus', 'hover'),
+                        trigger = c('focus', 'hover', 'click'),
                         options = list(container = "body")),
                    hr(),
                    p(markdown("**Row weights**")),
@@ -109,7 +110,7 @@ acpServer <- function(input, output, session, projet){
                                        popify(el = bsButton("hpcaname1", label = "", icon = icon("question-circle"), size = "extra-small"),
                                               title = "",
                                               content = "Type in a new name to compute a new PCA or select a previous PCA from the list to display its results.",
-                                              placement = "right", trigger = c('focus', 'hover'),
+                                              placement = "right", trigger = c('focus', 'hover', 'click'),
                                               options = list(container = "body")) 
                      ),
                      choices = all_PCA, 
@@ -122,7 +123,7 @@ acpServer <- function(input, output, session, projet){
                                popify(el = bsButton("hpcaname2", label = "", icon = icon("question-circle"), size = "extra-small"),
                                       title = "",
                                       content = "Type in a new name to compute a new PCA or select a previous PCA from the list to display its results.",
-                                      placement = "right", trigger = c('focus', 'hover'),
+                                      placement = "right", trigger = c('focus', 'hover', 'click'),
                                       options = list(container = "body")) 
                      ),
                      choices = all_PCA, 
@@ -142,7 +143,7 @@ acpServer <- function(input, output, session, projet){
                           popify(el = bsButton("hdfrw", label = "", icon = icon("question-circle"), size = "extra-small"),
                                  title = "",
                                  content = "None for default uniform row weights. Custom weights are useful for two table analyses: select an object in this box and one of its column in the box that will appear below.",
-                                 placement = "right", trigger = c('focus', 'hover'),
+                                 placement = "right", trigger = c('focus', 'hover', 'click'),
                                  options = list(container = "body")) 
                 ),
                 choices = c("None", names(projet$data), names(projet$dudi)))
@@ -159,7 +160,7 @@ acpServer <- function(input, output, session, projet){
                                   popify(el = bsButton("hdfcw", label = "", icon = icon("question-circle"), size = "extra-small"),
                                          title = "",
                                          content = "None for default uniform column weights. Custom weights are useful for two table analyses: select an object in this box and one of its column in the box that will appear below.",
-                                         placement = "right", trigger = c('focus', 'hover'),
+                                         placement = "right", trigger = c('focus', 'hover', 'click'),
                                          options = list(container = "body")) 
                 ),
                 choices = c("None", names(projet$data), names(projet$dudi)))
@@ -212,7 +213,7 @@ acpServer <- function(input, output, session, projet){
   # addPopover(session, id = "HdfPCA", title = "", content = paste0(
   #   "A dataframe with n rows (individuals) and p columns (numeric variables) previously loaded in the app. See more: ",
   #   a("dudi.pca()", href = "http://adeverse.github.io/ade4/reference/dudi.pca.html", target="_blank")),
-  #   placement = "right", trigger = c('focus', 'hover'),
+  #   placement = "right", trigger = c('focus', 'hover', 'click'),
   #   options = list(container = "body"))
   #)
   
@@ -224,7 +225,7 @@ acpServer <- function(input, output, session, projet){
                                          title = "",
                                          content = paste0("A dataframe with n rows (individuals) and p columns (numeric variables) previously loaded in the app. See more: ",
                                            a("dudi.pca()", href = "http://adeverse.github.io/ade4/reference/dudi.pca.html", target="_blank")),
-                                         placement = "right", trigger = c('focus', 'hover'),
+                                         placement = "right", trigger = c('focus', 'hover', 'click'),
                                          options = list(container = "body")) 
                                   ),
                 choices = names(projet$data), selected = input$DataframeACP)

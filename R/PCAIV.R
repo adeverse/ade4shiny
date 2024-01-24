@@ -23,7 +23,7 @@ pcaIV <- tabItem(tabName = "pcaiv",
                                "Number of axes of variance (dimensions) to keep. See more: ",
                                a("pcaiv()", href = "http://adeverse.github.io/ade4/reference/pcaiv.html", target="_blank")),
                              placement = "right",
-                             trigger = c('focus', 'hover'),
+                             trigger = c('focus', 'hover', 'click'),
                              options = list(container = "body")),
                    actionButton("DoPCAIV", "Compute PCAIV", style = "color : white; background-color : #93bf29")
                  ),
@@ -61,7 +61,7 @@ pcaIVserver <- function(input, output, session, projet){
                                        popify(el = bsButton("hpcivaname2", label = "", icon = icon("question-circle"), size = "extra-small"),
                                               title = "",
                                               content = "Type in a new name to compute a new PCAIV or select a previous one from the list to display its results.",
-                                              placement = "right", trigger = c('focus', 'hover'),
+                                              placement = "right", trigger = c('focus', 'hover', 'click'),
                                               options = list(container = "body")) 
                      ), 
                      choices = all_PCAIV, options = list(create = TRUE))
@@ -73,7 +73,7 @@ pcaIVserver <- function(input, output, session, projet){
                                        popify(el = bsButton("hpcivaname1", label = "", icon = icon("question-circle"), size = "extra-small"),
                                               title = "",
                                               content = "Type in a new name to compute a new PCAIV or select a previous one from the list to display its results.",
-                                              placement = "right", trigger = c('focus', 'hover'),
+                                              placement = "right", trigger = c('focus', 'hover', 'click'),
                                               options = list(container = "body")) 
                      ), 
                      choices = all_PCAIV, 
@@ -92,7 +92,7 @@ pcaIVserver <- function(input, output, session, projet){
                                          title = "",
                                          content = paste0("A dudi object outputed by a one table-analysis, previously ran or loaded in the app. See more: ",
                                                           a("pcaiv()", href = "http://adeverse.github.io/ade4/reference/pcaiv.html", target="_blank")),
-                                         placement = "right", trigger = c('focus', 'hover'),
+                                         placement = "right", trigger = c('focus', 'hover', 'click'),
                                          options = list(container = "body")) 
                 ),
                 choices = names(projet$dudi),
@@ -110,7 +110,7 @@ pcaIVserver <- function(input, output, session, projet){
                                          title = "",
                                          content = paste0("A dataframe withe the same rows than the dudi object previously selected. See more: ",
                                                           a("pcaiv()", href = "http://adeverse.github.io/ade4/reference/pcaiv.html", target="_blank")),
-                                         placement = "right", trigger = c('focus', 'hover'),
+                                         placement = "right", trigger = c('focus', 'hover', 'click'),
                                          options = list(container = "body")) 
                 ),
                 choices = names(projet$data),

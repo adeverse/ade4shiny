@@ -19,7 +19,7 @@ coa <- tabItem(tabName = "coa",
                                "Number of axes of variance (dimensions) to keep. See more: ",
                                a("dudi.coa()", href = "http://adeverse.github.io/ade4/reference/dudi.coa.html", target="_blank")),
                              placement = "right",
-                             trigger = c("hover", "focus"),
+                             trigger = c("hover", "focus", "click"),
                              options = list(container = "body")),
                    actionButton("DoCOA", "Compute COA", style = "color : white; background-color :  #93bf29")
                  ),
@@ -60,7 +60,7 @@ coaServer <- function(input, output, session, projet){
                                        popify(el = bsButton("help_name_coa", label = "", icon = icon("question-circle"), size = "extra-small"),
                                               title = "",
                                               content = "Type in a new name to compute a new COA or select a previous COA from the list to display its results.",
-                                              placement = "right", trigger = c("hover", "focus"),
+                                              placement = "right", trigger = c("hover", "focus", "click"),
                                               options = list(container = "body"))
                                        ), 
                      choices = all_COA, options = list(create = TRUE))
@@ -72,7 +72,7 @@ coaServer <- function(input, output, session, projet){
                                        popify(el = bsButton("help_name_coa2", label = "", icon = icon("question-circle"), size = "extra-small"),
                                               title = "",
                                               content = "Type in a new name to compute a new COA or select a previous COA from the list to display its results.",
-                                              placement = "right", trigger = c("hover", "focus"),
+                                              placement = "right", trigger = c("hover", "focus", "click"),
                                               options = list(container = "body"))
                      ), 
                      choices = all_COA, 
@@ -88,12 +88,12 @@ coaServer <- function(input, output, session, projet){
                 label = tags$span("Select a dataframe ",
                                   # helpPopup(title = NULL, content = paste0("A dataframe previously loaded in the app via 'Manage data' containing positive or null values. See more: ",
                                   #                          a("dudi.coa()", href = "http://adeverse.github.io/ade4/reference/dudi.coa.html", target="_blank")),
-                                  #           trigger = c("hover", "focus"))
+                                  #           trigger = c("hover", "focus", "click"))
                                   shinyBS::popify(el = bsButton("HdfCOA", label = "", icon = icon("question-circle"), size = "extra-small"),
                                                   title = "",
                                                   content = paste0("A dataframe previously loaded in the app containing positive or null values. See more: ",
                                                                    a("dudi.coa()", href = "http://adeverse.github.io/ade4/reference/dudi.coa.html", target="_blank")),
-                                                  placement = "right", trigger = c("hover", "focus"),
+                                                  placement = "right", trigger = c("hover", "focus", "click"),
                                                   options = list(container = "body"))
                                   ),
                                   choices = names(projet$data), selected = input$DataframeCOA)

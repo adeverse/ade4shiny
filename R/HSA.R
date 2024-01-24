@@ -23,7 +23,7 @@ hsa <- tabItem(tabName = "hsa",
                                          "Number of axes of variance (dimensions) to keep. See more: ",
                                          a("dudi.hillsmith()", href = "http://adeverse.github.io/ade4/reference/dudi.hillsmith.html", target="_blank")),
                                        placement = "right",
-                                       trigger = c('focus', 'hover'),
+                                       trigger = c('focus', 'hover', 'click'),
                                        options = list(container = "body")),
                    ## checkbox and hovertext row weights hsa     
                    uiOutput("selectDfRwHSA"),
@@ -67,7 +67,7 @@ hsaServer <- function(input, output, session, projet){
                                        popify(el = bsButton("hhsaname1", label = "", icon = icon("question-circle"), size = "extra-small"),
                                               title = "",
                                               content = "Type in a new name to compute a new HSA or select a previous HSA from the list to display its results.",
-                                              placement = "right", trigger = c('focus', 'hover'),
+                                              placement = "right", trigger = c('focus', 'hover', 'click'),
                                               options = list(container = "body")) 
                      ),
                      choices = all_HSA, 
@@ -80,7 +80,7 @@ hsaServer <- function(input, output, session, projet){
                                popify(el = bsButton("hhsaname2", label = "", icon = icon("question-circle"), size = "extra-small"),
                                       title = "",
                                       content = "Type in a new name to compute a new HSA or select a previous HSA from the list to display its results.",
-                                      placement = "right", trigger = c('focus', 'hover'),
+                                      placement = "right", trigger = c('focus', 'hover', 'click'),
                                       options = list(container = "body")) 
                      ),
                      choices = all_HSA, 
@@ -99,7 +99,7 @@ hsaServer <- function(input, output, session, projet){
                           popify(el = bsButton("hdfrw", label = "", icon = icon("question-circle"), size = "extra-small"),
                                  title = "",
                                  content = "None for default uniform row weights. Custom weights are useful for two table analyses: select an object in this box and one of its column in the box that will appear below.",
-                                 placement = "right", trigger = c('focus', 'hover'),
+                                 placement = "right", trigger = c('focus', 'hover', 'click'),
                                  options = list(container = "body")) 
                 ),
                 choices = c("None", names(projet$data), names(projet$dudi)))
@@ -134,7 +134,7 @@ hsaServer <- function(input, output, session, projet){
                                          title = "",
                                          content = paste0("A dataframe with n rows (individuals) and p columns (numeric variables) previously loaded in the app. See more: ",
                                            a("dudi.hillsmith()", href = "http://sdray.github.io/ade4/reference/dudi.hillsmith.html", target="_blank")),
-                                         placement = "right", trigger = c('focus', 'hover'),
+                                         placement = "right", trigger = c('focus', 'hover', 'click'),
                                          options = list(container = "body")) 
                                   ),
                 choices = names(projet$data), selected = input$DataframeHSA)

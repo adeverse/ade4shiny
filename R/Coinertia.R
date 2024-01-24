@@ -21,7 +21,7 @@ coinertie <- tabItem(tabName = "coinertia",
                                      "Number of axes of variance (dimensions) to keep. See more: ",
                                      a("coinertia()", href = "http://adeverse.github.io/ade4/reference/coinertia.html", target="_blank")),
                                    placement = "right",
-                                   trigger = c("hover", "focus"),
+                                   trigger = c("hover", "focus", "click"),
                                    options = list(container = "body")),
                          actionButton("DoCoinertia", "Compute coinertia", style = "color : white; background-color :  #93bf29")
                        ),
@@ -59,7 +59,7 @@ coinertiaserver <- function(input, output, session, projet){
                                        popify(el = bsButton("help_name_coin1", label = "", icon = icon("question-circle"), size = "extra-small"),
                                               title = "",
                                               content = "Type in a new name to compute a new coinertia analysis or select a previous one from the list to display its results",
-                                              placement = "right", trigger = c("hover", "focus"),
+                                              placement = "right", trigger = c("hover", "focus", "click"),
                                               options = list(container = "body"))
                      ),
                      choices = all_Coinertia, options = list(create = TRUE))
@@ -71,7 +71,7 @@ coinertiaserver <- function(input, output, session, projet){
                                        popify(el = bsButton("help_name_coin2", label = "", icon = icon("question-circle"), size = "extra-small"),
                                               title = "",
                                               content = "Type in a new name to compute a new coinertia analysis or select a previous one from the list to display its results",
-                                              placement = "right", trigger = c("hover", "focus"),
+                                              placement = "right", trigger = c("hover", "focus", "click"),
                                               options = list(container = "body"))
                                        ),
                                        choices = all_Coinertia, 
@@ -90,7 +90,7 @@ coinertiaserver <- function(input, output, session, projet){
                                          title = "",
                                          content = paste0("A duality diagram (object of class dudi) outputed by a one-table analysis. See more: ",
                                                           a("coinertia()", href = "http://adeverse.github.io/ade4/reference/coinertia.html", target="_blank")),
-                                        placement = "right", trigger = c("hover", "focus"),
+                                        placement = "right", trigger = c("hover", "focus", "click"),
                                          options = list(container = "body"))
                 ),
                 choices = names(projet$dudi),
@@ -111,7 +111,7 @@ coinertiaserver <- function(input, output, session, projet){
                                          title = "",
                                          content = paste0("A duality diagram (object of class dudi) outputed by a one-table analysis. See more: ",
                                                           a("coinertia()", href = "http://adeverse.github.io/ade4/reference/coinertia.html", target="_blank")),
-                                         placement = "right", trigger = c("hover", "focus"),
+                                         placement = "right", trigger = c("hover", "focus", "click"),
                                          options = list(container = "body"))
                 ),
                 choices = names(projet$dudi),
