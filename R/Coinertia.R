@@ -168,7 +168,7 @@ coinertiaserver <- function(input, output, session, projet){
       
       projet$code <- paste(projet$code, string, sep = "\n\n# Computing Coinertia\n")
       
-      projet$dudi[[input$NameCoinertia]]$call <- substring(string, nchar(input$NameCoinertia) + 5)
+      projet$dudi[[input$NameCoinertia]]$call <- str2lang(substring(string, nchar(input$NameCoinertia) + 5))
       
     }, error = function(e){
       alert("There has been an error (printed in the R console)")
