@@ -111,7 +111,7 @@ LoadDataServer <- function(input, output, session, projet){
     if (length(projet$dudi) == 0)
       return(NULL)
     selectInput("DudinameLoadData", 
-                "Dataframe to show", 
+                "Dudi to show", 
                 choices = names(projet$dudi), 
                 selected = input$DudinameLoadData)
     

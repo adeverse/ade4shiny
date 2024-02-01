@@ -336,7 +336,7 @@ acpServer <- function(input, output, session, projet){
     
     projet$code <- paste(projet$code, string, sep = "\n\n# Computing PCA\n")
     
-    projet$dudi[[input$NameACP]]$call <- substring(string, nchar(input$NameACP) + 5)
+    projet$dudi[[input$NameACP]]$call <- str2lang(substring(string, nchar(input$NameACP) + 5))
     
     }, error = function(e){
       alert("There has been an error (printed in R console)")

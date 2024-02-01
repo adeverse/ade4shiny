@@ -1,7 +1,6 @@
 ## Setting working directory to shiny directory
 setwd(dirname(rstudioapi::getSourceEditorContext()$path))
 
-
 # Loading libraries
 library(shiny)
 library(shinydashboard)
