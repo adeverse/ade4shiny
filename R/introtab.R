@@ -31,7 +31,11 @@ introtab <- tabItem(tabName = "introtab",
                          tags$li("Multiple Correspondence Analysis (MCA)")
                        )),
                  strong("One-table with groups"), br(),
-                     tags$div( tags$ul( tags$li("Between-Group Analysis (BGA)") ) ),
+                     tags$div(
+                       tags$ul(
+                         tags$li("Between-Group Analysis (BGA)"),
+                         tags$li("Within-Group Analysis (WGA)")
+                       )),
                  strong("Two-table analyses"), br(),
                      tags$div(
                        tags$ul(

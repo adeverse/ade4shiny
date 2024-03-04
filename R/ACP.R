@@ -327,16 +327,16 @@ acpServer <- function(input, output, session, projet){
                      center = input$docenterACP, scale = input$doscaleACP, 
                      row.w = row.weight, col.w = col.weight)
     
-    projet$dudi[[input$NameACP]] <- temp
+    projet$dudi[[input$NameACP]] <<- temp
     
     # Ecrit le code pour faire l'acp dans projet$code
     string <- paste(input$NameACP, " <- dudi.pca(", input$DataframeACP, ", nf = ", input$nfPCA, ", scannf = ", F,
                     ", center = ",input$docenterACP, ", scale = ", input$doscaleACP, 
                     ", row.w = ", string_rw, ", col.w = ", string_cw,")", sep = "")
     
-    projet$code <- paste(projet$code, string, sep = "\n\n# Computing PCA\n")
+    projet$code <<- paste(projet$code, string, sep = "\n\n# Computing PCA\n")
     
-    projet$dudi[[input$NameACP]]$call <- str2lang(substring(string, nchar(input$NameACP) + 5))
+    projet$dudi[[input$NameACP]]$call <<- str2lang(substring(string, nchar(input$NameACP) + 5))
     
     }, error = function(e){
       alert("There has been an error (printed in R console)")

@@ -25,9 +25,9 @@ sidebar <- dashboardSidebar(sidebarMenu(
   ),
   
   menuItem("One table with groups", startExpanded = TRUE,
-           menuSubItem("BGA", tabName = "bga")
-           # menuSubItem("WGA"),
-           # menuSubItem("DA")),
+           menuSubItem("BGA", tabName = "bga"),
+           menuSubItem("WGA", tabName = "wga")
+           # menuSubItem("DA"))
   ),
   menuItem("Two tables analyses", startExpanded = TRUE,
            menuSubItem("Coinertia", tabName = "coinertia"),
@@ -73,6 +73,7 @@ body <- dashboardBody(
     hsa,
     # pco,
     bga,
+    wga,
     coinertie,
     cca,
     pcaIV,

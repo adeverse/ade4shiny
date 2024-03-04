@@ -1,8 +1,8 @@
-## Permet d'importer des jeux de données de 3 manières :
+## Permet d'importer des jeux de données de 4 manières :
 ### Depuis les exemples d'ADE4
 ### Depuis un ancien projet créé par l'appli
 ### Depuis un dataframe ou un vecteur au format csv-like.
-
+### Depuis un jeu de données quelconque d'ade4
 
 LoadData <- tabItem(tabName = "managedata",
                     h2("Loading in data"),
@@ -88,9 +88,9 @@ LoadDataServer <- function(input, output, session, projet){
   observeEvent(input$LoadProjectFile,{
     
     object <- readRDS(input$LoadProjectFile$datapath)
-    projet$data <- object$data
-    projet$dudi <- object$dudi
-    projet$code <- object$code
+    projet$data <<- object$data
+    projet$dudi <<- object$dudi
+    projet$code <<- object$code
     
   })
   
@@ -134,12 +134,12 @@ LoadDataServer <- function(input, output, session, projet){
     
     if (file_ext(input$LoadDataFile$datapath) == "rds"){ # Si le fichier est un rds
       
-      projet$data[[input$LoadDataName]] <- readRDS(input$LoadDataFile$datapath)
+      projet$data[[input$LoadDataName]] <<- readRDS(input$LoadDataFile$datapath)
       
       string <- paste(input$LoadDataName, " <- readRDS(", 
                       input$LoadDataFile$datapath,")", sep = "")
       
-      projet$code <- paste(projet$code, string, sep = "\n")
+      projet$code <<- paste(projet$code, string, sep = "\n")
       
     }
     
@@ -149,7 +149,7 @@ LoadDataServer <- function(input, output, session, projet){
         isrownames <- 1
       
       tryCatch( # Essaie de read le fichier en entrée
-      projet$data[[input$LoadDataName]] <- read.table(input$LoadDataFile$datapath, 
+      projet$data[[input$LoadDataName]] <<- read.table(input$LoadDataFile$datapath, 
                                                     header = input$LoadDataCheckHeader,
                                                     sep = input$LoadDataSep,
                                                     row.names = isrownames)
@@ -171,7 +171,7 @@ LoadDataServer <- function(input, output, session, projet){
                         input$LoadDataSep,"'", ", row.names = ", 
                         isrownames,")", sep = "")
       
-      projet$code <- paste(projet$code, string, sep = "\n\n# Load data from a new dataframe\n")
+      projet$code <<- paste(projet$code, string, sep = "\n\n# Load data from a new dataframe\n")
       
     }
   })
@@ -198,28 +198,28 @@ LoadDataServer <- function(input, output, session, projet){
     
     # Si l'example est juste un data frame
     if (class(temp) == "data.frame" & "dudi" %in% class(temp) == FALSE)
-      projet$data[[input$examples]] <- temp
+      projet$data[[input$examples]] <<- temp
     
     # Si l'example est une liste d'objets
     if (class(temp) == "list")
       for(i in names(temp)){
         
         if("dudi" %in% class(temp[[i]]))
-          projet$dudi[[paste(input$examples, "$", i, sep = "")]] <- temp[[i]]
+          projet$dudi[[paste(input$examples, "$", i, sep = "")]] <<- temp[[i]]
         
         else if (class(temp[[i]]) == "data.frame")
-          projet$data[[paste(input$examples, "$", i, sep = "")]] <- temp[[i]]
+          projet$data[[paste(input$examples, "$", i, sep = "")]] <<- temp[[i]]
         
         else if (class(temp[[i]]) == "character" | class(temp[[i]]) == "factor") {
           temp[[i]] <- list(X = temp[[i]])
-          projet$data[[paste(input$examples, "$", i, sep = "")]] <- as.data.frame(temp[[i]])
+          projet$data[[paste(input$examples, "$", i, sep = "")]] <<- as.data.frame(temp[[i]])
         }
       }
     
     # Rajoute le code pour load les data dans projet$code
     string <- paste("data(", input$examples,")", sep = "")
     
-    projet$code <- paste(projet$code, string, sep = "\n\n# Load data from ade4 examples\n")
+    projet$code <<- paste(projet$code, string, sep = "\n\n# Load data from ade4 examples\n")
   })
   
   # Affiche le dudi selectionné dans l'onglet
@@ -233,8 +233,11 @@ LoadDataServer <- function(input, output, session, projet){
     if (!(input$DudinameLoadData %in% names(projet$dudi)))
       return("No dudi object in the current project")
     
-    return(projet$dudi[[input$DudinameLoadData]])
-    
+    if ("betcoi" %in% class(projet$dudi[[input$DudinameLoadData]])) {
+	  return(projet$dudi[[input$DudinameLoadData]])
+    } else 
+      return(projet$dudi[[input$DudinameLoadData]])
+
   })
   
 #   # Quand on clique sur le bouton pour l'aide sur un jeu de données d'ADE4
@@ -270,28 +273,28 @@ LoadDataServer <- function(input, output, session, projet){
     
     # Si l'example est juste un data frame
     if (class(temp) == "data.frame" & "dudi" %in% class(temp) == FALSE)
-      projet$data[[input$LoadDataSetName]] <- temp
+      projet$data[[input$LoadDataSetName]] <<- temp
     
     # Si l'example est une liste d'objets
     if (class(temp) == "list")
       for(i in names(temp)){
         
         if("dudi" %in% class(temp[[i]]))
-          projet$dudi[[paste(input$LoadDataSetName, "$", i, sep = "")]] <- temp[[i]]
+          projet$dudi[[paste(input$LoadDataSetName, "$", i, sep = "")]] <<- temp[[i]]
         
         else if (class(temp[[i]]) == "data.frame")
-          projet$data[[paste(input$LoadDataSetName, "$", i, sep = "")]] <- temp[[i]]
+          projet$data[[paste(input$LoadDataSetName, "$", i, sep = "")]] <<- temp[[i]]
         
         else if (class(temp[[i]]) == "character" | class(temp[[i]]) == "factor") {
           temp[[i]] <- list(X = temp[[i]])
-          projet$data[[paste(input$LoadDataSetName, "$", i, sep = "")]] <- as.data.frame(temp[[i]])
+          projet$data[[paste(input$LoadDataSetName, "$", i, sep = "")]] <<- as.data.frame(temp[[i]])
         }
       }
     
     # Rajoute le code pour load les data dans projet$code
     string <- paste("data(", input$LoadDataSetName,")", sep = "")
     
-    projet$code <- paste(projet$code, string, sep = "\n\n# Load data from ade4 data set\n")
+    projet$code <<- paste(projet$code, string, sep = "\n\n# Load data from ade4 data set\n")
   })
   
 

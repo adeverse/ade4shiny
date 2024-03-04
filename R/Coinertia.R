@@ -158,17 +158,17 @@ coinertiaserver <- function(input, output, session, projet){
     
     tryCatch({
       
-      temp <- coinertia(dud1, dud2 ,nf = input$nfCoinertia, scannf = F)
-      projet$dudi[[input$NameCoinertia]] <- temp
+      temp <- coinertia(dudiX = dud1, dudiY = dud2 ,nf = input$nfCoinertia, scannf = F)
+      projet$dudi[[input$NameCoinertia]] <<- temp
       
       # Rajoute le code pour faire l'analyse dans projet$code
-      string <- paste(input$NameCoinertia, " <- coinertia(", input$DudiCoinertia1, 
-                      ", ", input$DudiCoinertia2, ", nf = ", input$nfCoinertia, 
+      string <- paste(input$NameCoinertia, " <- coinertia(dudiX = ", input$DudiCoinertia1, 
+                      ", dudiY = ", input$DudiCoinertia2, ", nf = ", input$nfCoinertia, 
                       ", scannf = ", F,")", sep = "")
       
-      projet$code <- paste(projet$code, string, sep = "\n\n# Computing Coinertia\n")
+      projet$code <<- paste(projet$code, string, sep = "\n\n# Computing Coinertia\n")
       
-      projet$dudi[[input$NameCoinertia]]$call <- str2lang(substring(string, nchar(input$NameCoinertia) + 5))
+      projet$dudi[[input$NameCoinertia]]$call <<- str2lang(substring(string, nchar(input$NameCoinertia) + 5))
       
     }, error = function(e){
       alert("There has been an error (printed in the R console)")
@@ -190,6 +190,7 @@ coinertiaserver <- function(input, output, session, projet){
       return("No dudi object with this name in the project")
     
     ade4:::summary.dudi(projet$dudi[[input$NameCoinertia]])
+    # should be summary.coinertia (qui plante à cause de eval.parent !)
   })
   
   

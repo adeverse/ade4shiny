@@ -186,37 +186,36 @@ bgaServer <- function(input, output, session, projet){
     dud <- projet$dudi[[input$DudiBGA]]
     if ("dudi" %in% class(projet$dudi[[input$ObjectGroupBGA]]))
       fact <- as.factor(projet$dudi[[input$ObjectGroupBGA]]$tab[,input$GroupBGA])
-    
     else
       fact <- as.factor(projet$data[[input$ObjectGroupBGA]][,input$GroupBGA])
     
     tryCatch({
       
       if ("coinertia" %in% class(dud)) {
-	      # temp <- bca.coinertia(dud, fac = fact,nf = input$nfBGA, scannf = F, projet$dudi[[1]], projet$dudi[[2]])
-	      alert("Sorry, not yet available ! Please contact the authors")
-          return(0)
-      } else 
-          temp <- bca(dud, fac = fact, nf = input$nfBGA, scannf = F)
+	      # temp <- bca.coinertia(x = dud, fac = fact, nf = input$nfBGA, scannf = F)
+          alert("Sorry, not yet available ! Please contact the authors")
+      } else {
+          temp <- bca(x = dud, fac = fact, nf = input$nfBGA, scannf = F)
+      }
       
-      projet$dudi[[input$NameBGA]] <- temp
+      projet$dudi[[input$NameBGA]] <<- temp
       
       # Ecrit le code pour faire l'analyse dans projet$code
       if ("dudi" %in% class(projet$dudi[[input$ObjectGroupBGA]]))
-        string <- paste(input$NameBGA, " <- bca(", input$DudiBGA, ", fac = ", 
+        string <- paste(input$NameBGA, " <- bca(x = ", input$DudiBGA, ", fac = ", 
                         "as.factor(", input$ObjectGroupBGA, "$tab[,", '"',input$GroupBGA,'"',"])",
                         ", nf = ", input$nfBGA, ", scannf = F"
                         ,")", sep = "")
       
       else
-        string <- paste(input$NameBGA, " <- bca(", input$DudiBGA, ", fac = ", 
+        string <- paste(input$NameBGA, " <- bca(x = ", input$DudiBGA, ", fac = ", 
                         "as.factor(", input$ObjectGroupBGA, "[,", "'",input$GroupBGA,"'","])",
                         ", nf = ", input$nfBGA, ", scannf = F"
                         ,")", sep = "")
       
-      projet$code <- paste(projet$code, string, sep = "\n\n# Computing BCA\n")
+      projet$code <<- paste(projet$code, string, sep = "\n\n# Computing BCA\n")
       
-      projet$dudi[[input$NameBGA]]$call <- str2lang(substring(string, nchar(input$NameBGA) + 5))
+      projet$dudi[[input$NameBGA]]$call <<- str2lang(substring(string, nchar(input$NameBGA) + 5))
       
     }, error = function(e){
       alert("There has been an error (printed in R console)")
@@ -238,6 +237,9 @@ bgaServer <- function(input, output, session, projet){
     if (!(input$NameBGA %in% names(projet$dudi)))
       return("No dudi object with this name in the project")
     
+    #if ("betcoi" %in% class(projet$dudi[[input$NameBGA]]))
+      #ade4:::summary.dudi(projet$dudi[[input$NameBGA]])
+    #else 
     ade4:::summary.dudi(projet$dudi[[input$NameBGA]])
   })
   
@@ -273,13 +275,12 @@ bgaServer <- function(input, output, session, projet){
     else
       fact <- as.factor(projet$data[[input$ObjectGroupBGA]][,input$GroupBGA])
     
-    if ("coinertia" %in% class(dud)) {
-	    temp <- bca.coinertia2(dud, fac = fact,nf = input$nfBGA, scannf = F, projet$dudi[[1]], projet$dudi[[2]])
+    temp <- bca(dud, fac = fact,nf = input$nfBGA, scannf = F)
+
+    if ("betcoi" %in% class(dud))
         ade4:::plot.betcoi(temp, fac = fact)
-	} else {
-    	temp <- bca(dud, fac = fact, nf = input$nfBGA, scannf = F)
+	else
         ade4:::plot.between(temp)
-    }
   })
   
   

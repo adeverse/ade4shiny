@@ -1,6 +1,6 @@
 server <- function(input, output, session) { 
-  
-  projet <- reactiveValues(data = list(), # List of all dataframe
+
+  projet <<- reactiveValues(data = list(), # List of all dataframe
                            dudi = list(), # List of all dudi objects
                            plot = character(0), # Useful for visualisation
                            code = "library(ade4)\n") # Useful to write and download code
@@ -48,6 +48,9 @@ server <- function(input, output, session) {
   
   # R/BGA.R
   bgaServer(input, output, session, projet)
+  
+  # R/WGA.R
+  wgaServer(input, output, session, projet)
   
   # R/Coinertia.R
   coinertiaserver(input, output, session, projet)
