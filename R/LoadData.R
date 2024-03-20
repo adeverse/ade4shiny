@@ -162,11 +162,11 @@ LoadDataServer <- function(input, output, session, projet){
       
       # Rajoute le code d'importation du fichier dans projet$code
       if (is.null(isrownames))
-        string <- paste(input$LoadDataName, " <- read.table(<path_to_your_dataframe>, header = ", 
+        string <- paste(input$LoadDataName, " <- read.table(file = '", input$LoadDataFile$name, "', header = ", 
                         input$LoadDataCheckHeader, ", sep = ","'", 
                        input$LoadDataSep,"'", ", row.names = NULL)", sep = "")
       else
-        string <- paste(input$LoadDataName, " <- read.table(<path_to_your_dataframe>, header = ", 
+        string <- paste(input$LoadDataName, " <- read.table(file = '", input$LoadDataFile$name, "', header = ", 
                         input$LoadDataCheckHeader, ", sep = ","'", 
                         input$LoadDataSep,"'", ", row.names = ", 
                         isrownames,")", sep = "")
