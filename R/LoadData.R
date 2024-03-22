@@ -51,6 +51,7 @@ LoadDataServer <- function(input, output, session, projet){
                            list('PCA' = c("aravo", "baran95"), 
                                 'COA' = c("aminoacyl", "microsatt"),
                                 'MCA' = c("ours", "banque"),
+                                'PCO' = c("yanomama", "capitales"),
                                 'BCA' = c("meaudret", "avimedi"),
                                 'Coinertia' = c("doubs", "aviurba"),
                                 'PCAIV' = c("rhone", "avimedi")),
@@ -207,6 +208,9 @@ LoadDataServer <- function(input, output, session, projet){
         if("dudi" %in% class(temp[[i]]))
           projet$dudi[[paste(input$examples, "$", i, sep = "")]] <<- temp[[i]]
         
+        else if ("matrix" %in% class(temp[[i]]))
+          projet$data[[paste(input$LoadDataSetName, "$", i, sep = "")]] <<- temp[[i]]
+        
         else if (class(temp[[i]]) == "data.frame")
           projet$data[[paste(input$examples, "$", i, sep = "")]] <<- temp[[i]]
         
@@ -281,6 +285,9 @@ LoadDataServer <- function(input, output, session, projet){
         
         if("dudi" %in% class(temp[[i]]))
           projet$dudi[[paste(input$LoadDataSetName, "$", i, sep = "")]] <<- temp[[i]]
+        
+        else if ("matrix" %in% class(temp[[i]]))
+          projet$data[[paste(input$LoadDataSetName, "$", i, sep = "")]] <<- temp[[i]]
         
         else if (class(temp[[i]]) == "data.frame")
           projet$data[[paste(input$LoadDataSetName, "$", i, sep = "")]] <<- temp[[i]]

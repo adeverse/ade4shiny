@@ -44,7 +44,7 @@ server <- function(input, output, session) {
   hsaServer(input, output, session, projet)
   
   # R/PCO.R
-  ## pcoServer(input, output, session, projet)
+  pcoServer(input, output, session, projet)
   
   # R/BGA.R
   bgaServer(input, output, session, projet)

@@ -20,8 +20,8 @@ sidebar <- dashboardSidebar(sidebarMenu(
            menuSubItem("PCA", tabName = "pca"),
            menuSubItem("COA", tabName = "coa"),
            menuSubItem("MCA", tabName = "mca"),
-           menuSubItem("HSA", tabName = "hsa")
-           # menuSubItem("PCO", tabName = "pco")),
+           menuSubItem("HSA", tabName = "hsa"),
+           menuSubItem("PCO", tabName = "pco")
   ),
   
   menuItem("One table with groups", startExpanded = TRUE,
@@ -71,7 +71,7 @@ body <- dashboardBody(
     coa,
     mca,
     hsa,
-    # pco,
+    pco,
     bga,
     wga,
     coinertie,

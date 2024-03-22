@@ -14,7 +14,7 @@ pco <- tabItem(tabName = "pco",
                      
                      tabPanel("Output",
                               selectInput("selectoutputPCO", "", 
-                                          choices = c("Eigenvalues", "Variables", "Individuals")),
+                                          choices = c("Eigenvalues", "Items")),
                               uiOutput("selectoutputPCO2"),
                               dataTableOutput("outputPCO")),
                      
@@ -57,13 +57,9 @@ pcoServer <- function(input, output, session, projet){
     if(input$selectoutputPCO == "Eigenvalues")
       return()
     
-    else if (input$selectoutputPCO == "Variables")
+    else if (input$selectoutputPCO == "Items")
       selectInput("outputPCO2", "Select a value to show", 
-                  c("coord", "cos2", "contrib"))
-    
-    else
-      selectInput("outputPCO2", "Select a value to show", 
-                  c("coord", "cos2", "contrib"))
+                  c("coord"))
     
   })
   
@@ -78,20 +74,29 @@ pcoServer <- function(input, output, session, projet){
       return(0)
     }
     
-    df <- projet$data[[input$DataframePCO]]
+    tryCatch({
+	  dm <- as.dist(projet$data[[input$DataframePCO]])
+    }, error = function(e){
+      alert("There has been an error (printed in R console)")
+      print(e)
+      return(0)
+    })
     
+    if (!is.euclid(dm)) {
+      alert("Dist matrix is not Euclidean, trying quasieuclid")
+      dm <- quasieuclid(dm)
+    }
+
     tryCatch({
       
-      temp <- dudi.pco(df, nf = input$nfPCO, scannf = F, 
-                       center = input$docenterPCO, scale = input$doscalePCO)
-      projet$dudi[[input$NamePCO]] <- temp
+      temp <- dudi.pco(d = dm, nf = input$nfPCO, scannf = F)
+      projet$dudi[[input$NamePCO]] <<- temp
       
-      string <- paste(input$NamePCO, " <- dudi.pco(", input$DataframePCO, ", nf = ", input$nfPCO, ", scannf = ", F,
-                      ", center = ",input$docenterPCO, ", scale = ", input$doscalePCO, ")", sep = "")
+      string <- paste(input$NamePCO, " <- dudi.pco(d = dm, nf = ", input$nfPCO, ", scannf = ", F, ")", sep = "")
       
       projet$code <- paste(projet$code, string, sep = "\n\n# Computing PCO\n")
       
-      projet$dudi[[input$NamePCO]]$call <- substring(string, nchar(input$NamePCO) + 5)
+      projet$dudi[[input$NamePCO]]$call <- str2lang(substring(string, nchar(input$NamePCO) + 5))
       
     }, error = function(e){
       alert("There has been an error (printed in R console)")
@@ -101,7 +106,7 @@ pcoServer <- function(input, output, session, projet){
     
   })
   
-  output$SummaryPCO <- renderPrint({
+  output$summaryPCO <- renderPrint({
     if (length(projet$dudi) == 0)
       return("No dudi object in the project")
     
@@ -120,21 +125,12 @@ pcoServer <- function(input, output, session, projet){
     if (is.null(projet$dudi[[input$NamePCO]]))
       return(data.frame(list()))
     
-    if (input$selectoutputPCO == "Eigenvalues"){
+    if (input$selectoutputPCO == "Eigenvalues")
       return(datatable(data.frame(list(values = projet$dudi[[input$NamePCO]]$eig))))
-    }
     
-    else if (input$selectoutputPCO == "Variables")
-      dt <- get_pco_var(projet$dudi[[input$NamePCO]])
+    else if (input$selectoutputPCO == "Items")
+      return(datatable(data.frame(list(values = projet$dudi[[input$NamePCO]]$li))))
     
-    else
-      dt <- get_pco_ind(projet$dudi[[input$NamePCO]])
-    
-    if (is.null(input$outputPC02))
-      return(data.frame(list()))
-    
-    datatable(dt[[input$outputPCO2]], extensions = c("Buttons"),
-              options = list(scrollX = TRUE, buttons = c("csv"), dom = 'Bfrtip'))
   }, server = F)
   
   
