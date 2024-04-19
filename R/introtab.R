@@ -44,6 +44,10 @@ introtab <- tabItem(tabName = "introtab",
                        ))
                  )
                ),
+               
+               fluidRow(
+                 tags$div("Note that in case of problem using", strong("ade4shiny"), "you can ask questions on the ", a("ade4 mailing list", href = 'https://listes.univ-lyon1.fr/sympa/info/adelist', icon("envelope", size = 'large')))),
+
                h3("Ressources"),
                fluidRow(
                  column(width = 2, h4(a("Website", href = 'https://adeverse.github.io/ade4/index.html', icon("globe", size = 'large')))),
